@@ -85,7 +85,10 @@ jobs:
             --registry-password ${{ secrets.ACR_PASSWORD }} \
             --cpu 1 \
             --memory 1 \
+            --os-type Linux \
             --ports 8000 \
+            --protocol TCP \
+            --dns-name-label crop-ai-${{ github.run_number }} \
             --environment-variables LOG_LEVEL=INFO \
             --restart-policy Always
       - name: Log deployment info
@@ -93,7 +96,11 @@ jobs:
         run: |
           echo "=== Container Deployment Info ==="
           az container show -g crop-ai-rg -n crop-ai-aci-${{ github.run_number }} \
-            --query "{Name:name, Status:containers[0].instanceView.currentState.state, FQDN:ipAddress.fqdn, Ports:ipAddress.ports}" -o table
+            --query "{Name:name, Status:containers[0].instanceView.currentState.state, FQDN:ipAddress.fqdn, PublicIP:ipAddress.ip, Ports:ipAddress.ports}" -o table
+          echo ""
+          echo "=== Access Your Container ==="
+          FQDN=$(az container show -g crop-ai-rg -n crop-ai-aci-${{ github.run_number }} --query ipAddress.fqdn -o tsv)
+          echo "URL: http://$FQDN:8000"
           echo ""
           echo "=== Container Logs ==="
           az container logs -g crop-ai-rg -n crop-ai-aci-${{ github.run_number }} --tail 20 || true
