@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CropAIService } from '../../services/crop-ai.service';
-import { BaseChartDirective } from 'ng2-charts';
-import { ChartConfiguration } from 'chart.js';
+import { CropAIService } from '../services/crop-ai.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, BaseChartDirective],
+  imports: [CommonModule],
   template: `
     <div class="container-fluid">
       <h2 class="mb-4">📊 Dashboard</h2>
@@ -50,50 +48,74 @@ import { ChartConfiguration } from 'chart.js';
         </div>
       </div>
 
-      <!-- Charts Row -->
-      <div class="row">
-        <div class="col-md-6">
-          <div class="card">
-            <div class="card-header">
-              <h5 class="mb-0">🌱 Crop Distribution</h5>
-            </div>
-            <div class="card-body">
-              <canvas 
-                baseChart 
-                [data]="cropChartData"
-                [options]="cropChartOptions"
-                type="doughnut"
-              ></canvas>
-            </div>
-          </div>
-        </div>
-
+      <!-- System Info Row -->
+      <div class="row mb-4">
         <div class="col-md-6">
           <div class="card">
             <div class="card-header">
               <h5 class="mb-0">💻 System Resources</h5>
             </div>
             <div class="card-body">
-              <canvas 
-                baseChart 
-                [data]="resourceChartData"
-                [options]="resourceChartOptions"
-                type="bar"
-              ></canvas>
+              <div class="mb-3">
+                <label>CPU Usage: {{ metrics?.system?.cpu_percent || 0 | number:'1.1-1' }}%</label>
+                <div class="progress">
+                  <div 
+                    class="progress-bar" 
+                    [style.width.%]="metrics?.system?.cpu_percent || 0"
+                  ></div>
+                </div>
+              </div>
+              <div>
+                <label>Memory Usage: {{ metrics?.system?.memory_percent || 0 | number:'1.1-1' }}%</label>
+                <div class="progress">
+                  <div 
+                    class="progress-bar bg-warning" 
+                    [style.width.%]="metrics?.system?.memory_percent || 0"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">🔧 Service Info</h5>
+            </div>
+            <div class="card-body">
+              <p><strong>Model Ready:</strong> 
+                <span [class]="'badge badge-' + (metrics?.model?.initialized ? 'success' : 'danger')">
+                  {{ metrics?.model?.initialized ? 'Yes' : 'No' }}
+                </span>
+              </p>
+              <p><strong>CPU OK:</strong> 
+                <span [class]="'badge badge-' + (metrics?.system?.cpu_ok ? 'success' : 'danger')">
+                  {{ metrics?.system?.cpu_ok ? 'Yes' : 'No' }}
+                </span>
+              </p>
+              <p><strong>Memory OK:</strong> 
+                <span [class]="'badge badge-' + (metrics?.system?.memory_ok ? 'success' : 'danger')">
+                  {{ metrics?.system?.memory_ok ? 'Yes' : 'No' }}
+                </span>
+              </p>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Predictions History -->
-      <div class="row mt-4">
+      <div class="row">
         <div class="col-12">
           <div class="card">
             <div class="card-header">
               <h5 class="mb-0">📝 Recent Predictions</h5>
             </div>
             <div class="card-body">
-              <div class="table-responsive">
+              <div *ngIf="!predictions?.predictions || predictions.predictions.length === 0" class="alert alert-info">
+                No predictions yet
+              </div>
+              <div class="table-responsive" *ngIf="predictions?.predictions && predictions.predictions.length > 0">
                 <table class="table table-hover">
                   <thead class="table-light">
                     <tr>
@@ -104,17 +126,17 @@ import { ChartConfiguration } from 'chart.js';
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let pred of predictions?.predictions | slice:0:10">
+                    <tr *ngFor="let pred of predictions.predictions | slice:0:10; let item = $implicit">
                       <td>
-                        <span class="badge badge-primary">{{ pred.crop_type }}</span>
+                        <span class="badge badge-primary">{{ item['crop_type'] }}</span>
                       </td>
                       <td>
-                        <span class="badge" [class]="getConfidenceClass(pred.confidence)">
-                          {{ (pred.confidence * 100).toFixed(0) }}%
+                        <span class="badge" [class]="getConfidenceClass(item['confidence'])">
+                          {{ (item['confidence'] * 100).toFixed(0) }}%
                         </span>
                       </td>
-                      <td>{{ pred.model_version }}</td>
-                      <td>{{ pred.timestamp | date:'short' }}</td>
+                      <td>{{ item['model_version'] }}</td>
+                      <td>{{ item['timestamp'] | date:'short' }}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -152,128 +174,44 @@ import { ChartConfiguration } from 'chart.js';
     .badge-primary { background-color: #007bff; }
     .badge-success { background-color: #28a745; }
     .badge-warning { background-color: #ffc107; }
+    .badge-danger { background-color: #dc3545; }
     .badge-info { background-color: #17a2b8; }
   `]
 })
 export class DashboardComponent implements OnInit {
-  health: any;
-  metrics: any;
-  predictions: any;
-  stats: any;
+  health: any = {};
+  metrics: any = {};
+  predictions: any = { predictions: [] };
+  stats: any = {};
 
-  cropChartData: any;
-  cropChartOptions: ChartConfiguration['options'] = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'bottom',
-      }
-    }
-  };
-
-  resourceChartData: any;
-  resourceChartOptions: ChartConfiguration['options'] = {
-    responsive: true,
-    scales: {
-      y: {
-        beginAtZero: true,
-        max: 100
-      }
-    }
-  };
-
-  constructor(private cropAIService: CropAIService) {
-    this.initializeCharts();
-  }
+  constructor(private cropAIService: CropAIService) {}
 
   ngOnInit(): void {
     this.loadData();
+    // Refresh every 10 seconds
+    setInterval(() => this.loadData(), 10000);
   }
 
   loadData(): void {
     this.cropAIService.getHealth().subscribe({
-      next: (data) => { this.health = data; },
-      error: (err) => console.error('Health error:', err)
+      next: (data: any) => { this.health = data; },
+      error: (err: any) => console.error('Health error:', err)
     });
 
     this.cropAIService.getMetrics().subscribe({
-      next: (data) => { 
-        this.metrics = data;
-        this.updateResourceChart(data);
-      },
-      error: (err) => console.error('Metrics error:', err)
+      next: (data: any) => { this.metrics = data; },
+      error: (err: any) => console.error('Metrics error:', err)
     });
 
     this.cropAIService.getPredictions(50).subscribe({
-      next: (data) => { 
-        this.predictions = data;
-        this.updateCropChart(data);
-      },
-      error: (err) => console.error('Predictions error:', err)
+      next: (data: any) => { this.predictions = data; },
+      error: (err: any) => console.error('Predictions error:', err)
     });
 
     this.cropAIService.getStats().subscribe({
-      next: (data) => { this.stats = data; },
-      error: (err) => console.error('Stats error:', err)
+      next: (data: any) => { this.stats = data; },
+      error: (err: any) => console.error('Stats error:', err)
     });
-  }
-
-  private initializeCharts(): void {
-    this.cropChartData = {
-      labels: [],
-      datasets: [{
-        data: [],
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
-        borderWidth: 2,
-        borderColor: '#fff'
-      }]
-    };
-
-    this.resourceChartData = {
-      labels: ['CPU %', 'Memory %'],
-      datasets: [{
-        label: 'Usage',
-        data: [0, 0],
-        backgroundColor: ['#FF6384', '#36A2EB'],
-        borderWidth: 1,
-        borderColor: '#999'
-      }]
-    };
-  }
-
-  private updateCropChart(predictions: any): void {
-    const crops = predictions.predictions || [];
-    const cropCount: { [key: string]: number } = {};
-    
-    crops.forEach((pred: any) => {
-      cropCount[pred.crop_type] = (cropCount[pred.crop_type] || 0) + 1;
-    });
-
-    this.cropChartData = {
-      labels: Object.keys(cropCount),
-      datasets: [{
-        data: Object.values(cropCount),
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
-        borderWidth: 2,
-        borderColor: '#fff'
-      }]
-    };
-  }
-
-  private updateResourceChart(metrics: any): void {
-    this.resourceChartData = {
-      labels: ['CPU %', 'Memory %'],
-      datasets: [{
-        label: 'Usage',
-        data: [
-          metrics.system?.cpu_percent || 0,
-          metrics.system?.memory_percent || 0
-        ],
-        backgroundColor: ['#FF6384', '#36A2EB'],
-        borderWidth: 1,
-        borderColor: '#999'
-      }]
-    };
   }
 
   formatUptime(seconds: number): string {

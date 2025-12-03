@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CropAIService } from '../../services/crop-ai.service';
+import { CropAIService } from '../services/crop-ai.service';
 
 @Component({
   selector: 'app-predict',
