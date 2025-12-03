@@ -85,10 +85,15 @@ jobs:
             --registry-password ${{ secrets.ACR_PASSWORD }} \
             --cpu 1 \
             --memory 1 \
+            --ports 8000 \
             --environment-variables LOG_LEVEL=INFO \
-            --restart-policy OnFailure
+            --restart-policy Always
       - name: Log deployment info
         continue-on-error: true
         run: |
-          echo "Container deployed to Azure Container Instances"
-          az container show -g crop-ai-rg -n crop-ai-aci-${{ github.run_number }} --query "{Name:name, Status:containers[0].instanceView.currentState.state, Image:containers[0].image}" -o table
+          echo "=== Container Deployment Info ==="
+          az container show -g crop-ai-rg -n crop-ai-aci-${{ github.run_number }} \
+            --query "{Name:name, Status:containers[0].instanceView.currentState.state, FQDN:ipAddress.fqdn, Ports:ipAddress.ports}" -o table
+          echo ""
+          echo "=== Container Logs ==="
+          az container logs -g crop-ai-rg -n crop-ai-aci-${{ github.run_number }} --tail 20 || true

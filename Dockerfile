@@ -15,4 +15,4 @@ COPY src/ src/
 
 ENV PYTHONPATH=/app/src
 
-CMD ["python", "-c", "print('crop-ai container ready')"]
+CMD ["python", "-m", "http.server", "8000", "--directory", "/app"]
