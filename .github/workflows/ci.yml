@@ -53,24 +53,28 @@ jobs:
     name: Deploy to Azure Container Instances
     needs: [test]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && secrets.AZURE_CREDENTIALS != ''
+    if: github.ref == 'refs/heads/main'
     environment: production
     steps:
       - uses: actions/checkout@v4
       - name: Azure Login (Service Principal)
+        if: secrets.AZURE_CREDENTIALS != ''
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Set ACR credentials for Docker
+        if: secrets.AZURE_CREDENTIALS != ''
         run: |
           az acr login -n $(echo ${{ secrets.ACR_LOGIN_SERVER }} | cut -d. -f1)
       - name: Build and push image to ACR
+        if: secrets.AZURE_CREDENTIALS != ''
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
           tags: ${{ secrets.ACR_LOGIN_SERVER }}/crop-ai:${{ github.sha }},${{ secrets.ACR_LOGIN_SERVER }}/crop-ai:latest
       - name: Deploy to Azure Container Instances
+        if: secrets.AZURE_CREDENTIALS != ''
         run: |
           az container create \
             -g crop-ai-rg \
@@ -84,6 +88,7 @@ jobs:
             --environment-variables LOG_LEVEL=INFO \
             --restart-policy OnFailure
       - name: Log deployment info
+        if: secrets.AZURE_CREDENTIALS != ''
         run: |
           echo "Container deployed to Azure Container Instances"
           az container show -g crop-ai-rg -n crop-ai-aci-${{ github.run_number }} --query "{Name:name, Status:containers[0].instanceView.currentState.state, Image:containers[0].image}" -o table
