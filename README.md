@@ -103,3 +103,4 @@ crop-ai/
 # Pipeline run Wed Dec  3 09:40:35 UTC 2025
 # Azure deployment secrets configured Wed Dec  3 10:03:47 UTC 2025
 # Deployment update Wed Dec  3 10:11:18 UTC 2025
+# Fresh deployment trigger Wed Dec  3 11:01:56 UTC 2025
