@@ -4,6 +4,7 @@ FastAPI application for crop-ai prediction service.
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+from contextlib import asynccontextmanager
 import logging
 import sys
 from datetime import datetime
@@ -11,6 +12,7 @@ from .predict import ModelAdapter
 from .monitoring import get_monitor
 from .database import get_database, PredictionRecord
 import time
+import asyncio
 
 # Configure logging
 logging.basicConfig(
@@ -20,21 +22,47 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Initialize FastAPI app
-app = FastAPI(
-    title="crop-ai",
-    description="Crop Identification Service using Satellite Imagery",
-    version="0.1.0"
-)
-
-# Initialize model adapter
+# Global state
 model_adapter = None
 db = None
 startup_time = datetime.utcnow()
 inference_count = 0
 monitor = get_monitor()
 
-# Request/Response Models
+async def _startup():
+    """Initialize model and database on startup."""
+    global model_adapter, db
+    logger.info("crop-ai service starting up...")
+    try:
+        model_adapter = ModelAdapter()
+        logger.info("Model adapter initialized successfully")
+    except Exception as e:
+        logger.error(f"Failed to initialize model adapter: {e}")
+        model_adapter = None
+    
+    try:
+        db = await get_database()
+        logger.info("Database initialized successfully")
+    except Exception as e:
+        logger.error(f"Failed to initialize database: {e}")
+        db = None
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifespan context manager for startup/shutdown."""
+    # Startup
+    await _startup()
+    yield
+    # Shutdown
+    logger.info("crop-ai service shutting down...")
+
+# Initialize FastAPI app with lifespan
+app = FastAPI(
+    title="crop-ai",
+    description="Crop Identification Service using Satellite Imagery",
+    version="0.1.0",
+    lifespan=lifespan
+)
 class PredictionRequest(BaseModel):
     """Request model for crop prediction."""
     image_url: str
@@ -54,32 +82,6 @@ class HealthResponse(BaseModel):
     uptime_seconds: float
     inference_count: int
     timestamp: str
-
-# Startup event
-@app.on_event("startup")
-async def startup_event():
-    """Initialize model and database on startup."""
-    global model_adapter, db
-    logger.info("crop-ai service starting up...")
-    try:
-        model_adapter = ModelAdapter()
-        logger.info("Model adapter initialized successfully")
-    except Exception as e:
-        logger.error(f"Failed to initialize model adapter: {e}")
-        model_adapter = None
-    
-    try:
-        db = await get_database()
-        logger.info("Database initialized successfully")
-    except Exception as e:
-        logger.error(f"Failed to initialize database: {e}")
-        db = None
-
-# Shutdown event
-@app.on_event("shutdown")
-async def shutdown_event():
-    """Cleanup on shutdown."""
-    logger.info("crop-ai service shutting down...")
 
 # Health check endpoint
 @app.get("/health", response_model=HealthResponse)
