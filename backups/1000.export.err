@@ -1,0 +1,3 @@
+ERROR: (ResourceGroupNotFound) Resource group '1000' could not be found.
+Code: ResourceGroupNotFound
+Message: Resource group '1000' could not be found.

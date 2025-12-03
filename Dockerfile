@@ -15,4 +15,6 @@ COPY src/ src/
 
 ENV PYTHONPATH=/app/src
 
-CMD ["python", "-m", "http.server", "8000", "--directory", "/app"]
+EXPOSE 8000
+
+CMD ["uvicorn", "crop_ai.api:app", "--host", "0.0.0.0", "--port", "8000"]

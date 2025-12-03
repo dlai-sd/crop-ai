@@ -1,71 +1,152 @@
-"""Prediction adapter and small CLI for the crop-ai demo.
-
-This module provides a framework-agnostic `ModelAdapter` stub that agents
-can extend to integrate PyTorch, TensorFlow, or a remote model server.
-
-Keep this file small and testable; real model-loading logic belongs behind
-an adapter class that isolates the dependency (torch/tf) from the rest of
-the codebase.
 """
-from __future__ import annotations
+Model adapter for crop identification inference.
+"""
+import logging
+from typing import Optional, Dict, Any, List
+from dataclasses import dataclass
 
-from typing import Any, Iterable, List, Optional
+logger = logging.getLogger(__name__)
 
+@dataclass
+class PredictionResult:
+    """Result from model prediction."""
+    crop_type: str
+    confidence: float
+    model_version: str = "0.1.0"
+    metadata: Dict[str, Any] = None
 
 class ModelAdapter:
-    """Thin, framework-agnostic model adapter stub.
-
-    Usage examples:
-    - `ModelAdapter(framework='torch', model_path='path/to.pt')`
-    - `ModelAdapter()` and then subclass to implement `load()`/`predict()`
     """
-
-    def __init__(self, framework: Optional[str] = None, model_path: Optional[str] = None) -> None:
-        self.framework = framework
-        self.model_path = model_path
-        self.model: Optional[Any] = None
-
-    def load(self) -> None:
-        """Load model into memory.
-
-        This stub sets a lightweight marker dict. Replace with real
-        loading logic (torch.load, tf.saved_model.load, or remote call).
+    Adapter for crop identification model.
+    Handles model loading, inference, and result formatting.
+    """
+    
+    DEFAULT_MODEL_PATH = None  # Can be set from environment
+    
+    def __init__(self, model_path: Optional[str] = None):
         """
-        self.model = {"loaded": True, "framework": self.framework, "path": self.model_path}
-
-    def predict(self, inputs: Iterable[Any]) -> List[Any]:
-        """Run inference on inputs.
-
-        The stub returns a deterministic, simple transformation so tests
-        can validate behavior without heavy ML dependencies.
+        Initialize model adapter.
+        
+        Args:
+            model_path: Path to model file or weights
         """
-        if self.model is None:
-            raise RuntimeError("Model not loaded. Call load() before predict().")
-        results: List[Any] = []
-        for x in inputs:
+        self.model_path = model_path or self.DEFAULT_MODEL_PATH
+        self.model = None
+        self.model_version = "0.1.0"
+        self.supported_crops = [
+            "wheat", "rice", "corn", "soybean", "cotton",
+            "potato", "tomato", "apple", "grape", "citrus"
+        ]
+        
+        try:
+            self._load_model()
+            logger.info("Model adapter initialized successfully")
+        except Exception as e:
+            logger.warning(f"Failed to load model: {e}. Using mock mode.")
+            self.model = None
+    
+    def _load_model(self):
+        """
+        Load the ML model.
+        
+        This is a placeholder. Implement actual model loading:
+        - Load pre-trained model from local file or cloud storage
+        - Initialize model with weights
+        - Set model to eval mode if applicable
+        """
+        # TODO: Implement actual model loading
+        # Example: self.model = torch.load(self.model_path)
+        logger.info("Mock model loaded (placeholder)")
+        self.model = {}  # Placeholder
+    
+    def predict(self, image_path: str, top_k: int = 1) -> PredictionResult:
+        """
+        Perform inference on satellite imagery.
+        
+        Args:
+            image_path: Path or URL to satellite image
+            top_k: Number of top predictions to return
+            
+        Returns:
+            PredictionResult with crop type and confidence
+        """
+        try:
+            # TODO: Implement actual inference pipeline
+            # Steps:
+            # 1. Load and preprocess image
+            # 2. Run model inference
+            # 3. Post-process results
+            # 4. Return top-k predictions
+            
+            # Mock implementation
+            crop_type = "wheat"
+            confidence = 0.85
+            
+            logger.info(f"Prediction: {crop_type} ({confidence:.2%})")
+            
+            return PredictionResult(
+                crop_type=crop_type,
+                confidence=confidence,
+                model_version=self.model_version,
+                metadata={
+                    "image_path": image_path,
+                    "supported_crops": self.supported_crops
+                }
+            )
+        except Exception as e:
+            logger.error(f"Prediction failed: {e}")
+            raise
+    
+    def batch_predict(self, image_paths: list) -> list:
+        """
+        Perform batch inference.
+        
+        Args:
+            image_paths: List of image paths/URLs
+            
+        Returns:
+            List of PredictionResult objects
+        """
+        results = []
+        for image_path in image_paths:
             try:
-                results.append(len(x))
-            except Exception:
-                results.append(1)
+                result = self.predict(image_path)
+                results.append(result)
+            except Exception as e:
+                logger.error(f"Batch prediction failed for {image_path}: {e}")
         return results
+    
+    def get_supported_crops(self) -> list:
+        """Get list of supported crop types."""
+        return self.supported_crops
+    
+    def get_model_info(self) -> Dict[str, Any]:
+        """Get model metadata."""
+        return {
+            "model_version": self.model_version,
+            "model_path": self.model_path,
+            "supported_crops": self.supported_crops,
+            "is_loaded": self.model is not None
+        }
 
 
-def cli_main() -> None:
-    import argparse
-    import json
+# Module-level functions for convenience
+_adapter = None
 
-    parser = argparse.ArgumentParser(description="Run a simple prediction using ModelAdapter stub")
-    parser.add_argument("--model-path", help="optional model path", default=None)
-    parser.add_argument("--framework", help="optional framework name", default=None)
-    parser.add_argument("--inputs", help="JSON list of inputs", default="[]")
-    args = parser.parse_args()
+def get_adapter() -> ModelAdapter:
+    """Get or create global model adapter."""
+    global _adapter
+    if _adapter is None:
+        _adapter = ModelAdapter()
+    return _adapter
 
-    adapter = ModelAdapter(framework=args.framework, model_path=args.model_path)
-    adapter.load()
-    inputs = json.loads(args.inputs)
-    outputs = adapter.predict(inputs)
-    print(json.dumps({"outputs": outputs}))
+def predict(image_path: str) -> PredictionResult:
+    """Convenience function for prediction."""
+    adapter = get_adapter()
+    return adapter.predict(image_path)
 
+def batch_predict(image_paths: list) -> list:
+    """Convenience function for batch prediction."""
+    adapter = get_adapter()
+    return adapter.batch_predict(image_paths)
 
-if __name__ == "__main__":
-    cli_main()
