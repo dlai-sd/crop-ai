@@ -11,6 +11,7 @@ from datetime import datetime
 from .predict import ModelAdapter
 from .monitoring import get_monitor
 from .database import get_database, PredictionRecord
+from .telemetry import get_telemetry, init_telemetry_logging, PredictionMetric, HealthMetric
 import time
 import asyncio
 
@@ -21,6 +22,10 @@ logging.basicConfig(
     stream=sys.stdout
 )
 logger = logging.getLogger(__name__)
+
+# Initialize Application Insights telemetry
+init_telemetry_logging()
+telemetry = get_telemetry()
 
 # Global state
 model_adapter = None
@@ -90,6 +95,18 @@ async def health():
     uptime = (datetime.utcnow() - startup_time).total_seconds()
     health_status = monitor.check_health(model_adapter is not None)
     
+    # Track health metrics in Application Insights
+    telemetry.track_health(
+        HealthMetric(
+            cpu_percent=health_status.metrics.cpu_percent,
+            memory_percent=health_status.metrics.memory_percent,
+            memory_mb=health_status.metrics.memory_mb,
+            status=health_status.status,
+            model_ready=health_status.model_ready,
+            timestamp=datetime.utcnow().isoformat()
+        )
+    )
+    
     return HealthResponse(
         status=health_status.status,
         service="crop-ai",
@@ -135,6 +152,19 @@ async def predict(request: PredictionRequest):
         processing_time_ms = (time.time() - start_time) * 1000
         inference_count += 1
         
+        # Track prediction in Application Insights
+        telemetry.track_prediction(
+            PredictionMetric(
+                image_url=request.image_url,
+                crop_type=crop_type,
+                confidence=confidence,
+                model_version=request.model_version,
+                processing_time_ms=processing_time_ms,
+                timestamp=datetime.utcnow().isoformat(),
+                success=True
+            )
+        )
+        
         # Save to database
         if db:
             record = PredictionRecord(
@@ -155,6 +185,21 @@ async def predict(request: PredictionRequest):
         )
     except Exception as e:
         logger.error(f"Prediction failed: {e}")
+        
+        # Track failure in Application Insights
+        telemetry.track_prediction(
+            PredictionMetric(
+                image_url=request.image_url,
+                crop_type="unknown",
+                confidence=0.0,
+                model_version=request.model_version,
+                processing_time_ms=(time.time() - start_time) * 1000,
+                timestamp=datetime.utcnow().isoformat(),
+                success=False,
+                error_message=str(e)
+            )
+        )
+        telemetry.track_exception(e, "predict_endpoint")
         raise HTTPException(status_code=500, detail=str(e))
 
 # Info endpoint
