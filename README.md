@@ -101,3 +101,4 @@ crop-ai/
 - Build a demo backend (Flask/FastAPI) and frontend (HTML/JS) for predictions.
 - Set up Kubernetes deployment if scaling is required.
 # Pipeline run Wed Dec  3 09:40:35 UTC 2025
+# Azure deployment secrets configured Wed Dec  3 10:03:47 UTC 2025
