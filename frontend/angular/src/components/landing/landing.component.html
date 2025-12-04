@@ -3,8 +3,8 @@
   <header class="header">
     <div class="header-container">
       <div class="logo-container">
-        <img src="/company_logo.png" alt="DLAI Satellite Data" class="logo-img" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2245%22 height=%2245%22%3E%3Crect fill=%22%23D4AF37%22 width=%2245%22 height=%2245%22 rx=%228%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2220%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22 dy=%22.3em%22%3EDLAI%3C/text%3E%3C/svg%3E'">
-        <span class="logo-text">DLAI Satellite Data</span>
+        <img src="assets/company_logo.png" alt="DLAI" class="logo-img" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22110%22 height=%22110%22%3E%3Crect fill=%22%23E8DC5A%22 width=%22110%22 height=%22110%22 rx=%228%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2248%22 font-weight=%22bold%22 fill=%22%23333%22 text-anchor=%22middle%22 dy=%22.3em%22%3EDLAI%3C/text%3E%3C/svg%3E'">
+        <span class="logo-text" style="color: #2e7d32;">DEEP LEARNING SATELLITE DATA</span>
       </div>
       
       <nav class="nav-menu">
@@ -26,7 +26,7 @@
             </div>
           </li>
           <li><a href="javascript:void(0)">{{ translate('Blog') }}</a></li>
-          <li><a href="javascript:void(0)">{{ translate('About') }}</a></li>
+          <li><a href="javascript:void(0)">{{ translate('About Us') }}</a></li>
           <li><a href="javascript:void(0)">{{ translate('Contact') }}</a></li>
         </ul>
       </nav>
@@ -40,7 +40,7 @@
         </select>
         
         <button class="btn btn-outline" (click)="goToLogin()">{{ translate('Login') }}</button>
-        <button class="btn btn-primary" (click)="goToLogin()">{{ translate('Register') }}</button>
+        <button class="btn btn-primary" style="background-color: #2e7d32; color: white;" (click)="goToLogin()">{{ translate('Register') }}</button>
       </div>
     </div>
   </header>
@@ -163,7 +163,7 @@
           <h3>{{ translate('Quick Links') }}</h3>
           <ul>
             <li><a href="javascript:void(0)">{{ translate('Home') }}</a></li>
-            <li><a href="javascript:void(0)">{{ translate('About') }}</a></li>
+            <li><a href="javascript:void(0)">{{ translate('About Us') }}</a></li>
             <li><a href="javascript:void(0)">{{ translate('Services') }}</a></li>
             <li><a href="javascript:void(0)">{{ translate('Blog') }}</a></li>
           </ul>

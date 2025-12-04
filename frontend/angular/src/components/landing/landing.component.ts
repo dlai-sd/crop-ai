@@ -9,16 +9,17 @@ import { TranslationService } from '../../services/translation.service';
   imports: [CommonModule],
   templateUrl: './landing.component.html',
   styles: [`
-    :root { --g: #D4AF37; --lg: #FFFEF0; --d: #333; --l: #666; --w: #fff; --gr: #f8f9fa; }
+    :root { --g: #E8DC5A; --dg: #1B5E20; --lg: #FFFEF0; --d: #333; --l: #666; --w: #fff; --gr: #f8f9fa; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     .landing { font-family: Segoe UI, sans-serif; color: var(--d); }
     .header { background: var(--w); padding: 1rem 0; position: fixed; top: 0; width: 100%; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,.05); }
     .header-container { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; padding: 0 20px; }
     .logo-container { display: flex; align-items: center; gap: 10px; }
-    .logo-img { width: 45px; height: 45px; border-radius: 8px; }
-    .logo-text { font-size: 1.3rem; font-weight: 700; color: var(--g); }
+    .logo-img { width: 130px; height: auto; border-radius: 8px; object-fit: contain; }
+    .logo-text { font-size: 1.3rem; font-weight: 700; color: var(--dg); }
     .nav-menu a { text-decoration: none; color: var(--d); font-weight: 500; }
     .nav-menu a:hover { color: var(--g); }
+    .nav-menu ul { display: flex; list-style: none; gap: 2rem; margin: 0; padding: 0; }
     .dropdown { position: relative; }
     .dropdown-content { display: none; position: absolute; background: var(--w); min-width: 200px; box-shadow: 0 8px 24px rgba(0,0,0,.1); border-radius: 8px; padding: .5rem 0; margin-top: .5rem; top: 100%; left: 0; }
     .dropdown:hover .dropdown-content { display: block; }
@@ -28,7 +29,7 @@ import { TranslationService } from '../../services/translation.service';
     .language-select { padding: .6rem; border: 1px solid #e0e0e0; border-radius: 6px; background: var(--w); cursor: pointer; }
     .btn { padding: .7rem 1.8rem; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; font-size: .95rem; transition: all .3s; }
     .btn-outline { background: transparent; border: 1px solid var(--g); color: var(--g); }
-    .btn-primary { background: var(--g); color: var(--w); }
+    .btn-primary { background: var(--dg); color: var(--w); }
     .btn:hover { transform: translateY(-2px); }
     .hero { padding: 10rem 0 6rem; background: var(--w); margin-top: 60px; }
     .hero-container { display: flex; flex-direction: column; max-width: 1400px; margin: 0 auto; padding: 0 20px; }
@@ -41,7 +42,7 @@ import { TranslationService } from '../../services/translation.service';
     .search-box input { flex: 1; padding: 1rem 1.2rem; border: none; font-size: 1rem; background: var(--w); }
     .search-box input:focus { outline: none; }
     .search-box button { padding: 0 2rem; background: var(--g); color: var(--w); border: none; cursor: pointer; font-weight: 600; }
-    .search-box button:hover { background: #C89A2E; }
+    .search-box button:hover { background: #D4C04A; }
     .analytics-panel { flex: 0 0 35%; background: var(--w); padding: 2rem; display: flex; flex-direction: column; border-radius: 12px; border: 1px solid #e0e0e0; }
     .risk-indicator { display: flex; align-items: center; margin-bottom: 1.5rem; padding: 1.2rem; border-radius: 10px; background: var(--lg); }
     .risk-icon { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #ff9800, #f57c00); display: flex; align-items: center; justify-content: center; margin-right: 1.2rem; color: var(--w); font-weight: bold; font-size: 1.2rem; }
@@ -109,7 +110,7 @@ export class LandingComponent implements OnInit {
       'For Partners': { en: 'For Partners', hi: 'साथियों के लिए', mr: 'भागीदारांसाठी', gu: 'ભાગીદારો માટે' },
       'For Customers': { en: 'For Customers', hi: 'ग्राहकों के लिए', mr: 'ग्राहकांसाठी', gu: 'ગ્રાહકો માટે' },
       'Blog': { en: 'Blog', hi: 'ब्लॉग', mr: 'ब्लॉग', gu: 'બ્લૉગ' },
-      'About': { en: 'About', hi: 'के बारे में', mr: 'संबंधी', gu: 'વિશે' },
+      'About Us': { en: 'About Us', hi: 'हमारे बारे में', mr: 'आमच्या बद्दल', gu: 'અમારા વિશે' },
       'Contact': { en: 'Contact', hi: 'संपर्क', mr: 'संपर्क', gu: 'સંપર્ક' },
       'Login': { en: 'Login', hi: 'लॉगिन', mr: 'लॉगिन', gu: 'લૉગિન' },
       'Register': { en: 'Register', hi: 'रजिस्टर करें', mr: 'नोंदणी', gu: 'નોંધણી' },
@@ -135,15 +136,14 @@ export class LandingComponent implements OnInit {
       'Lead Generation': { en: 'Lead Generation', hi: 'लीड जनरेशन', mr: 'लीड जनरेशन', gu: 'લીડ જનરેશન' },
       'Direct Purchase': { en: 'Direct Purchase', hi: 'सीधी खरीद', mr: 'थेट खरेदी', gu: 'સીધી ખરીદી' },
       'Doorstep Delivery': { en: 'Doorstep Delivery', hi: 'दरवाजे पर डिलीवरी', mr: 'घराच्या दारी डिलिव्हरी', gu: 'દરવાજે ડિલિવરી' },
-      'About Us': { en: 'About Us', hi: 'हमारे बारे में', mr: 'आमच्या बद्दल', gu: 'અમારા વિશે' },
       'About description': { en: 'We are a multidisciplinary leadership team united by meaningful innovation.', hi: 'हम एक बहु-विषयक नेतृत्व दल हैं जो सार्थक नवाचार से जुड़े हैं।', mr: 'आम्ही एक बहु-शाखीय नेतृत्व संघ आहोत जो अर्थपूर्ण नवाचार से संयुक्त आहे.', gu: 'અમે એક બહુ-શાખીય નેતૃત્વ ટીમ છીએ જે અર્થપૂર્ણ નવાધર્મ સાથે જોડાયેલા છીએ.' },
       'Founder & Director': { en: 'Founder & Director', hi: 'संस्थापक और निदेशक', mr: 'संस्थापक आणि निर्देशक', gu: 'સંસ્થાપક અને નિર્દેશક' },
       'Head Sales & Marketing': { en: 'Head Sales & Marketing', hi: 'बिक्री और विपणन प्रमुख', mr: 'विक्रय आणि विपणन प्रमुख', gu: 'વિક્રય અને માર્કેટિંગ હેડ' },
       'Chief Information Officer': { en: 'Chief Information Officer', hi: 'मुख्य सूचना अधिकारी', mr: 'मुख्य माहिती अधिकारी', gu: 'મુખ્ય માહિતી અધિકારી' },
       'Quick Links': { en: 'Quick Links', hi: 'तेजी से लिंक', mr: 'द्रुत लिंक्स', gu: 'ઝડપી લિંક્સ' },
       'Services': { en: 'Services', hi: 'सेवाएं', mr: 'सेवा', gu: 'સેવાઓ' },
-      'Contact Us': { en: 'Contact Us', hi: 'हमसे संपर्क करें', mr: 'आमच्याशी संपर्क साधा', gu: 'અમારો સંપર્ક કરો' },
-      'Home': { en: 'Home', hi: 'होम', mr: 'घर', gu: 'હોમ' },
+      'Contact Us': { en: 'Contact Us', hi: 'हमसे संपर्क करें', mr: 'आमच्याशી संपर्क साधा', gu: 'અમારો સંપર્ક કરો' },
+      'Home': { en: 'Home', hi: 'होम', mr: 'घર', gu: 'હોમ' },
       'All rights reserved': { en: 'All rights reserved', hi: 'सर्वाधिकार सुरक्षित', mr: 'सर्व हक्क सुरक्षित', gu: 'બધા અધિકારો આરક્ષિત' }
     };
 
