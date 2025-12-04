@@ -14,7 +14,7 @@ declare var L: any; // Declare Leaflet library
     :root { --g: #E8DC5A; --dg: #1B5E20; --lg: #FFFEF0; --d: #333; --l: #666; --w: #fff; --gr: #f8f9fa; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     .landing { font-family: Segoe UI, sans-serif; color: var(--d); }
-    .header { background: var(--w); padding: 1rem 0; position: fixed; top: 0; width: 100%; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,.05); }
+    .header { background: var(--w); padding: 1rem 0; position: fixed; top: 0; width: 100%; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
     .header-container { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; padding: 0 20px; }
     .logo-container { display: flex; align-items: center; gap: 10px; }
     .logo-img { width: 130px; height: auto; border-radius: 8px; object-fit: contain; }
@@ -40,12 +40,14 @@ declare var L: any; // Declare Leaflet library
     .map-container { flex: 0 0 65%; background: var(--w); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; border-radius: 12px; border: 1px solid #e0e0e0; }
     #satellite-map { width: 100%; height: 100%; border-radius: 12px; }
     .satellite-map-placeholder { text-align: center; color: var(--l); font-size: 1.2rem; }
-    .crop-selection-overlay { position: absolute; top: 20px; left: 20px; z-index: 100; width: 350px; }
+    .crop-selection-overlay { position: absolute; top: 20px; left: 20px; z-index: 500; width: 400px; }
     .search-box { display: flex; width: 100%; box-shadow: 0 8px 24px rgba(0,0,0,.15); border-radius: 8px; overflow: hidden; }
-    .search-box input { flex: 1; padding: 1rem 1.2rem; border: none; font-size: 1rem; background: var(--w); }
-    .search-box input:focus { outline: none; }
-    .search-box button { padding: 0 2rem; background: var(--g); color: var(--w); border: none; cursor: pointer; font-weight: 600; }
-    .search-box button:hover { background: #D4C04A; }
+    .search-box input { flex: 1; padding: 1rem 1.2rem; border: none; font-size: 1rem; background-color: white; color: var(--d); transition: all .3s; }
+    .search-box input::placeholder { color: #999; opacity: 1; }
+    .search-box input:focus { outline: none; background-color: white; color: var(--d); }
+    .search-box button { padding: 0 2rem; background-color: #2e7d32; color: white; border: none; cursor: pointer; font-weight: 600; transition: all .3s; }
+    .search-box button:hover { background-color: #1B5E20; opacity: 0.9; }
+    .location-label { opacity: 1 !important; }
     .analytics-panel { flex: 0 0 35%; background: var(--w); padding: 2rem; display: flex; flex-direction: column; border-radius: 12px; border: 1px solid #e0e0e0; }
     .risk-indicator { display: flex; align-items: center; margin-bottom: 1.5rem; padding: 1.2rem; border-radius: 10px; background: var(--lg); }
     .risk-icon { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #ff9800, #f57c00); display: flex; align-items: center; justify-content: center; margin-right: 1.2rem; color: var(--w); font-weight: bold; font-size: 1.2rem; }
@@ -120,8 +122,29 @@ export class LandingComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    // Initialize map
-    this.map = L.map('satellite-map').setView([18.85, 73.87], 12);
+    // Initialize map with zoom level 18 (max detail) showing location 1 Km north
+    // Coordinates: 1 Km north from previous location (10 Km east from Junner)
+    this.map = L.map('satellite-map', { zoomControl: false }).setView([18.859, 73.96], 18);
+
+    // Try to get user's current location
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLat = position.coords.latitude;
+          const userLng = position.coords.longitude;
+          // Center map on user location with current zoom level
+          this.map.setView([userLat, userLng], this.map.getZoom());
+          console.log(`User location: ${userLat}, ${userLng}`);
+        },
+        (error) => {
+          console.log('Geolocation error or denied:', error.message);
+          console.log('Using default location: 18.859, 73.96');
+          // Keep default location if geolocation fails or is denied
+        }
+      );
+    } else {
+      console.log('Geolocation not supported, using default location');
+    }
 
     // Add Bing Satellite tile layer
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
@@ -129,10 +152,51 @@ export class LandingComponent implements OnInit, AfterViewInit {
       maxZoom: 18
     }).addTo(this.map);
 
-    // Add marker for Junner East, Pune
-    L.marker([18.85, 73.87]).addTo(this.map)
-      .bindPopup('Junner East, Pune<br>Approx. 30 Sq Km Area<br>📡 Real Satellite Imagery')
-      .openPopup();
+    // Add marker for 1 Km north from previous location
+    // REMOVED: Marker pin - using location labels only
+    // L.marker([18.859, 73.96]).addTo(this.map)
+    //   .bindPopup('1 Km North<br>Max Zoom (Level 18)<br>📡 Real Satellite Imagery')
+    //   .openPopup();
+
+    // Add location labels for cities/villages
+    const locations = [
+      { name: 'Junner', lat: 18.85, lng: 73.87 },
+      { name: 'Khed', lat: 18.88, lng: 73.95 },
+      { name: 'Tamhini Ghat', lat: 18.82, lng: 73.90 },
+      { name: 'Naane', lat: 18.87, lng: 74.00 }
+    ];
+
+    // Add village-level text labels for locations (custom HTML overlay)
+    const villageLabels = [
+      // Major villages/towns
+      { name: 'Junner', lat: 18.850, lng: 73.870, size: 'large' },
+      { name: 'Khed', lat: 18.880, lng: 73.950, size: 'large' },
+      { name: 'Tamhini', lat: 18.820, lng: 73.900, size: 'medium' },
+      { name: 'Naane', lat: 18.870, lng: 74.000, size: 'small' },
+      // Additional village-level labels for granularity
+      { name: 'Parwada', lat: 18.855, lng: 73.875, size: 'small' },
+      { name: 'Lavale', lat: 18.875, lng: 73.920, size: 'small' },
+      { name: 'Supe', lat: 18.860, lng: 73.880, size: 'small' },
+      { name: 'Dabhade', lat: 18.865, lng: 73.945, size: 'small' },
+      { name: 'Khanapur', lat: 18.845, lng: 73.915, size: 'small' }
+    ];
+
+    villageLabels.forEach(loc => {
+      const fontSize = loc.size === 'large' ? '13px' : loc.size === 'medium' ? '11px' : '10px';
+      const fontWeight = loc.size === 'large' ? '700' : '600';
+      L.marker([loc.lat, loc.lng], {
+        icon: L.divIcon({
+          className: 'location-label',
+          html: `<div style="color: #2e7d32; font-weight: ${fontWeight}; font-size: ${fontSize}; white-space: nowrap; background: rgba(255,255,255,0.85); padding: 2px 6px; border-radius: 3px; border: 1px solid #2e7d32;">${loc.name}</div>`,
+          iconSize: [100, 20],
+          iconAnchor: [50, 10]
+        })
+      }).addTo(this.map);
+    });
+
+    // Add custom zoom controls to bottom-left
+    const zoomControl = L.control.zoom({ position: 'bottomleft' });
+    zoomControl.addTo(this.map);
   }
 
   translate(key: string): string {
