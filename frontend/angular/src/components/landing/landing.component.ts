@@ -13,8 +13,8 @@ declare var L: any; // Declare Leaflet library
   styles: [`
     :root { --g: #E8DC5A; --dg: #1B5E20; --lg: #FFFEF0; --d: #333; --l: #666; --w: #fff; --gr: #f8f9fa; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    .landing { font-family: Segoe UI, sans-serif; color: var(--d); }
-    .header { background: var(--w); padding: 1rem 0; position: fixed; top: 0; width: 100%; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+    .landing { font-family: Segoe UI, sans-serif; color: var(--d); padding-top: 60px; }
+    .header { background-color: #ffffff; padding: 1rem 0; position: fixed; top: 0; left: 0; right: 0; width: 100%; z-index: 9999; box-shadow: 0 2px 8px rgba(0,0,0,.15); opacity: 1; }
     .header-container { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; padding: 0 20px; }
     .logo-container { display: flex; align-items: center; gap: 10px; }
     .logo-img { width: 130px; height: auto; border-radius: 8px; object-fit: contain; }
@@ -23,9 +23,9 @@ declare var L: any; // Declare Leaflet library
     .nav-menu a:hover { color: var(--g); }
     .nav-menu ul { display: flex; list-style: none; gap: 2rem; margin: 0; padding: 0; }
     .dropdown { position: relative; }
-    .dropdown-content { display: none; position: absolute; background: var(--w); min-width: 200px; box-shadow: 0 8px 24px rgba(0,0,0,.1); border-radius: 8px; padding: .5rem 0; margin-top: .5rem; top: 100%; left: 0; }
+    .dropdown-content { display: none; position: absolute; background-color: #ffffff; min-width: 200px; box-shadow: 0 8px 24px rgba(0,0,0,.1); border-radius: 8px; padding: .5rem 0; margin-top: .5rem; top: 100%; left: 0; z-index: 10000; opacity: 1; }
     .dropdown:hover .dropdown-content { display: block; }
-    .dropdown-content a { display: block; padding: .75rem 1.5rem; }
+    .dropdown-content a { display: block; padding: .75rem 1.5rem; opacity: 1; background-color: var(--w); }
     .dropdown-content a:hover { background: var(--lg); }
     .header-controls { display: flex; align-items: center; gap: 1.2rem; }
     .language-select { padding: .6rem; border: 1px solid #e0e0e0; border-radius: 6px; background: var(--w); cursor: pointer; }
@@ -33,9 +33,9 @@ declare var L: any; // Declare Leaflet library
     .btn-outline { background: transparent; border: 1px solid var(--g); color: var(--g); }
     .btn-primary { background: var(--dg); color: var(--w); }
     .btn:hover { transform: translateY(-2px); }
-    .hero { padding: 10rem 0 6rem; background: var(--w); margin-top: 60px; }
+    .hero { padding: 3.9rem 0 6rem; background: var(--w); margin-top: 0; }
     .hero-container { display: flex; flex-direction: column; max-width: 1400px; margin: 0 auto; padding: 0 20px; }
-    .hero h1 { font-size: 3.2rem; margin-bottom: 2rem; text-align: center; font-weight: 700; }
+    .hero h1 { font-size: 1.6rem; margin-bottom: 0.6rem; text-align: left; font-weight: 700; }
     .map-analytics-section { display: flex; gap: 2rem; margin-bottom: 2rem; height: 600px; }
     .map-container { flex: 0 0 65%; background: var(--w); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; border-radius: 12px; border: 1px solid #e0e0e0; }
     #satellite-map { width: 100%; height: 100%; border-radius: 12px; }
