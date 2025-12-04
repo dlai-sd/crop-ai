@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 
@@ -9,19 +9,42 @@ import { FooterComponent } from './components/footer/footer.component';
   standalone: true,
   imports: [CommonModule, RouterModule, NavbarComponent, FooterComponent],
   template: `
-    <app-navbar></app-navbar>
-    <main class="container-fluid mt-4">
-      <router-outlet></router-outlet>
-    </main>
-    <app-footer></app-footer>
+    <div class="app-wrapper">
+      <app-navbar *ngIf="showNavbar"></app-navbar>
+      <main [class.full-height]="!showNavbar">
+        <router-outlet></router-outlet>
+      </main>
+      <app-footer *ngIf="showNavbar"></app-footer>
+    </div>
   `,
   styles: [`
+    .app-wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
     main {
-      min-height: calc(100vh - 140px);
+      flex: 1;
       padding: 20px;
+    }
+
+    main.full-height {
+      padding: 0;
+      background: transparent;
     }
   `]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'crop-ai';
+  showNavbar = true;
+
+  constructor(private router: Router) {}
+
+  ngOnInit() {
+    this.router.events.subscribe(() => {
+      this.showNavbar = !this.router.url.includes('/login');
+    });
+  }
 }
+
