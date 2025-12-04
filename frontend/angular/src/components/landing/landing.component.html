@@ -11,23 +11,23 @@
         <ul>
           <li class="dropdown">
             <a href="javascript:void(0)">{{ translate('I Am') }}</a>
-            <div class="dropdown-content">
-              <a href="javascript:void(0)">{{ translate('Farmer') }}</a>
-              <a href="javascript:void(0)">{{ translate('Partner') }}</a>
-              <a href="javascript:void(0)">{{ translate('Customer') }}</a>
+            <div class="dropdown-content" (click)="$event.stopPropagation()">
+              <a href="javascript:void(0)" (click)="scrollToCarouselCard(0)">{{ translate('Farmer') }}</a>
+              <a href="javascript:void(0)" (click)="scrollToCarouselCard(1)">{{ translate('Partner') }}</a>
+              <a href="javascript:void(0)" (click)="scrollToCarouselCard(2)">{{ translate('Customer') }}</a>
             </div>
           </li>
           <li class="dropdown">
             <a href="javascript:void(0)">{{ translate('Our Offerings') }}</a>
-            <div class="dropdown-content">
-              <a href="javascript:void(0)">{{ translate('For Farmers') }}</a>
-              <a href="javascript:void(0)">{{ translate('For Partners') }}</a>
-              <a href="javascript:void(0)">{{ translate('For Customers') }}</a>
+            <div class="dropdown-content" (click)="$event.stopPropagation()">
+              <a href="javascript:void(0)" (click)="scrollToCarouselCard(0)">{{ translate('For Farmers') }}</a>
+              <a href="javascript:void(0)" (click)="scrollToCarouselCard(1)">{{ translate('For Partners') }}</a>
+              <a href="javascript:void(0)" (click)="scrollToCarouselCard(2)">{{ translate('For Customers') }}</a>
             </div>
           </li>
-          <li><a href="javascript:void(0)">{{ translate('Blog') }}</a></li>
-          <li><a href="javascript:void(0)">{{ translate('About Us') }}</a></li>
-          <li><a href="javascript:void(0)">{{ translate('Contact') }}</a></li>
+          <li><a href="javascript:void(0)" (click)="scrollToSection('about')">{{ translate('Blog') }}</a></li>
+          <li><a href="javascript:void(0)" (click)="scrollToSection('about')">{{ translate('About Us') }}</a></li>
+          <li><a href="javascript:void(0)" (click)="scrollToSection('contact')">{{ translate('Contact') }}</a></li>
         </ul>
       </nav>
       
@@ -82,7 +82,8 @@
       </div>
       
       <!-- User Role Carousel with Auto-Scroll -->
-      <div class="carousel-container">
+      <div class="carousel-container" id="carousel">
+        <p class="carousel-subtitle">{{ translate('Our comprehensive platform offers tailored solutions for every stakeholder in the agricultural ecosystem') }}</p>
         <div class="carousel-wrapper">
           <div class="carousel-track">
             <!-- Farmer Card -->
@@ -115,12 +116,15 @@
             
             <!-- Customer Card -->
             <div class="carousel-card" [class.active]="currentCarouselIndex === 2" (click)="selectCarouselCard(2)">
-              <h3>🛒 {{ translate('I am a Customer') }}</h3>
-              <p>{{ translate('Source fresh farm products directly from farmers') }}</p>
-              <ul>
-                <li>{{ translate('Direct farm-to-table sourcing') }}</li>
-                <li>{{ translate('Quality assured produce') }}</li>
-                <li>{{ translate('Competitive pricing') }}</li>
+              <h3>🛒 {{ translate('Liberating Customers') }}</h3>
+              <p style="text-align: center;">{{ translate('Source fresh farm products directly from farmers') }}</p>
+              <ul style="text-align: center; list-style: none; display: flex; flex-direction: column; align-items: center;">
+                <li>{{ translate('Manage Profile - Set your preferences for farm produce and locations') }}</li>
+                <li>{{ translate('Direct Purchase from Farmers - Buy fresh produce directly from source') }}</li>
+                <li>{{ translate('Quality, Packing and Transport - Ensure quality with our verified supply chain') }}</li>
+                <li>{{ translate('Doorstep Delivery - Get farm-fresh products delivered to your home') }}</li>
+                <li>{{ translate('Quality Assurance - Verified quality standards for all products') }}</li>
+                <li>{{ translate('Supply Chain Transparency - Track your products from farm to table') }}</li>
               </ul>
             </div>
           </div>
@@ -140,66 +144,84 @@
     </div>
   </section>
   
-  <!-- Features Section -->
-  <section class="features">
-    <p class="section-subtitle">{{ translate('Platform subtitle') }}</p>
-    
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">👨‍🌾</div>
-        <h3>{{ translate('Empowering Farmers') }}</h3>
-        <ul>
-          <li>{{ translate('Manage Profile') }}</li>
-          <li>{{ translate('Actionable Insights') }}</li>
-          <li>{{ translate('Request Service') }}</li>
-        </ul>
-      </div>
+  <!-- About Section -->
+  <section class="about" id="about">
+    <div class="about-container">
+      <h2>{{ translate('About Us') }}</h2>
+      <p class="about-description">{{ translate('About Us Description') }}</p>
       
-      <div class="feature-card">
-        <div class="feature-icon">🤝</div>
-        <h3>{{ translate('Delighting Partners') }}</h3>
-        <ul>
-          <li>{{ translate('Manage Profile') }}</li>
-          <li>{{ translate('Market Analytics') }}</li>
-          <li>{{ translate('Lead Generation') }}</li>
-        </ul>
-      </div>
+      <h3 style="margin-top: 3rem; margin-bottom: 1.5rem; color: var(--dg); font-size: 1.5rem;">{{ translate('Vision') }}</h3>
+      <p class="about-description">{{ translate('Vision Description') }}</p>
       
-      <div class="feature-card">
-        <div class="feature-icon">🛒</div>
-        <h3>{{ translate('Liberating Customers') }}</h3>
-        <ul>
-          <li>{{ translate('Manage Profile') }}</li>
-          <li>{{ translate('Direct Purchase') }}</li>
-          <li>{{ translate('Doorstep Delivery') }}</li>
-        </ul>
+      <h3 style="margin-top: 2rem; margin-bottom: 1.5rem; color: var(--dg); font-size: 1.5rem;">{{ translate('Mission') }}</h3>
+      <p class="about-description">{{ translate('Mission Description') }}</p>
+      
+      <h3 style="margin-top: 2rem; margin-bottom: 2rem; color: var(--dg); font-size: 1.5rem;">{{ translate('Leadership Team') }}</h3>
+      
+      <div class="team-grid">
+        <div class="team-member" style="text-align: left;">
+          <div class="member-name" style="margin-top: 0;">Yogesh Khandge</div>
+          <div class="member-position">{{ translate('Founder & Director') }}</div>
+          <p style="color: var(--l); line-height: 1.6; margin-top: 1rem;">{{ translate('Yogesh Bio') }}</p>
+        </div>
+        
+        <div class="team-member" style="text-align: left;">
+          <div class="member-name" style="margin-top: 0;">Joseph Varghese</div>
+          <div class="member-position">{{ translate('Chief Information Officer') }}</div>
+          <p style="color: var(--l); line-height: 1.6; margin-top: 1rem;">{{ translate('Joseph Bio') }}</p>
+        </div>
+        
+        <div class="team-member" style="text-align: left;">
+          <div class="member-name" style="margin-top: 0;">Sujay Khandge</div>
+          <div class="member-position">{{ translate('Head Sales & Marketing') }}</div>
+          <p style="color: var(--l); line-height: 1.6; margin-top: 1rem;">{{ translate('Sujay Bio') }}</p>
+        </div>
       </div>
     </div>
   </section>
-  
-  <!-- About Section -->
-  <section class="about">
-    <div class="about-container">
-      <h2>{{ translate('About Us') }}</h2>
-      <p class="about-description">{{ translate('About description') }}</p>
+
+  <!-- Contact Us Section -->
+  <section class="contact-us" id="contact">
+    <div class="contact-container">
+      <h2>{{ translate('Contact Us') }}</h2>
       
-      <div class="team-grid">
-        <div class="team-member">
-          <div class="member-image">YK</div>
-          <div class="member-name">Yogesh Khandge</div>
-          <div class="member-position">{{ translate('Founder & Director') }}</div>
+      <div class="contact-cards-grid">
+        <!-- Customer Care Card -->
+        <div class="contact-card">
+          <div class="contact-card-header">📞</div>
+          <h3>{{ translate('Customer Care') }}</h3>
+          <div class="contact-info">
+            <p><strong>📧 {{ translate('Email') }}:</strong> <a href="mailto:customer.care@dlaisd.com">customer.care@dlaisd.com</a></p>
+            <p style="margin-top: 0.5rem;"><strong>📱 {{ translate('Phone') }}:</strong> <a href="tel:+918888912344">+91-8888912344</a></p>
+            <div style="margin-top: 1.5rem; display: flex; gap: 0.8rem; flex-wrap: wrap;">
+              <a href="https://www.linkedin.com/company/dlaisd/" target="_blank" class="linkedin-link">🔗 LinkedIn</a>
+              <a href="https://www.youtube.com/@DLAISD/playlists" target="_blank" class="linkedin-link">📺 YouTube</a>
+              <a href="https://dlaisd.com/" target="_blank" class="linkedin-link">🌐 Website</a>
+            </div>
+          </div>
         </div>
-        
-        <div class="team-member">
-          <div class="member-image">SK</div>
-          <div class="member-name">Sujay Khandge</div>
-          <div class="member-position">{{ translate('Head Sales & Marketing') }}</div>
+
+        <!-- Founder Contact Card -->
+        <div class="contact-card">
+          <div class="contact-card-header">👤</div>
+          <h3>{{ translate('Founder & Director') }}</h3>
+          <div class="contact-info">
+            <p><strong>Yogesh Khandge</strong></p>
+            <p><strong>📧</strong> <a href="mailto:yogesh.khandge@dlaisd.com">yogesh.khandge@dlaisd.com</a></p>
+            <p><strong>📱</strong> <a href="tel:+919822753575">+91-9822753575</a></p>
+            <p style="margin-top: 0.8rem;"><a href="https://www.linkedin.com/in/yogesh-khandge/" target="_blank" class="linkedin-link">🔗 LinkedIn Profile</a></p>
+          </div>
         </div>
-        
-        <div class="team-member">
-          <div class="member-image">JV</div>
-          <div class="member-name">Joseph Varghese</div>
-          <div class="member-position">{{ translate('Chief Information Officer') }}</div>
+
+        <!-- Company Info Card -->
+        <div class="contact-card">
+          <div class="contact-card-header">🏢</div>
+          <h3>{{ translate('Company Info') }}</h3>
+          <div class="contact-info">
+            <p><strong>DLAI Satellite Data (OPC) Pvt Ltd</strong></p>
+            <p>C8, Everest Heights, Park Road,<br>Viman Nagar, Pune, MH, India<br>PIN 411014</p>
+            <p style="margin-top: 0.8rem;"><strong>CIN:</strong> U62090PN2024OPC230499</p>
+          </div>
         </div>
       </div>
     </div>

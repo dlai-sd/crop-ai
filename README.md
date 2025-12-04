@@ -2,9 +2,31 @@
 
 Crop Identification demo — modular AI system for crop identification using satellite imagery.
 
+## Latest Updates
+
+### Frontend Landing Page (December 4, 2025)
+- ✅ **Submenu Navigation:** All navigation items now smoothly scroll to relevant page sections
+- ✅ **Smart Carousel:** "I Am" and "Our Offerings" menus automatically navigate to corresponding user role cards
+- ✅ **Typography:** Applied Aptos (Body) font for professional appearance
+- ✅ **Text Alignment:** Justified text for About Us, Vision, and Mission sections
+- ✅ **Responsive Design:** Fully responsive navigation and layout
+- ✅ **Multilingual Support:** 4-language support (English, Hindi, Marathi, Gujarati)
+
+See `CHANGELOG.md` for complete December 4 session details.
+
 ## Quick start
 
-### Local development
+### Frontend Development (Angular)
+
+```bash
+cd frontend/angular
+npm install
+npm start  # Runs on http://localhost:4200
+```
+
+The dev server binds to all interfaces (0.0.0.0:4200) for external access.
+
+### Backend / Python
 
 1. Create and activate a virtual environment:
 ```bash
