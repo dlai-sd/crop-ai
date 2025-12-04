@@ -81,11 +81,54 @@
         </div>
       </div>
       
-      <div class="user-toggle-container">
-        <div class="user-toggle">
-          <div class="toggle-option active" (click)="selectRole('Farmer')">{{ translate('I am a Farmer') }}</div>
-          <div class="toggle-option" (click)="selectRole('Partner')">{{ translate('I am a Partner') }}</div>
-          <div class="toggle-option" (click)="selectRole('Customer')">{{ translate('I am a Customer') }}</div>
+      <!-- User Role Carousel with Auto-Scroll -->
+      <div class="carousel-container">
+        <div class="carousel-wrapper">
+          <div class="carousel-track">
+            <!-- Farmer Card -->
+            <div class="carousel-card" [class.active]="currentCarouselIndex === 0" (click)="selectCarouselCard(0)">
+              <h3>👨‍🌾 {{ translate('I am a Farmer') }}</h3>
+              <p>{{ translate('Manage your farming operations with AI-powered insights') }}</p>
+              <ul>
+                <li>{{ translate('Real-time crop monitoring') }}</li>
+                <li>{{ translate('Weather-based recommendations') }}</li>
+                <li>{{ translate('Market price updates') }}</li>
+              </ul>
+            </div>
+            
+            <!-- Partner Card -->
+            <div class="carousel-card" [class.active]="currentCarouselIndex === 1" (click)="selectCarouselCard(1)">
+              <h3>🤝 {{ translate('I am a Partner') }}</h3>
+              <p>{{ translate('Expand your agricultural services with our platform') }}</p>
+              <ul>
+                <li>{{ translate('Access to verified farmers') }}</li>
+                <li>{{ translate('Advanced analytics dashboard') }}</li>
+                <li>{{ translate('Revenue optimization tools') }}</li>
+              </ul>
+            </div>
+            
+            <!-- Customer Card -->
+            <div class="carousel-card" [class.active]="currentCarouselIndex === 2" (click)="selectCarouselCard(2)">
+              <h3>🛒 {{ translate('I am a Customer') }}</h3>
+              <p>{{ translate('Source fresh farm products directly from farmers') }}</p>
+              <ul>
+                <li>{{ translate('Direct farm-to-table sourcing') }}</li>
+                <li>{{ translate('Quality assured produce') }}</li>
+                <li>{{ translate('Competitive pricing') }}</li>
+              </ul>
+            </div>
+          </div>
+          
+          <!-- Navigation Arrows -->
+          <button class="carousel-nav-button left" (click)="prevCarouselSlide()" aria-label="Previous">❮</button>
+          <button class="carousel-nav-button right" (click)="nextCarouselSlide()" aria-label="Next">❯</button>
+        </div>
+        
+        <!-- Dot Indicators -->
+        <div class="carousel-dots">
+          <div class="carousel-dot" [class.active]="currentCarouselIndex === 0" (click)="selectCarouselCard(0)"></div>
+          <div class="carousel-dot" [class.active]="currentCarouselIndex === 1" (click)="selectCarouselCard(1)"></div>
+          <div class="carousel-dot" [class.active]="currentCarouselIndex === 2" (click)="selectCarouselCard(2)"></div>
         </div>
       </div>
     </div>

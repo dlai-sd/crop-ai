@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TranslationService } from '../../services/translation.service';
@@ -53,10 +53,24 @@ declare var L: any; // Declare Leaflet library
     .risk-icon { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #ff9800, #f57c00); display: flex; align-items: center; justify-content: center; margin-right: 1.2rem; color: var(--w); font-weight: bold; font-size: 1.2rem; }
     .opportunity { padding: 1.5rem; border-radius: 10px; background: var(--lg); }
     .opportunity h4 { color: var(--g); margin-bottom: .8rem; }
-    .user-toggle-container { display: flex; justify-content: center; margin-top: 2rem; }
-    .user-toggle { display: flex; background: var(--gr); border-radius: 50px; padding: .4rem; max-width: 600px; width: 100%; }
-    .toggle-option { flex: 1; text-align: center; padding: 1rem; border-radius: 50px; cursor: pointer; font-weight: 500; transition: all .3s; }
-    .toggle-option.active { background: var(--g); color: var(--w); }
+    .carousel-container { position: relative; margin-top: 3rem; width: 100%; }
+    .carousel-wrapper { position: relative; overflow: hidden; }
+    .carousel-track { display: flex; gap: 1.5rem; transition: transform 0.6s ease-in-out; padding: 0 20px; }
+    .carousel-card { flex: 0 0 100%; background: var(--w); padding: 2.5rem; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,.08); text-align: center; cursor: pointer; transition: all .3s; }
+    .carousel-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,.12); }
+    .carousel-card.active { background: var(--g); color: var(--w); }
+    .carousel-card h3 { font-size: 1.8rem; margin-bottom: 1.5rem; font-weight: 700; }
+    .carousel-card p { font-size: 1rem; line-height: 1.6; color: inherit; }
+    .carousel-card ul { list-style: none; text-align: left; margin-top: 1.5rem; }
+    .carousel-card li { margin-bottom: 0.8rem; font-size: 0.95rem; }
+    .carousel-card li:before { content: "✓"; font-weight: bold; margin-right: 0.7rem; }
+    .carousel-nav-button { position: absolute; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; background: var(--g); color: var(--w); border: none; border-radius: 50%; cursor: pointer; font-size: 1.5rem; font-weight: bold; transition: all .3s; z-index: 100; }
+    .carousel-nav-button:hover { background: var(--dg); transform: translateY(-50%) scale(1.1); }
+    .carousel-nav-button.left { left: 10px; }
+    .carousel-nav-button.right { right: 10px; }
+    .carousel-dots { display: flex; justify-content: center; gap: 0.8rem; margin-top: 2rem; }
+    .carousel-dot { width: 12px; height: 12px; border-radius: 50%; background: #ddd; cursor: pointer; transition: all .3s; }
+    .carousel-dot.active { background: var(--g); width: 30px; border-radius: 6px; }
     .features { padding: 6rem 0; background: var(--w); }
     .section-subtitle { text-align: center; margin-bottom: 4rem; color: var(--l); font-size: 1.2rem; max-width: 700px; margin-left: auto; margin-right: auto; }
     .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; max-width: 1400px; margin: 0 auto; padding: 0 20px; }
@@ -94,6 +108,9 @@ declare var L: any; // Declare Leaflet library
 export class LandingComponent implements OnInit, AfterViewInit {
   private currentLanguage = 'en';
   private map: any;
+  currentCarouselIndex = 0;
+  private carouselAutoScrollInterval: any;
+  private readonly AUTO_SCROLL_DELAY = 4000; // 4 seconds
 
   constructor(private router: Router, private translationService: TranslationService) {
     this.translationService.getLanguage().subscribe(lang => {
@@ -107,6 +124,54 @@ export class LandingComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.initSatelliteMap();
+    this.startCarouselAutoScroll();
+  }
+
+  private startCarouselAutoScroll(): void {
+    this.carouselAutoScrollInterval = setInterval(() => {
+      this.nextCarouselSlide();
+    }, this.AUTO_SCROLL_DELAY);
+  }
+
+  nextCarouselSlide(): void {
+    // 3 items: 0 = Farmer, 1 = Partner, 2 = Customer
+    this.currentCarouselIndex = (this.currentCarouselIndex + 1) % 3;
+    this.updateCarouselPosition();
+    this.resetAutoScroll();
+  }
+
+  prevCarouselSlide(): void {
+    this.currentCarouselIndex = (this.currentCarouselIndex - 1 + 3) % 3;
+    this.updateCarouselPosition();
+    this.resetAutoScroll();
+  }
+
+  selectCarouselCard(index: number): void {
+    this.currentCarouselIndex = index;
+    this.updateCarouselPosition();
+    this.resetAutoScroll();
+  }
+
+  private updateCarouselPosition(): void {
+    const carouselTrack = document.querySelector('.carousel-track') as HTMLElement;
+    if (carouselTrack) {
+      const translateX = -this.currentCarouselIndex * 100;
+      carouselTrack.style.transform = `translateX(${translateX}%)`;
+    }
+  }
+
+  private resetAutoScroll(): void {
+    // Clear existing interval and start fresh
+    if (this.carouselAutoScrollInterval) {
+      clearInterval(this.carouselAutoScrollInterval);
+    }
+    this.startCarouselAutoScroll();
+  }
+
+  ngOnDestroy(): void {
+    if (this.carouselAutoScrollInterval) {
+      clearInterval(this.carouselAutoScrollInterval);
+    }
   }
 
   private initSatelliteMap(): void {
@@ -243,8 +308,20 @@ export class LandingComponent implements OnInit, AfterViewInit {
       'Quick Links': { en: 'Quick Links', hi: 'तेजी से लिंक', mr: 'द्रुत लिंक्स', gu: 'ઝડપી લિંક્સ' },
       'Services': { en: 'Services', hi: 'सेवाएं', mr: 'सेवा', gu: 'સેવાઓ' },
       'Contact Us': { en: 'Contact Us', hi: 'हमसे संपर्क करें', mr: 'आमच्याशી संपर्क साधा', gu: 'અમારો સંપર્ક કરો' },
-      'Home': { en: 'Home', hi: 'होम', mr: 'घર', gu: 'હોમ' },
-      'All rights reserved': { en: 'All rights reserved', hi: 'सर्वाधिकार सुरक्षित', mr: 'सर्व हक्क सुरक्षित', gu: 'બધા અધિકારો આરક્ષિત' }
+      'Home': { en: 'Home', hi: 'होम', mr: 'घर', gu: 'હોમ' },
+      'All rights reserved': { en: 'All rights reserved', hi: 'सर्वाधिकार सुरक्षित', mr: 'सर्व हक्क सुरक्षित', gu: 'બધા અધિકારો આરક્ષિત' },
+      'Manage your farming operations with AI-powered insights': { en: 'Manage your farming operations with AI-powered insights', hi: 'एआई-संचालित अंतर्दृष्टि के साथ अपने कृषि संचालन का प्रबंधन करें', mr: 'AI-चालित अंतर्दृष्टी के साथ आपल्या कृषी कार्यांचे व्यवस्थापन करा', gu: 'AI-સંચાલિત અંતર્દૃષ્ટી સાથે તમારી ખેતી કામચલાઉ સંચાલન કરો' },
+      'Real-time crop monitoring': { en: 'Real-time crop monitoring', hi: 'रीयल-टाइम फसल निगरानी', mr: 'रिअल-टाइम पीक निरीक्षण', gu: 'રીયલ-ટાઈમ પાક મોનિટરિંગ' },
+      'Weather-based recommendations': { en: 'Weather-based recommendations', hi: 'मौसम-आधारित सिफारिशें', mr: 'हवामान-आधारित शिफारस', gu: 'હવામાન-આધારિત ભલામણો' },
+      'Market price updates': { en: 'Market price updates', hi: 'बाजार मूल्य अपडेट', mr: 'बाजार किंमत अपडेट', gu: 'બજાર કિંમત અપડેટ્સ' },
+      'Expand your agricultural services with our platform': { en: 'Expand your agricultural services with our platform', hi: 'हमारे प्लेटफॉर्म के साथ अपनी कृषि सेवाओं का विस्तार करें', mr: 'आमच्या प्लॅटफॉर्मसह आपल्या कृषी सेवांचा विस्तार करा', gu: 'આમારા પ્લેટફર્મ સાથે તમારી કૃષિ સેવાઓ વિસ્તૃત કરો' },
+      'Access to verified farmers': { en: 'Access to verified farmers', hi: 'सत्यापित किसानों तक पहुंच', mr: 'सत्यापित शेतकरी यांना प्रवेश', gu: 'ચકાસાયેલ ખેડૂતોને પ્રવેશ' },
+      'Advanced analytics dashboard': { en: 'Advanced analytics dashboard', hi: 'उन्नत विश्लेषण डैशबोर्ड', mr: 'प्रगत विश्लेषण डॅशबोर्ड', gu: 'અદ્યતન વિશ્લેષણ ડેશબોર્ડ' },
+      'Revenue optimization tools': { en: 'Revenue optimization tools', hi: 'राजस्व अनुकूलन उपकरण', mr: 'महसूल अनुकूलन साधने', gu: 'રાજસ્વ અપ્ટિમાઇઝેશન ટૂલ્સ' },
+      'Source fresh farm products directly from farmers': { en: 'Source fresh farm products directly from farmers', hi: 'सीधे किसानों से ताजी कृषि पণ्य खरीदें', mr: 'शेतकऱ्यांकडून थेट ताজी शेतमाल खरेदी करा', gu: 'ખેડૂતોથી સીધા તાજા ખેતીવાર ઉત્પાદનો સોર્સ કરો' },
+      'Direct farm-to-table sourcing': { en: 'Direct farm-to-table sourcing', hi: 'सीधे खेत से टेबल तक स्रोत', mr: 'थेट शेतातून टेबलपर्यंत स्रोत', gu: 'સીધું ખેતરથી ટેબલ સુધી સોર્સિંગ' },
+      'Quality assured produce': { en: 'Quality assured produce', hi: 'गुणवत्ता आश्वासित उपज', mr: 'गुणवत्ता आश्वस्त पीक', gu: 'ગુણવત્તા આશ્વાસિત ઉત્પાદન' },
+      'Competitive pricing': { en: 'Competitive pricing', hi: 'प्रतिस्पर्धी मूल्य निर्धारण', mr: 'प्रतिस्पर्धी किंमत', gu: 'પ્રતિસ્પર્ધી કિંમત' }
     };
 
     const lang = this.currentLanguage;
@@ -259,6 +336,8 @@ export class LandingComponent implements OnInit, AfterViewInit {
 
   selectRole(role: string): void {
     console.log('Selected role:', role);
+    const roleIndex = role === 'Farmer' ? 0 : role === 'Partner' ? 1 : 2;
+    this.selectCarouselCard(roleIndex);
   }
 
   goToLogin(): void {
