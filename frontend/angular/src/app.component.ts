@@ -43,7 +43,8 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.router.events.subscribe(() => {
-      this.showNavbar = !this.router.url.includes('/login');
+      const hiddenRoutes = ['/login', '/'];
+      this.showNavbar = !hiddenRoutes.includes(this.router.url);
     });
   }
 }

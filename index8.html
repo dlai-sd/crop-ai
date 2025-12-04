@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agricultural Satellite Insights</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        :root {
+            --primary-green: #2e7d32;
+            --light-green: #e8f5e9;
+            --text-dark: #333;
+            --text-light: #666;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            color: var(--text-dark);
+            background-color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--white);
+            padding: 1.2rem 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary-green), #4caf50);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            letter-spacing: -0.5px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav li {
+            margin: 0 1.2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            padding: 0.5rem 0;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        nav a:hover {
+            color: var(--primary-green);
+        }
+
+        nav a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary-green);
+            transition: var(--transition);
+        }
+
+        nav a:hover:after {
+            width: 100%;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--white);
+            min-width: 200px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            padding: 0.5rem 0;
+            margin-top: 0.5rem;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            transition: var(--transition);
+        }
+
+        .dropdown-content a:hover {
+            background-color: var(--light-green);
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .language-selector select {
+            padding: 0.6rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            background-color: var(--white);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .language-selector select:focus {
+            outline: none;
+            border-color: var(--primary-green);
+        }
+
+        .btn {
+            padding: 0.7rem 1.8rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-size: 0.95rem;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-green);
+            color: var(--primary-green);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-green);
+            color: var(--white);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 10rem 0 6rem;
+            background: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            gap: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            flex: 1;
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+            line-height: 1.2;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        /* Map and Analytics Section */
+        .map-analytics-section {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+            height: 700px;
+        }
+
+        .map-container {
+            flex: 0 0 65%;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        #satellite-map {
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+        }
+
+        /* Crop Selection Overlay */
+        .crop-selection-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            width: 400px;
+        }
+
+        .search-box {
+            display: flex;
+            width: 100%;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 1rem 1.2rem;
+            border: none;
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: var(--white);
+        }
+
+        .search-box input:focus {
+            outline: none;
+        }
+
+        .search-box button {
+            padding: 0 2rem;
+            background-color: var(--primary-green);
+            color: var(--white);
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .search-box button:hover {
+            background-color: #1b5e20;
+        }
+
+        .analytics-panel {
+            flex: 0 0 35%;
+            background-color: var(--white);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            border-radius: 12px;
+        }
+
+        /* User Toggle at Bottom */
+        .user-toggle-container {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .user-toggle {
+            display: flex;
+            background-color: var(--light-gray);
+            border-radius: 50px;
+            padding: 0.4rem;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .toggle-option {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .toggle-option.active {
+            background-color: var(--primary-green);
+            color: var(--white);
+        }
+
+        /* Analytics Content */
+        .risk-indicator {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 1.2rem;
+            border-radius: 10px;
+            background-color: var(--light-green);
+        }
+
+        .risk-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.2rem;
+            color: var(--white);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .opportunity {
+            padding: 1.5rem;
+            border-radius: 10px;
+            background-color: var(--light-green);
+            margin-top: 1.5rem;
+        }
+
+        .opportunity h4 {
+            color: var(--primary-green);
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        /* Features Section with Carousel */
+        .features {
+            padding: 6rem 0;
+            background-color: var(--white);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            margin-bottom: 4rem;
+            color: var(--text-light);
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .carousel-container {
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 80px;
+        }
+
+        .carousel {
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .carousel-inner {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .carousel-item {
+            flex: 0 0 100%;
+            padding: 0 15px;
+            transition: var(--transition);
+        }
+
+        .feature-card {
+            background-color: var(--white);
+            padding: 3rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: var(--transition);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            height: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--light-green), #c8e6c9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            color: var(--primary-green);
+            font-size: 2.8rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 1.5rem;
+            color: var(--primary-green);
+            font-size: 2rem;
+        }
+
+        .feature-card ul {
+            list-style: none;
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .feature-card li {
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+            position: relative;
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .feature-card li:before {
+            content: "•";
+            color: var(--primary-green);
+            position: absolute;
+            left: 0;
+            font-size: 1.8rem;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 1.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .carousel-btn:hover {
+            background-color: #1b5e20;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .prev-btn {
+            left: 0;
+        }
+
+        .next-btn {
+            right: 0;
+        }
+
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            gap: 12px;
+        }
+
+        .indicator {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background-color: #ccc;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .indicator.active {
+            background-color: var(--primary-green);
+            transform: scale(1.3);
+        }
+
+        /* About Section */
+        .about {
+            padding: 6rem 0;
+            background: var(--white);
+        }
+
+        .about-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .about-description {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+            font-size: 1.2rem;
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .team-member {
+            text-align: center;
+            padding: 2rem;
+            transition: var(--transition);
+            background-color: var(--white);
+            border-radius: 12px;
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+        }
+
+        .member-image {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e0e0e0, #f5f5f5);
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .member-name {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--primary-green);
+            font-size: 1.3rem;
+        }
+
+        .member-position {
+            color: var(--text-light);
+            margin-bottom: 1.2rem;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--text-dark);
+            color: var(--white);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1.8rem;
+            color: var(--light-green);
+            font-size: 1.3rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section a:hover {
+            color: var(--white);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2.5rem;
+            border-top: 1px solid #444;
+            color: #ccc;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .map-analytics-section {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .map-container, .analytics-panel {
+                flex: 0 0 100%;
+            }
+            
+            .map-container {
+                height: 400px;
+            }
+            
+            .crop-selection-overlay {
+                width: 90%;
+                left: 5%;
+            }
+            
+            .header-container {
+                flex-direction: column;
+                gap: 1.2rem;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav li {
+                margin: 0.5rem 0.8rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .carousel-container {
+                padding: 0 60px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-controls {
+                flex-direction: column;
+                gap: 1rem;
+                width: 100%;
+            }
+            
+            .language-selector, .auth-buttons {
+                width: 100%;
+            }
+            
+            .language-selector select, .btn {
+                width: 100%;
+            }
+            
+            .hero {
+                padding: 8rem 0 4rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .carousel-container {
+                padding: 0 50px;
+            }
+            
+            .feature-card {
+                padding: 2rem;
+            }
+            
+            .feature-icon {
+                width: 90px;
+                height: 90px;
+                font-size: 2.2rem;
+            }
+            
+            .feature-card h3 {
+                font-size: 1.7rem;
+            }
+            
+            .crop-selection-overlay {
+                width: 95%;
+                left: 2.5%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo-container">
+                <div class="logo">DL</div>
+                <div class="logo-text">DEEP LEARNING SATELLITE DATA</div>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li class="dropdown">
+                        <a href="#">I Am</a>
+                        <div class="dropdown-content">
+                            <a href="#">Farmer</a>
+                            <a href="#">Service Partner</a>
+                            <a href="#">Customer</a>
+                        </div>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Our Offerings</a>
+                        <div class="dropdown-content">
+                            <a href="#">For Farmers</a>
+                            <a href="#">For Service Partners</a>
+                            <a href="#">For Customers</a>
+                        </div>
+                    </li>
+                    <li><a href="#">Technology Blog</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+            
+            <div class="header-controls">
+                <div class="language-selector">
+                    <select id="languageSelect">
+                        <option value="en">English</option>
+                        <option value="mr">Marathi</option>
+                        <option value="hi">Hindi</option>
+                        <option value="gu">Gujarati</option>
+                        <option value="kn">Kannada</option>
+                        <option value="ml">Malayalam</option>
+                        <option value="ta">Tamil</option>
+                        <option value="te">Telugu</option>
+                        <option value="or">Odia</option>
+                    </select>
+                </div>
+                
+                <div class="auth-buttons">
+                    <button class="btn btn-outline">Login</button>
+                    <button class="btn btn-primary">Register</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Shall I plan this Crop?</h1>
+                
+                <div class="map-analytics-section">
+                    <div class="map-container">
+                        <div class="crop-selection-overlay">
+                            <div class="search-box">
+                                <input type="text" placeholder="Select your crop (e.g. Tomato, Peanut, Wheat)">
+                                <button>Search</button>
+                            </div>
+                        </div>
+                        <div id="satellite-map"></div>
+                    </div>
+                    
+                    <div class="analytics-panel">
+                        <div class="analytics-content">
+                            <div class="risk-indicator">
+                                <div class="risk-icon">!</div>
+                                <div>
+                                    <p><strong>Current Crop Occupancy:</strong> 4%</p>
+                                    <p><strong>Total Farm Land:</strong> 80%</p>
+                                </div>
+                            </div>
+                            <div class="opportunity">
+                                <h4>Opportunity Identified</h4>
+                                <p>Since the weather for the next 3-6 months is favorable for tomato crop and price patterns show stable prices, our analytics identifies this as an opportunity.</p>
+                                <p>We encourage farmers to go for this crop.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="user-toggle-container">
+                    <div class="user-toggle">
+                        <div class="toggle-option active">I am a Farmer</div>
+                        <div class="toggle-option">I am a Service Partner</div>
+                        <div class="toggle-option">I am a Customer</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Platform Features with Carousel -->
+    <section class="features">
+        <p class="section-subtitle">Our comprehensive platform offers tailored solutions for every stakeholder in the agricultural ecosystem</p>
+        
+        <div class="carousel-container">
+            <button class="carousel-btn prev-btn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            
+            <div class="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-tractor"></i>
+                            </div>
+                            <h3>Empowering Farmers</h3>
+                            <ul>
+                                <li>Manage Profile - Create and maintain your farming profile with detailed information</li>
+                                <li>Actionable Insights - Get AI-powered recommendations for crop planning and management</li>
+                                <li>Request Service - Connect with service providers for farm needs</li>
+                                <li>Modern Farm Services - Access drone services, soil testing, and IoT solutions</li>
+                                <li>Crop Health Monitoring - Track your crops' health using satellite imagery</li>
+                                <li>Weather Alerts - Receive timely weather forecasts and alerts</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="carousel-item">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-handshake"></i>
+                            </div>
+                            <h3>Delighting Partners</h3>
+                            <ul>
+                                <li>Manage Profile - Showcase your services and expertise to farmers</li>
+                                <li>Actionable Insights - Access market analytics and farmer needs in your area</li>
+                                <li>Respond to Service Requests - Connect with farmers seeking your services</li>
+                                <li>Connect with Service Providers - Network with other agricultural service providers</li>
+                                <li>Market Analytics - Get insights on crop patterns and farmer requirements</li>
+                                <li>Lead Generation - Find potential customers through our platform</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="carousel-item">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-shopping-basket"></i>
+                            </div>
+                            <h3>Liberating Customers</h3>
+                            <ul>
+                                <li>Manage Profile - Set your preferences for farm produce and locations</li>
+                                <li>Direct Purchase from Farmers - Buy fresh produce directly from source</li>
+                                <li>Quality, Packing and Transport - Ensure quality with our verified supply chain</li>
+                                <li>Doorstep Delivery - Get farm-fresh products delivered to your home</li>
+                                <li>Quality Assurance - Verified quality standards for all products</li>
+                                <li>Supply Chain Transparency - Track your products from farm to table</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="carousel-btn next-btn">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            
+            <div class="carousel-indicators">
+                <div class="indicator active" data-index="0"></div>
+                <div class="indicator" data-index="1"></div>
+                <div class="indicator" data-index="2"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about">
+        <div class="about-container">
+            <h2 class="section-title">About Us</h2>
+            <p class="about-description">
+                We are a multidisciplinary leadership team united by the belief that meaningful innovation happens where strategy, technology, and execution meet. With deep experience across AI, digital marketing, computer vision, and large-scale program delivery, we help organizations transform ideas into outcomes that scale.
+            </p>
+            
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-image">YK</div>
+                    <div class="member-name">Yogesh Khandge</div>
+                    <div class="member-position">Founder & Director</div>
+                    <p>Technology executive and founder with expertise in computer vision, deep learning and enterprise program delivery.</p>
+                </div>
+                
+                <div class="team-member">
+                    <div class="member-image">SK</div>
+                    <div class="member-name">Sujay Khandge</div>
+                    <div class="member-position">Investor & Head Sales & Marketing</div>
+                    <p>Marketing leader and founder with a knack for turning AI and digital trends into measurable growth.</p>
+                </div>
+                
+                <div class="team-member">
+                    <div class="member-image">JV</div>
+                    <div class="member-name">Joseph Varghese</div>
+                    <div class="member-position">Chief Information Officer</div>
+                    <p>Technology and business leader helping organizations adopt AI and modernize operations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Services</a></li>
+                        <li><a href="#">Technology Blog</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Our Offerings</h3>
+                    <ul>
+                        <li><a href="#">For Farmers</a></li>
+                        <li><a href="#">For Service Partners</a></li>
+                        <li><a href="#">For Customers</a></li>
+                        <li><a href="#">Request Demo</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-envelope"></i> customer.care@dlaisd.com</p>
+                    <p><i class="fas fa-phone"></i> +91-08888912344</p>
+                    <p><i class="fas fa-map-marker-alt"></i> C8, Everest Heights, Park Road, Viman Nagar, Pune, MH, India</p>
+                    
+                    <div class="social-links">
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fas fa-globe"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 Deep Learning Satellite Data (OPC) Pvt Ltd. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Initialize the satellite map focused on Junner East, Pune (30 Sq Km area)
+        // Coordinates for Junner, Pune: 18.85, 73.87
+        // Zoom level 12 shows approximately 30 Sq Km area
+        const map = L.map('satellite-map').setView([18.85, 73.87], 12);
+        
+        // Add satellite tile layer (using OpenStreetMap as base)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+        // Add a marker for Junner East, Pune
+        L.marker([18.85, 73.87]).addTo(map)
+            .bindPopup('Junner East, Pune<br>Approx. 30 Sq Km Area')
+            .openPopup();
+
+        // User toggle functionality
+        document.querySelectorAll('.toggle-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.toggle-option').forEach(opt => {
+                    opt.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Update analytics content based on selection
+                updateAnalyticsContent(this.textContent.trim());
+            });
+        });
+
+        // Update analytics content based on user type
+        function updateAnalyticsContent(userType) {
+            const content = document.querySelector('.analytics-content');
+            
+            if (userType === 'I am a Farmer') {
+                content.innerHTML = `
+                    <div class="risk-indicator">
+                        <div class="risk-icon">!</div>
+                        <div>
+                            <p><strong>Current Crop Occupancy:</strong> 4%</p>
+                            <p><strong>Total Farm Land:</strong> 80%</p>
+                        </div>
+                    </div>
+                    <div class="opportunity">
+                        <h4>Opportunity Identified</h4>
+                        <p>Since the weather for the next 3-6 months is favorable for tomato crop and price patterns show stable prices, our analytics identifies this as an opportunity.</p>
+                        <p>We encourage farmers to go for this crop.</p>
+                    </div>
+                `;
+            } else if (userType === 'I am a Service Partner') {
+                content.innerHTML = `
+                    <div class="risk-indicator">
+                        <div class="risk-icon">👥</div>
+                        <div>
+                            <p><strong>Farmers in Selected Area:</strong> 12</p>
+                            <p><strong>Active Crops:</strong> Tomato, Chilli, Okra</p>
+                        </div>
+                    </div>
+                    <div class="opportunity">
+                        <h4>Business Opportunity</h4>
+                        <p>Farmers in the selected area may need your products and services.</p>
+                        <p>Connect and grow your business.</p>
+                    </div>
+                `;
+            } else if (userType === 'I am a Customer') {
+                content.innerHTML = `
+                    <div class="risk-indicator">
+                        <div class="risk-icon">🛒</div>
+                        <div>
+                            <p><strong>Available Product:</strong> Tomato</p>
+                            <p><strong>Quality Grade:</strong> A</p>
+                        </div>
+                    </div>
+                    <div class="opportunity">
+                        <h4>Purchase</h4>
+                        <p>Buy fresh tomatoes directly from farmers.</p>
+                        <p>Available Logistics Partners: 3</p>
+                        <p>Estimated Delivery Rate: ₹15/kg</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Carousel functionality
+        const carouselInner = document.querySelector('.carousel-inner');
+        const carouselItems = document.querySelectorAll('.carousel-item');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        const indicators = document.querySelectorAll('.indicator');
+        
+        let currentIndex = 0;
+        const itemWidth = carouselItems[0].offsetWidth;
+        const totalItems = carouselItems.length;
+        
+        function updateCarousel() {
+            carouselInner.style.transform = `translateX(-${currentIndex * 100}%)`;
+            
+            // Update indicators
+            indicators.forEach((indicator, index) => {
+                if (index === currentIndex) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            });
+        }
+        
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex > 0) ? currentIndex - 1 : totalItems - 1;
+            updateCarousel();
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex < totalItems - 1) ? currentIndex + 1 : 0;
+            updateCarousel();
+        });
+        
+        // Add click event to indicators
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                currentIndex = index;
+                updateCarousel();
+            });
+        });
+
+        // Auto-advance carousel every 5 seconds
+        setInterval(() => {
+            currentIndex = (currentIndex < totalItems - 1) ? currentIndex + 1 : 0;
+            updateCarousel();
+        }, 5000);
+
+        // Language selector functionality
+        document.getElementById('languageSelect').addEventListener('change', function() {
+            alert('Language changed to: ' + this.options[this.selectedIndex].text);
+            // In a real implementation, this would change the language of the entire site
+        });
+
+        // Add smooth scrolling for navigation links
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if(targetId && targetId !== '#') {
+                    const targetElement = document.querySelector(targetId);
+                    if(targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
