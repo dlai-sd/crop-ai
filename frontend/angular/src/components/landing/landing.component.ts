@@ -9,7 +9,7 @@ import { TranslationService } from '../../services/translation.service';
   imports: [CommonModule],
   templateUrl: './landing.component.html',
   styles: [`
-    :root { --g: #2e7d32; --lg: #e8f5e9; --d: #333; --l: #666; --w: #fff; --gr: #f8f9fa; }
+    :root { --g: #D4AF37; --lg: #FFFEF0; --d: #333; --l: #666; --w: #fff; --gr: #f8f9fa; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     .landing { font-family: Segoe UI, sans-serif; color: var(--d); }
     .header { background: var(--w); padding: 1rem 0; position: fixed; top: 0; width: 100%; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,.05); }
@@ -17,7 +17,6 @@ import { TranslationService } from '../../services/translation.service';
     .logo-container { display: flex; align-items: center; gap: 10px; }
     .logo-img { width: 45px; height: 45px; border-radius: 8px; }
     .logo-text { font-size: 1.3rem; font-weight: 700; color: var(--g); }
-    .nav-menu ul { display: flex; list-style: none; gap: 2rem; }
     .nav-menu a { text-decoration: none; color: var(--d); font-weight: 500; }
     .nav-menu a:hover { color: var(--g); }
     .dropdown { position: relative; }
@@ -42,7 +41,7 @@ import { TranslationService } from '../../services/translation.service';
     .search-box input { flex: 1; padding: 1rem 1.2rem; border: none; font-size: 1rem; background: var(--w); }
     .search-box input:focus { outline: none; }
     .search-box button { padding: 0 2rem; background: var(--g); color: var(--w); border: none; cursor: pointer; font-weight: 600; }
-    .search-box button:hover { background: #1b5e20; }
+    .search-box button:hover { background: #C89A2E; }
     .analytics-panel { flex: 0 0 35%; background: var(--w); padding: 2rem; display: flex; flex-direction: column; border-radius: 12px; border: 1px solid #e0e0e0; }
     .risk-indicator { display: flex; align-items: center; margin-bottom: 1.5rem; padding: 1.2rem; border-radius: 10px; background: var(--lg); }
     .risk-icon { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #ff9800, #f57c00); display: flex; align-items: center; justify-content: center; margin-right: 1.2rem; color: var(--w); font-weight: bold; font-size: 1.2rem; }
