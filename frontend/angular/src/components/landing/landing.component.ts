@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TranslationService } from '../../services/translation.service';
+
+declare var L: any; // Declare Leaflet library
 
 @Component({
   selector: 'app-landing',
@@ -36,6 +38,7 @@ import { TranslationService } from '../../services/translation.service';
     .hero h1 { font-size: 3.2rem; margin-bottom: 2rem; text-align: center; font-weight: 700; }
     .map-analytics-section { display: flex; gap: 2rem; margin-bottom: 2rem; height: 600px; }
     .map-container { flex: 0 0 65%; background: var(--w); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; border-radius: 12px; border: 1px solid #e0e0e0; }
+    #satellite-map { width: 100%; height: 100%; border-radius: 12px; }
     .satellite-map-placeholder { text-align: center; color: var(--l); font-size: 1.2rem; }
     .crop-selection-overlay { position: absolute; top: 20px; left: 20px; z-index: 100; width: 350px; }
     .search-box { display: flex; width: 100%; box-shadow: 0 8px 24px rgba(0,0,0,.15); border-radius: 8px; overflow: hidden; }
@@ -86,8 +89,9 @@ import { TranslationService } from '../../services/translation.service';
     @media (max-width: 768px) { .header-container { flex-direction: column; gap: 1rem; } .nav-menu ul { flex-wrap: wrap; justify-content: center; gap: 1rem; } .hero h1 { font-size: 2.2rem; } .features-grid { grid-template-columns: 1fr; } .feature-card { padding: 2rem; } }
   `]
 })
-export class LandingComponent implements OnInit {
+export class LandingComponent implements OnInit, AfterViewInit {
   private currentLanguage = 'en';
+  private map: any;
 
   constructor(private router: Router, private translationService: TranslationService) {
     this.translationService.getLanguage().subscribe(lang => {
@@ -97,6 +101,38 @@ export class LandingComponent implements OnInit {
 
   ngOnInit(): void {
     // Language subscription set in constructor
+  }
+
+  ngAfterViewInit(): void {
+    this.initSatelliteMap();
+  }
+
+  private initSatelliteMap(): void {
+    // Check if Leaflet is loaded
+    if (typeof L === 'undefined') {
+      console.error('Leaflet library not loaded');
+      return;
+    }
+
+    const mapElement = document.getElementById('satellite-map');
+    if (!mapElement) {
+      console.error('Map container not found');
+      return;
+    }
+
+    // Initialize map
+    this.map = L.map('satellite-map').setView([18.85, 73.87], 12);
+
+    // Add Bing Satellite tile layer
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DigitalGlobe, GeoEye, Earthstar Geographics',
+      maxZoom: 18
+    }).addTo(this.map);
+
+    // Add marker for Junner East, Pune
+    L.marker([18.85, 73.87]).addTo(this.map)
+      .bindPopup('Junner East, Pune<br>Approx. 30 Sq Km Area<br>📡 Real Satellite Imagery')
+      .openPopup();
   }
 
   translate(key: string): string {
