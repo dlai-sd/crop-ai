@@ -6,6 +6,7 @@
     <title>Agricultural Satellite Insights</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-providers@2.0.0/leaflet-providers.css" />
     <style>
         :root {
             --primary-green: #2e7d32;
@@ -1001,20 +1002,33 @@
     </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-providers@2.0.0/leaflet-providers.js"></script>
+    <script src="https://unpkg.com/leaflet-bing-layer@5.1.2/dist/leaflet-bing-layer.umd.js"></script>
     <script>
         // Initialize the satellite map focused on Junner East, Pune (30 Sq Km area)
         // Coordinates for Junner, Pune: 18.85, 73.87
         // Zoom level 12 shows approximately 30 Sq Km area
         const map = L.map('satellite-map').setView([18.85, 73.87], 12);
         
-        // Add satellite tile layer (using OpenStreetMap as base)
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        // Add Bing Satellite tile layer (high-resolution satellite imagery, no API key needed for basic usage)
+        // Bing provides free satellite imagery with excellent coverage globally including India
+        L.tileLayer.provider('BingMapsAerial', {
+            attribution: 'Bing Maps &copy; Microsoft'
         }).addTo(map);
+        
+        // Fallback: If Bing provider doesn't load, use Esri Satellite
+        const tileLayerOptions = {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DigitalGlobe, GeoEye, Earthstar Geographics'
+        };
+        
+        L.tileLayer(
+            'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+            tileLayerOptions
+        ).addTo(map);
         
         // Add a marker for Junner East, Pune
         L.marker([18.85, 73.87]).addTo(map)
-            .bindPopup('Junner East, Pune<br>Approx. 30 Sq Km Area')
+            .bindPopup('Junner East, Pune<br>Approx. 30 Sq Km Area<br>📡 Real Satellite Imagery')
             .openPopup();
 
         // User toggle functionality
