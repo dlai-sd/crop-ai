@@ -4,27 +4,23 @@
 
 ### 1. Always Provide External Review Link After Changes
 **MANDATORY for every code change to web app:**
-- After committing changes to `index8.html` or frontend files
-- Generate and display the external Codespace URL
-- Format: `https://codespaces-XXXXX-YYYYY.preview.app.github.dev/index8.html`
-- User needs this link to review changes in their browser
-
-**How to get the link:**
-```bash
-# Check if port 8000 is forwarded
-# If not, user should:
-# 1. Open VS Code Command Palette: Cmd+Shift+P (Mac) / Ctrl+Shift+P (Windows/Linux)
-# 2. Type: "Forward a Port"
-# 3. Enter: 8000
-# 4. VS Code generates public URL automatically
+- After committing changes to Angular SPA or frontend files
+- **USE THIS EXACT LINK FOR REVIEW:**
 ```
+https://potential-orbit-q7j949p6j9j7fx9vx-4200.app.github.dev/
+```
+- This is the Angular SPA running on port 4200 (already configured)
+- User accesses this from external computer to review changes
+- Link is production-ready and works globally
 
 **Expected message format after each frontend change:**
 ```
 ✅ Changes committed: [commit-hash]
-🔗 External Review Link: https://codespaces-XXXXX-YYYYY.preview.app.github.dev/index8.html
+🔗 Review Link: https://potential-orbit-q7j949p6j9j7fx9vx-4200.app.github.dev/
 🎯 What to test: [specific features to review]
 ```
+
+**CRITICAL:** Always use this exact link - DO NOT generate new URLs, DO NOT use localhost, DO NOT use index8.html
 
 ---
 
@@ -46,9 +42,11 @@
 - 🔄 Phase 2 backend development starting
 
 ### Key Files
-- **Landing Page**: `/workspaces/crop-ai/index8.html` (static HTML)
-- **Dev Server**: Python HTTP server on port 8000
-- **Preview Guide**: `PREVIEW_LINKS.md`
+- **Angular SPA**: `/workspaces/crop-ai/frontend/angular/` (Main application)
+- **SPA Dev Server**: Running on port 4200 (ng serve)
+- **Review Link**: https://potential-orbit-q7j949p6j9j7fx9vx-4200.app.github.dev/
+- **Static Landing Page**: `/workspaces/crop-ai/index8.html` (reference only)
+- **Documentation**: `AGENT_INSTRUCTIONS.md` (this file), `PREVIEW_LINKS.md`, `docs/PHASE_2_ROADMAP.md`
 - **Phase 2 Roadmap**: `docs/PHASE_2_ROADMAP.md`
 
 ---
@@ -80,21 +78,17 @@ feat: add [feature name]
 
 ## 🌐 External Link Generation
 
-### Current Setup
-- **HTTP Server**: `python3 -m http.server 8000`
-- **Running on**: localhost:8000
-- **Root path**: /workspaces/crop-ai/
+### Current Setup (PRODUCTION)
+- **Angular SPA**: `/workspaces/crop-ai/frontend/angular/`
+- **Dev Server**: `ng serve --proxy-config proxy.conf.json`
+- **Running on**: port 4200
+- **Public URL**: https://potential-orbit-q7j949p6j9j7fx9vx-4200.app.github.dev/
 
-### Steps to Get External Link
-1. VS Code Ports Tab (bottom of screen)
-2. Find port 8000 → Click globe icon 🌐
-3. OR Command Palette → "Forward a Port" → Enter 8000
-4. VS Code auto-generates public URL
-
-### Link Format
-```
-https://codespaces-[WORKSPACE-ID]-[RANDOM-STRING].preview.app.github.dev/index8.html
-```
+### How to Use
+1. After any frontend changes, commit and push
+2. Provide this link to user for review: **https://potential-orbit-q7j949p6j9j7fx9vx-4200.app.github.dev/**
+3. User can access from any browser globally
+4. No additional setup needed
 
 ---
 
