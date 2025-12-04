@@ -87,23 +87,29 @@
           <div class="carousel-track">
             <!-- Farmer Card -->
             <div class="carousel-card" [class.active]="currentCarouselIndex === 0" (click)="selectCarouselCard(0)">
-              <h3>👨‍🌾 {{ translate('I am a Farmer') }}</h3>
-              <p>{{ translate('Manage your farming operations with AI-powered insights') }}</p>
-              <ul>
-                <li>{{ translate('Real-time crop monitoring') }}</li>
-                <li>{{ translate('Weather-based recommendations') }}</li>
-                <li>{{ translate('Market price updates') }}</li>
+              <h3>👨‍🌾 {{ translate('Empowering Farmers') }}</h3>
+              <p style="text-align: center;">{{ translate('Manage your farming operations with AI-powered insights') }}</p>
+              <ul style="text-align: center; list-style: none; display: flex; flex-direction: column; align-items: center;">
+                <li>{{ translate('Manage Profile - Create and maintain your farming profile with detailed information') }}</li>
+                <li>{{ translate('Actionable Insights - Get AI-powered recommendations for crop planning and management') }}</li>
+                <li>{{ translate('Request Service - Connect with service providers for farm needs') }}</li>
+                <li>{{ translate('Modern Farm Services - Access drone services, soil testing, and IoT solutions') }}</li>
+                <li>{{ translate('Crop Health Monitoring - Track your crops health using satellite imagery') }}</li>
+                <li>{{ translate('Weather Alerts - Receive timely weather forecasts and alerts') }}</li>
               </ul>
             </div>
             
             <!-- Partner Card -->
             <div class="carousel-card" [class.active]="currentCarouselIndex === 1" (click)="selectCarouselCard(1)">
-              <h3>🤝 {{ translate('I am a Partner') }}</h3>
-              <p>{{ translate('Expand your agricultural services with our platform') }}</p>
-              <ul>
-                <li>{{ translate('Access to verified farmers') }}</li>
-                <li>{{ translate('Advanced analytics dashboard') }}</li>
-                <li>{{ translate('Revenue optimization tools') }}</li>
+              <h3>🤝 {{ translate('Delighting Partners') }}</h3>
+              <p style="text-align: center;">{{ translate('Expand your agricultural services with our platform') }}</p>
+              <ul style="text-align: center; list-style: none; display: flex; flex-direction: column; align-items: center;">
+                <li>{{ translate('Manage Profile - Showcase your services and expertise to farmers') }}</li>
+                <li>{{ translate('Actionable Insights - Access market analytics and farmer needs in your area') }}</li>
+                <li>{{ translate('Respond to Service Requests - Connect with farmers seeking your services') }}</li>
+                <li>{{ translate('Connect with Service Providers - Network with other agricultural service providers') }}</li>
+                <li>{{ translate('Market Analytics - Get insights on crop patterns and farmer requirements') }}</li>
+                <li>{{ translate('Lead Generation - Find potential customers through our platform') }}</li>
               </ul>
             </div>
             
