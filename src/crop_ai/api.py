@@ -15,6 +15,11 @@ from .telemetry import get_telemetry, init_telemetry_logging, PredictionMetric, 
 import time
 import asyncio
 
+# Import routers
+from .auth.routes import router as auth_router
+from .registration.routes import router as registration_router
+from .login.routes import router as login_router
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -68,6 +73,11 @@ app = FastAPI(
     version="0.1.0",
     lifespan=lifespan
 )
+
+# Include routers
+app.include_router(auth_router)
+app.include_router(registration_router)
+app.include_router(login_router)
 class PredictionRequest(BaseModel):
     """Request model for crop prediction."""
     image_url: str
