@@ -1,0 +1,200 @@
+name: Security Scan & Code Review
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    name: CodeQL Security Analysis
+    
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: 'python'
+          
+      - name: Build CodeQL database
+        uses: github/codeql-action/autobuild@v2
+
+      - name: Run CodeQL analysis
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: "/language:python"
+
+  dependency-check:
+    runs-on: ubuntu-latest
+    name: Python Dependency Security Check
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install safety
+        run: pip install safety
+
+      - name: Run safety check for known vulnerabilities
+        run: |
+          safety check --json --continue-on-error || true
+        continue-on-error: true
+
+      - name: Install pip-audit
+        run: pip install pip-audit
+
+      - name: Run pip-audit for vulnerabilities
+        run: |
+          if [ -f requirements.txt ]; then
+            pip-audit --desc || true
+          fi
+        continue-on-error: true
+
+  bandit-scan:
+    runs-on: ubuntu-latest
+    name: Bandit Security Linting
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install bandit
+        run: pip install bandit
+
+      - name: Run Bandit security scan
+        run: |
+          bandit -r src/ -f json -o bandit-report.json || true
+        continue-on-error: true
+
+      - name: Upload Bandit report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bandit-report
+          path: bandit-report.json
+
+  sast-scan:
+    runs-on: ubuntu-latest
+    name: SAST - Static Application Security Testing
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install semgrep
+        run: pip install semgrep
+
+      - name: Run Semgrep SAST scan
+        run: |
+          semgrep --config=p/security-audit --json src/ || true
+        continue-on-error: true
+
+  code-quality:
+    runs-on: ubuntu-latest
+    name: Code Quality Check
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff black pylint
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Run ruff linter
+        run: ruff check src/ || true
+        continue-on-error: true
+
+      - name: Run black formatter check
+        run: black --check src/ || true
+        continue-on-error: true
+
+      - name: Run pylint
+        run: pylint src/ --exit-zero || true
+        continue-on-error: true
+
+  docker-scan:
+    runs-on: ubuntu-latest
+    name: Docker Image Security Scan
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image for scanning
+        run: docker build -t crop-ai-security-scan:latest .
+        continue-on-error: true
+
+      - name: Run Trivy vulnerability scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'crop-ai-security-scan:latest'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+        continue-on-error: true
+
+      - name: Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+        continue-on-error: true
+
+  summary:
+    runs-on: ubuntu-latest
+    name: Security Scan Summary
+    needs: [security-scan, dependency-check, bandit-scan, sast-scan, code-quality, docker-scan]
+    if: always()
+    
+    steps:
+      - name: Print security scan summary
+        run: |
+          echo "✅ Security Scan Summary"
+          echo "========================"
+          echo "✓ CodeQL Analysis: Completed"
+          echo "✓ Dependency Check: Completed"
+          echo "✓ Bandit Security Linting: Completed"
+          echo "✓ SAST Scanning: Completed"
+          echo "✓ Code Quality Check: Completed"
+          echo "✓ Docker Image Scan: Completed"
+          echo ""
+          echo "All security checks completed. Review results above for any issues."

@@ -1,0 +1,31 @@
+# CODEOWNERS file - Automatically assigns reviewers
+
+# Default reviewers for all code
+* @dlai-sd
+
+# Backend API code
+src/ @dlai-sd
+
+# Frontend code
+frontend/ @dlai-sd
+
+# CI/CD pipeline
+.github/workflows/ @dlai-sd
+
+# Docker configuration
+Dockerfile @dlai-sd
+docker-compose.yml @dlai-sd
+
+# Documentation
+*.md @dlai-sd
+docs/ @dlai-sd
+
+# Configuration
+*.yml @dlai-sd
+*.yaml @dlai-sd
+requirements.txt @dlai-sd
+angular.json @dlai-sd
+
+# Tests must have approval
+tests/ @dlai-sd
+**/*test*.py @dlai-sd
