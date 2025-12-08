@@ -53,7 +53,6 @@ export interface LoginResponse {
   device_token?: string;
   challenge_id?: string;
   mfa_method?: string;
-  expires_in?: number;
 }
 
 export interface MFAVerificationRequest {
