@@ -6,11 +6,11 @@ Supports role-specific registration flows for:
 - Partner
 - Customer
 """
-from typing import Optional, List
-from pydantic import BaseModel, EmailStr, validator, Field
 from datetime import datetime
 from enum import Enum
+from typing import List, Optional
 
+from pydantic import BaseModel, EmailStr, Field
 
 # ============================================================================
 # Enumerations

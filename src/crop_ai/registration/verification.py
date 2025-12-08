@@ -10,12 +10,11 @@ Supports:
 import os
 import secrets
 import smtplib
-from typing import Optional, Tuple
-from datetime import datetime, timedelta
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 from dataclasses import dataclass
-
+from datetime import datetime, timedelta
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from typing import Optional, Tuple
 
 # ============================================================================
 # Verification Configuration
@@ -231,7 +230,7 @@ class MockEmailProvider(EmailProvider):
             f"token={verification_token}&registration_id={registration_id}"
         )
         print(f"\n[MOCK EMAIL] To {recipient_email}:")
-        print(f"Subject: Verify Your CropAI Account")
+        print("Subject: Verify Your CropAI Account")
         print(f"Verification URL: {verification_url}\n")
         return True
 

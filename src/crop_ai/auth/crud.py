@@ -139,10 +139,10 @@ def list_users(
         List of User objects
     """
     query = db.query(User)
-    
+
     if active_only:
-        query = query.filter(User.is_active == True)
-    
+        query = query.filter(User.is_active)
+
     return query.offset(skip).limit(limit).all()
 
 

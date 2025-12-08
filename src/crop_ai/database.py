@@ -2,10 +2,8 @@
 Database integration for crop-ai predictions.
 """
 import logging
-from datetime import datetime
 from dataclasses import dataclass
-from typing import Optional, List
-import json
+from typing import List, Optional
 
 logger = logging.getLogger(__name__)
 

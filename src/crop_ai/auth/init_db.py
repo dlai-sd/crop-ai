@@ -1,21 +1,21 @@
 """
 Initialize authentication database with default roles and permissions.
 """
-from sqlalchemy.orm import Session
 import logging
 from typing import List, Tuple
 
-from .models import Role, Permission, User
+from sqlalchemy.orm import Session
+
 from .crud import (
-    create_role,
-    create_permission,
-    get_role_by_name,
-    get_permission_by_name,
     assign_permission_to_role,
-    create_user,
     assign_role_to_user,
+    create_permission,
+    create_role,
+    create_user,
+    get_permission_by_name,
+    get_role_by_name,
 )
-from .utils import hash_password
+from .models import Permission, Role, User
 
 logger = logging.getLogger(__name__)
 

@@ -1,9 +1,7 @@
 """
 SQLAlchemy models for authentication and authorization.
 """
-from datetime import datetime, timedelta
-from typing import List, Optional
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, Table, ForeignKey
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String, Table
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy.sql import func
 

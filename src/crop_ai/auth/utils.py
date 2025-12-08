@@ -1,13 +1,14 @@
 """
 JWT and password utilities for authentication.
 """
+import logging
 import os
 from datetime import datetime, timedelta, timezone
-from typing import Optional, Dict, Any, List
+from typing import Any, Dict, List, Optional
 from uuid import uuid4
+
 import jwt
 from passlib.context import CryptContext
-import logging
 
 logger = logging.getLogger(__name__)
 

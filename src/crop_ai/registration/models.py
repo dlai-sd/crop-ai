@@ -8,15 +8,24 @@ Supports three roles:
 
 Each role has distinct registration requirements and profile data.
 """
+import enum
 from datetime import datetime
+
 from sqlalchemy import (
-    Column, Integer, String, Float, Boolean, DateTime, 
-    ForeignKey, Enum, Text, UniqueConstraint, Index,
-    LargeBinary
+    Boolean,
+    Column,
+    DateTime,
+    Enum,
+    Float,
+    ForeignKey,
+    Index,
+    Integer,
+    String,
+    Text,
+    UniqueConstraint,
 )
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
-import enum
 
 Base = declarative_base()
 

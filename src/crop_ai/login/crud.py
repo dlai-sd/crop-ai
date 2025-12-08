@@ -10,16 +10,20 @@ Handles database operations for:
 """
 
 from datetime import datetime, timedelta
-from typing import Optional, List, Tuple
-from sqlalchemy import and_, desc, func
-from sqlalchemy.orm import Session
+from typing import List, Optional, Tuple
+
+from sqlalchemy import and_, desc
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
 
 from .models import (
-    UserLoginCredential, LoginHistory, LoginDevice, MFAChallenge,
-    LoginAttemptThrottle, LoginStatus, MFAMethod, LoginDeviceType
+    LoginAttemptThrottle,
+    LoginDevice,
+    LoginHistory,
+    LoginStatus,
+    MFAChallenge,
+    UserLoginCredential,
 )
-
 
 # ============================================================================
 # USER LOGIN CREDENTIALS

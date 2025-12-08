@@ -7,14 +7,13 @@ Supports:
 - Facebook OAuth
 """
 import os
-import httpx
 import secrets
-import json
-from typing import Optional, Dict, Any
 from datetime import datetime, timedelta
+from typing import Any, Dict, Optional
 from urllib.parse import urlencode
-from pydantic import BaseModel, EmailStr
 
+import httpx
+from pydantic import BaseModel, EmailStr
 
 # ============================================================================
 # SSO Configuration Models

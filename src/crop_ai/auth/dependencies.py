@@ -2,7 +2,7 @@
 Dependency injection and decorators for protected routes.
 """
 import logging
-from typing import List, Optional
+from typing import List
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer

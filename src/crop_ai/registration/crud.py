@@ -8,23 +8,23 @@ Database operations for:
 - Verification tokens
 - Registration metadata
 """
-from typing import Optional, List
 from datetime import datetime, timedelta
-from sqlalchemy.orm import Session
+from typing import List, Optional
+
 from sqlalchemy import and_, func
+from sqlalchemy.orm import Session
 
 from crop_ai.registration.models import (
-    UserProfile,
+    CustomerProfile,
     FarmerProfile,
     PartnerProfile,
-    CustomerProfile,
-    SSOAccount,
-    VerificationToken,
     RegistrationMetadata,
-    UserRole,
     RegistrationStatus,
+    SSOAccount,
+    UserProfile,
+    UserRole,
+    VerificationToken,
 )
-
 
 # ============================================================================
 # User Profile CRUD

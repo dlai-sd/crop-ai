@@ -8,35 +8,31 @@ Endpoints for:
 - SSO callbacks
 - Profile retrieval
 """
-from typing import Optional
-from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks, Query
-from sqlalchemy.orm import Session
 from datetime import datetime
+from typing import Optional
 
-from crop_ai.registration.models import UserRole, RegistrationStatus
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query
+from sqlalchemy.orm import Session
+
+from crop_ai.registration import crud, init_db
+from crop_ai.registration.location import get_location_service
+from crop_ai.registration.models import RegistrationStatus, UserRole
 from crop_ai.registration.schemas import (
+    CustomerRegistrationRequest,
+    FarmerProfileResponse,
+    FarmerRegistrationRequest,
+    PartnerRegistrationRequest,
+    RegistrationCompleteResponse,
     RegistrationStartRequest,
     RegistrationStartResponse,
+    RegistrationStatusResponse,
+    SSOCallbackResponse,
+    SSOLoginRequest,
     VerifyTokenRequest,
     VerifyTokenResponse,
-    FarmerRegistrationRequest,
-    FarmerProfileResponse,
-    PartnerRegistrationRequest,
-    PartnerProfileResponse,
-    CustomerRegistrationRequest,
-    CustomerProfileResponse,
-    RegistrationCompleteResponse,
-    RegistrationErrorResponse,
-    RegistrationStatusResponse,
-    SSOLoginRequest,
-    SSOCallbackResponse,
 )
 from crop_ai.registration.sso import get_sso_manager
 from crop_ai.registration.verification import get_verification_service
-from crop_ai.registration.location import get_location_service
-from crop_ai.registration import crud
-from crop_ai.registration import init_db
-
 
 # Create router
 router = APIRouter(prefix="/api/v1/register", tags=["registration"])

@@ -29,6 +29,7 @@ Example usage:
 
 from .crud import (
     assign_permission_to_role,
+    assign_role_to_user,
     create_permission,
     create_role,
     create_user,
@@ -48,7 +49,6 @@ from .crud import (
     remove_permission_from_role,
     remove_role_from_user,
     update_user,
-    assign_role_to_user,
 )
 from .dependencies import (
     get_current_user,
@@ -58,7 +58,9 @@ from .dependencies import (
     require_permission,
     require_role,
 )
-from .models import Permission, Role, Session as AuthSession, TokenBlacklist, User
+from .init_db import get_init_summary, init_auth_db
+from .models import Permission, Role, TokenBlacklist, User
+from .models import Session as AuthSession
 from .routes import router as auth_router
 from .schemas import (
     ErrorResponse,
@@ -81,7 +83,6 @@ from .utils import (
     verify_password,
     verify_token_not_blacklisted,
 )
-from .init_db import init_auth_db, get_init_summary
 
 __all__ = [
     # Models

@@ -8,12 +8,12 @@ Provides:
 - Address geocoding
 - Location accuracy assessment
 """
-from typing import Optional, Tuple, List
-from pydantic import BaseModel, validator, Field
 from dataclasses import dataclass
-from math import radians, cos, sin, asin, sqrt
-import httpx
+from math import asin, cos, radians, sin, sqrt
+from typing import List, Optional, Tuple
 
+import httpx
+from pydantic import BaseModel, Field, validator
 
 # ============================================================================
 # Location Models

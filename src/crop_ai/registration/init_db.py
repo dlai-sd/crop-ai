@@ -9,13 +9,11 @@ Seed data:
 - Indian states and cities
 """
 from sqlalchemy.orm import Session
+
 from crop_ai.registration.models import (
-    UserRole,
-    RegistrationStatus,
     FarmType,
     PartnerBusinessType,
 )
-
 
 # ============================================================================
 # Seed Data

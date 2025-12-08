@@ -5,13 +5,13 @@ Observability instrumentation for FastAPI backend
 - Distributed tracing support
 """
 
+import json
 import logging
 import time
-from prometheus_client import Counter, Histogram, Gauge, generate_latest
-from fastapi import Request
-from functools import wraps
-import json
 from datetime import datetime
+from functools import wraps
+
+from prometheus_client import Counter, Gauge, Histogram, generate_latest
 
 # Prometheus metrics
 request_count = Counter(
@@ -163,7 +163,7 @@ def track_prediction(model_name):
                 prediction_duration.labels(model=model_name).observe(duration)
                 prediction_count.labels(model=model_name, status='success').inc()
                 return result
-            except Exception as e:
+            except Exception:
                 prediction_count.labels(model=model_name, status='error').inc()
                 raise
         return wrapper
@@ -180,7 +180,7 @@ def track_db_query(operation, table):
                 duration = time.time() - start_time
                 db_query_duration.labels(operation=operation, table=table).observe(duration)
                 return result
-            except Exception as e:
+            except Exception:
                 raise
         return wrapper
     return decorator

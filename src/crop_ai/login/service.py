@@ -9,24 +9,29 @@ Handles:
 - Security features (brute force protection, rate limiting)
 """
 
-import os
-import qrcode
-import io
 import base64
-import secrets
-from datetime import datetime, timedelta
-from typing import Optional, Tuple, Dict, Any
-from sqlalchemy.orm import Session
-from functools import lru_cache
-import hmac
 import hashlib
-import pyotp
-import httpx
+import io
+import os
+import secrets
+from datetime import datetime
+from functools import lru_cache
+from typing import Any, Dict, Optional, Tuple
 
-from crop_ai.auth.utils import hash_password, verify_password, create_access_token, create_refresh_token
+import pyotp
+import qrcode
+from sqlalchemy.orm import Session
+
 from crop_ai.auth.models import User as AuthUser
+from crop_ai.auth.utils import (
+    create_access_token,
+    create_refresh_token,
+    hash_password,
+    verify_password,
+)
+
 from . import crud
-from .models import UserLoginCredential, LoginStatus, MFAMethod
+from .models import LoginStatus, MFAMethod
 
 
 class LoginService:

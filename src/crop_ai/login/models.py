@@ -10,15 +10,22 @@ Supports:
 - Login attempt throttling
 """
 
+import enum
 from datetime import datetime
+
 from sqlalchemy import (
-    Column, Integer, String, Boolean, DateTime, 
-    ForeignKey, Enum, Text, UniqueConstraint, Index,
-    LargeBinary
+    Boolean,
+    Column,
+    DateTime,
+    Enum,
+    Index,
+    Integer,
+    LargeBinary,
+    String,
+    Text,
+    UniqueConstraint,
 )
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
-import enum
 
 Base = declarative_base()
 

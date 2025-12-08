@@ -9,15 +9,14 @@ Endpoints for:
 - Login history
 """
 
-from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException, status, Header, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 
-from crop_ai.database import get_db
 from crop_ai.auth.dependencies import get_current_user
-from . import schemas, crud
+from crop_ai.database import get_db
+
+from . import crud, schemas
 from .service import LoginService
-from .models import LoginStatus
 
 router = APIRouter(prefix="/api/v1/login", tags=["login"])
 
@@ -238,8 +237,8 @@ async def disable_mfa(
     **Protected:** Requires authentication
     """
     
-    from crop_ai.auth.utils import verify_password
     from crop_ai.auth.models import User as AuthUser
+    from crop_ai.auth.utils import verify_password
     
     auth_user = db.query(AuthUser).filter(
         AuthUser.id == current_user["user_id"]

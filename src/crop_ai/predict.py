@@ -2,8 +2,8 @@
 Model adapter for crop identification inference.
 """
 import logging
-from typing import Optional, Dict, Any, List
 from dataclasses import dataclass
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 

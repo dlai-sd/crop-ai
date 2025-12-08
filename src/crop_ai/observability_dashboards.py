@@ -3,8 +3,8 @@ Observability Dashboard Configuration for Grafana
 Defines all dashboard templates and data sources
 """
 
-import json
-from typing import Dict, List, Any
+from typing import Any, Dict
+
 
 class DashboardGenerator:
     """Generate Grafana dashboards programmatically"""

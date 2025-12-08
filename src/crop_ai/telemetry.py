@@ -3,9 +3,8 @@ Application Insights telemetry and monitoring integration.
 """
 import logging
 import os
-from typing import Optional, Dict, Any
-from datetime import datetime
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
+from typing import Dict, Optional
 
 logger = logging.getLogger(__name__)
 

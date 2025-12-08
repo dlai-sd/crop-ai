@@ -1,30 +1,29 @@
 """
 Authentication routes: login, refresh, logout, and profile endpoints.
 """
+import logging
 from datetime import datetime, timedelta
-from typing import Optional
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-import logging
 
+from .dependencies import get_current_user, get_db
+from .models import User
 from .schemas import (
+    ErrorResponse,
+    RefreshTokenRequest,
     TokenRequest,
     TokenResponse,
-    RefreshTokenRequest,
     UserResponse,
-    ErrorResponse,
 )
 from .utils import (
-    hash_password,
-    verify_password,
+    add_token_to_blacklist,
     create_access_token,
     create_refresh_token,
     decode_token,
+    verify_password,
     verify_token_not_blacklisted,
-    add_token_to_blacklist,
 )
-from .models import User
-from .dependencies import get_current_user, get_db
 
 logger = logging.getLogger(__name__)
 

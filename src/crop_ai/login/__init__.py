@@ -79,46 +79,42 @@ Environment Variables:
     GOOGLE_MAPS_API_KEY - For geolocation (optional)
 """
 
-from .models import (
-    UserLoginCredential,
-    LoginHistory,
-    LoginDevice,
-    MFAChallenge,
-    LoginAttemptThrottle,
-    MFAMethod,
-    LoginDeviceType,
-    LoginStatus,
-)
-
-from .schemas import (
-    LoginRequest,
-    LoginResponse,
-    MFAVerificationRequest,
-    MFAChallengeResponse,
-    SetupMFARequest,
-    MFASetupResponse,
-    VerifyMFASetupRequest,
-    DisableMFARequest,
-    ChangePasswordRequest,
-    ResetPasswordRequest,
-    ResetPasswordVerifyRequest,
-    DeviceRegistrationRequest,
-    TrustedDeviceRequest,
-    LoginCredentialResponse,
-    LoginHistoryResponse,
-    LoginDeviceResponse,
-    PasswordResetResponse,
-    ErrorResponse,
-    LoginHistoryListResponse,
-    LoginDeviceListResponse,
-)
-
-from .service import LoginService, get_login_service
-
-from .routes import router as login_router
-
 # Re-export CRUD functions for direct use
 from . import crud
+from .models import (
+    LoginAttemptThrottle,
+    LoginDevice,
+    LoginDeviceType,
+    LoginHistory,
+    LoginStatus,
+    MFAChallenge,
+    MFAMethod,
+    UserLoginCredential,
+)
+from .routes import router as login_router
+from .schemas import (
+    ChangePasswordRequest,
+    DeviceRegistrationRequest,
+    DisableMFARequest,
+    ErrorResponse,
+    LoginCredentialResponse,
+    LoginDeviceListResponse,
+    LoginDeviceResponse,
+    LoginHistoryListResponse,
+    LoginHistoryResponse,
+    LoginRequest,
+    LoginResponse,
+    MFAChallengeResponse,
+    MFASetupResponse,
+    MFAVerificationRequest,
+    PasswordResetResponse,
+    ResetPasswordRequest,
+    ResetPasswordVerifyRequest,
+    SetupMFARequest,
+    TrustedDeviceRequest,
+    VerifyMFASetupRequest,
+)
+from .service import LoginService, get_login_service
 
 __all__ = [
     # Models

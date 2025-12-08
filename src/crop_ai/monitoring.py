@@ -1,11 +1,11 @@
 """
 Monitoring and health check utilities for crop-ai.
 """
-import psutil
 import logging
-from datetime import datetime
 from dataclasses import dataclass
-from typing import Optional
+from datetime import datetime
+
+import psutil
 
 logger = logging.getLogger(__name__)
 
