@@ -272,7 +272,7 @@ jobs:
         run: |
           TIMESTAMP=$(date +%Y%m%d_%H%M%S)
           GIT_SHA=${{ github.sha }}
-          IMAGE_TAG="${{ env.DOCKER_HUB_REGISTRY }}/${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME_BACKEND }}:${GIT_SHA:0:8}-${TIMESTAMP}"
+          IMAGE_TAG="${{ env.IMAGE_NAME_BACKEND }}:${GIT_SHA:0:8}-${TIMESTAMP}"
           echo "tags=${IMAGE_TAG}" >> $GITHUB_OUTPUT
           echo "Backend image tag: ${IMAGE_TAG}"
 
@@ -311,7 +311,7 @@ jobs:
         run: |
           TIMESTAMP=$(date +%Y%m%d_%H%M%S)
           GIT_SHA=${{ github.sha }}
-          IMAGE_TAG="${{ env.DOCKER_HUB_REGISTRY }}/${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME_FRONTEND }}:${GIT_SHA:0:8}-${TIMESTAMP}"
+          IMAGE_TAG="${{ env.IMAGE_NAME_FRONTEND }}:${GIT_SHA:0:8}-${TIMESTAMP}"
           echo "tags=${IMAGE_TAG}" >> $GITHUB_OUTPUT
           echo "Frontend image tag: ${IMAGE_TAG}"
 
