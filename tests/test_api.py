@@ -1,8 +1,8 @@
 """
 Tests for crop-ai API.
 """
-import pytest
 from fastapi.testclient import TestClient
+
 from crop_ai.api import app
 
 client = TestClient(app)

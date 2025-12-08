@@ -5,25 +5,24 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from crop_ai.auth.crud import (
+    assign_permission_to_role,
+    assign_role_to_user,
+    create_permission,
+    create_role,
+    create_user,
+    get_user,
+    get_user_permissions,
+)
+from crop_ai.auth.init_db import get_init_summary, init_auth_db
 from crop_ai.auth.models import Base, User
 from crop_ai.auth.utils import (
-    hash_password,
-    verify_password,
     create_access_token,
     create_refresh_token,
     decode_token,
+    hash_password,
+    verify_password,
 )
-from crop_ai.auth.crud import (
-    create_user,
-    get_user,
-    create_role,
-    create_permission,
-    assign_role_to_user,
-    assign_permission_to_role,
-    get_user_permissions,
-)
-from crop_ai.auth.init_db import init_auth_db, get_init_summary
-
 
 # ============================================================================
 # Test Fixtures
@@ -169,7 +168,6 @@ class TestJWTTokens:
     
     def test_token_expiration(self):
         """Test that expired tokens raise an error."""
-        from crop_ai.auth.utils import ACCESS_TOKEN_EXPIRE_MINUTES
         
         # Create an access token with very short expiration
         token = create_access_token(
@@ -291,7 +289,7 @@ class TestPermissionManagement:
     
     def test_assign_permission_to_role(self, initialized_db):
         """Test assigning permission to role."""
-        from crop_ai.auth.crud import get_role_by_name, get_permission_by_name
+        from crop_ai.auth.crud import get_permission_by_name, get_role_by_name
         
         role = get_role_by_name(initialized_db, "VIEWER")
         perm = get_permission_by_name(initialized_db, "crops:read")

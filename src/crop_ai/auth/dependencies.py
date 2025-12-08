@@ -24,7 +24,9 @@ def get_db() -> Session:
     For now, this is a placeholder that should be replaced with
     actual database session dependency.
     """
-    raise NotImplementedError("Database dependency not configured. Implement in your app.")
+    raise NotImplementedError(
+        "Database dependency not configured. Implement in your app."
+    )
 
 
 async def get_current_user(

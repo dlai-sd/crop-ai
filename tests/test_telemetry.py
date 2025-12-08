@@ -2,12 +2,8 @@
 Tests for telemetry module.
 """
 from datetime import datetime
-from crop_ai.telemetry import (
-    TelemetryManager,
-    PredictionMetric,
-    HealthMetric,
-    get_telemetry
-)
+
+from crop_ai.telemetry import HealthMetric, PredictionMetric, TelemetryManager, get_telemetry
 
 
 def test_telemetry_manager_init():

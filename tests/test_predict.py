@@ -3,6 +3,7 @@ Tests for crop-ai model adapter.
 """
 from crop_ai.predict import ModelAdapter, PredictionResult
 
+
 def test_model_adapter_init():
     """Test model adapter initialization."""
     adapter = ModelAdapter()

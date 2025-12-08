@@ -198,7 +198,9 @@ def init_roles(db: Session, permissions: dict) -> dict:
                 try:
                     # Check if permission already assigned
                     if permissions[perm_name] not in role.permissions:
-                        assign_permission_to_role(db, role.id, permissions[perm_name].id)
+                        assign_permission_to_role(
+                            db, role.id, permissions[perm_name].id
+                        )
                 except Exception as e:
                     logger.warning(f"Could not assign {perm_name} to {role_name}: {e}")
         

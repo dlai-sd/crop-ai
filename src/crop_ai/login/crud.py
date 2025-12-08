@@ -399,7 +399,7 @@ async def get_user_devices(
         LoginDevice.user_id == user_id
     )
     if only_trusted:
-        query = query.filter(LoginDevice.is_trusted == True)
+        query = query.filter(LoginDevice.is_trusted)
     return query.order_by(desc(LoginDevice.last_used_at)).all()
 
 
