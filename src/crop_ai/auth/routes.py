@@ -156,7 +156,7 @@ async def refresh_token(
             )
         
         # Get user
-        user = db.query(User).filter(User.id == user_id, User.is_active == True).first()
+        user = db.query(User).filter(User.id == user_id, User.is_active).first()
         
         if not user:
             raise HTTPException(

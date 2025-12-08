@@ -28,7 +28,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY frontend/ .
 
 # Copy Angular build output
-COPY --from=ng-builder /app/angular/dist/crop-ai-ng ./staticfiles/ng
+COPY --from=ng-builder /app/angular/staticfiles/ng ./staticfiles/ng
 
 # Collect static files
 RUN python manage.py collectstatic --noinput || true

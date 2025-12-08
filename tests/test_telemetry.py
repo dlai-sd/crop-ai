@@ -1,8 +1,6 @@
 """
 Tests for telemetry module.
 """
-import pytest
-import os
 from datetime import datetime
 from crop_ai.telemetry import (
     TelemetryManager,

@@ -1,7 +1,6 @@
 """
 Tests for crop-ai model adapter.
 """
-import pytest
 from crop_ai.predict import ModelAdapter, PredictionResult
 
 def test_model_adapter_init():

@@ -2,13 +2,10 @@
 Comprehensive tests for authentication module.
 """
 import pytest
-from datetime import datetime, timedelta
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, Session
-from fastapi.testclient import TestClient
-from fastapi import FastAPI, Depends
+from sqlalchemy.orm import sessionmaker
 
-from crop_ai.auth.models import Base, User, Role, Permission
+from crop_ai.auth.models import Base, User
 from crop_ai.auth.utils import (
     hash_password,
     verify_password,
@@ -25,7 +22,6 @@ from crop_ai.auth.crud import (
     assign_permission_to_role,
     get_user_permissions,
 )
-from crop_ai.auth.schemas import TokenRequest, TokenResponse
 from crop_ai.auth.init_db import init_auth_db, get_init_summary
 
 

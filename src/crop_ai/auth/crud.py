@@ -338,7 +338,9 @@ def create_permission(
     """
     try:
         # Check if permission already exists
-        existing_permission = db.query(Permission).filter(Permission.name == name).first()
+        existing_permission = (
+            db.query(Permission).filter(Permission.name == name).first()
+        )
         
         if existing_permission:
             raise ValueError(f"Permission '{name}' already exists")

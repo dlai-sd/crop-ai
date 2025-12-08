@@ -68,7 +68,7 @@ async def get_current_user(
     
     # Verify user still exists and is active
     try:
-        user = db.query(User).filter(User.id == user_id, User.is_active == True).first()
+        user = db.query(User).filter(User.id == user_id, User.is_active).first()
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -97,7 +97,9 @@ async def require_permission(
     
     Usage:
         @router.get("/admin")
-        async def admin_endpoint(current_user: dict = Depends(require_permission("admin:access"))):
+        async def admin_endpoint(
+            current_user: dict = Depends(require_permission("admin:access"))
+        ):
             return {"message": "Admin only"}
     
     Args:
