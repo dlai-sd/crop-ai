@@ -334,7 +334,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Push to Docker Hub
     needs: [build-backend-image, build-frontend-image]
-    if: github.event.inputs.docker_hub_publish == 'true'
+    if: fromJSON(github.event.inputs.docker_hub_publish) == true
 
     steps:
       - name: Checkout code
