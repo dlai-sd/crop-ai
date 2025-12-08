@@ -1,0 +1,62 @@
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+positions:
+  filename: /tmp/positions.yaml
+
+scrape_configs:
+  # FastAPI logs
+  - job_name: fastapi
+    static_labels:
+      app: crop-ai-backend
+      environment: codespace
+    file_sd_configs:
+      - files:
+          - /tmp/crop-ai-logs/fastapi.log
+    relabel_configs:
+      - source_labels: ['__path__']
+        regex: '/tmp/crop-ai-logs/(.*).log'
+        target_label: 'job'
+        replacement: '$1'
+
+  # Django logs
+  - job_name: django
+    static_labels:
+      app: crop-ai-django
+      environment: codespace
+    file_sd_configs:
+      - files:
+          - /tmp/crop-ai-logs/django.log
+    relabel_configs:
+      - source_labels: ['__path__']
+        regex: '/tmp/crop-ai-logs/(.*).log'
+        target_label: 'job'
+        replacement: '$1'
+
+  # Angular logs
+  - job_name: angular
+    static_labels:
+      app: crop-ai-angular
+      environment: codespace
+    file_sd_configs:
+      - files:
+          - /tmp/crop-ai-logs/angular.log
+    relabel_configs:
+      - source_labels: ['__path__']
+        regex: '/tmp/crop-ai-logs/(.*).log'
+        target_label: 'job'
+        replacement: '$1'
+
+  # System logs
+  - job_name: system
+    static_labels:
+      app: system
+      environment: codespace
+    file_sd_configs:
+      - files:
+          - /var/log/syslog
+    relabel_configs:
+      - source_labels: ['__path__']
+        regex: '/var/log/(.*)'
+        target_label: 'logfile'
+        replacement: '$1'

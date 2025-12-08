@@ -1,0 +1,43 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: 'default'
+  group_by: ['alertname', 'cluster', 'service']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 12h
+  routes:
+    - receiver: 'critical'
+      group_wait: 5s
+      group_interval: 5s
+      repeat_interval: 1h
+      match:
+        severity: critical
+    
+    - receiver: 'warning'
+      group_wait: 10s
+      group_interval: 30s
+      repeat_interval: 4h
+      match:
+        severity: warning
+
+receivers:
+  - name: 'default'
+    webhook_configs:
+      - url: 'http://localhost:5001/alert'
+
+  - name: 'critical'
+    webhook_configs:
+      - url: 'http://localhost:5001/alert/critical'
+
+  - name: 'warning'
+    webhook_configs:
+      - url: 'http://localhost:5001/alert/warning'
+
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'device', 'instance']

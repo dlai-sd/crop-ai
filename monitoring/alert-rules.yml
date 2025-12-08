@@ -1,0 +1,76 @@
+groups:
+  - name: crop-ai-alerts
+    interval: 30s
+    rules:
+      # Backend API alerts
+      - alert: BackendAPIDown
+        expr: up{job="crop-ai-backend"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: backend
+        annotations:
+          summary: "Backend API is down"
+          description: "crop-ai-backend on {{ $labels.instance }} is not responding"
+
+      - alert: HighBackendErrorRate
+        expr: rate(http_requests_total{job="crop-ai-backend", status=~"5.."}[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+          service: backend
+        annotations:
+          summary: "High error rate in backend"
+          description: "Backend error rate is {{ $value | humanizePercentage }}"
+
+      - alert: HighBackendLatency
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job="crop-ai-backend"}[5m])) > 1
+        for: 5m
+        labels:
+          severity: warning
+          service: backend
+        annotations:
+          summary: "High latency in backend"
+          description: "P95 latency is {{ $value }}s"
+
+      # Django Gateway alerts
+      - alert: DjangoGatewayDown
+        expr: up{job="crop-ai-django"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: django
+        annotations:
+          summary: "Django gateway is down"
+          description: "crop-ai-django on {{ $labels.instance }} is not responding"
+
+      # System alerts
+      - alert: HighMemoryUsage
+        expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) < 0.1
+        for: 2m
+        labels:
+          severity: warning
+          service: system
+        annotations:
+          summary: "High memory usage"
+          description: "Memory usage is {{ $value | humanizePercentage }}"
+
+      - alert: HighCPUUsage
+        expr: (1 - avg(rate(node_cpu_seconds_total{mode="idle"}[5m]))) > 0.8
+        for: 5m
+        labels:
+          severity: warning
+          service: system
+        annotations:
+          summary: "High CPU usage"
+          description: "CPU usage is {{ $value | humanizePercentage }}"
+
+      - alert: DiskSpaceLow
+        expr: (node_filesystem_avail_bytes{fstype!~"tmpfs|fuse|squashfs|vfat"} / node_filesystem_size_bytes) < 0.1
+        for: 2m
+        labels:
+          severity: warning
+          service: system
+        annotations:
+          summary: "Low disk space"
+          description: "Disk {{ $labels.device }} has {{ $value | humanizePercentage }} space remaining"
