@@ -533,7 +533,7 @@ class LoginService:
                 raise ValueError("Phone number required for SMS MFA")
             
             # Generate and send OTP
-            otp_code = ''.join([str(secrets.randbelow(10)) for _ in range(6)])
+            _ = ''.join([str(secrets.randbelow(10)) for _ in range(6)])
             setup_token = secrets.token_urlsafe(32)
             
             # TODO: Send SMS
@@ -586,7 +586,7 @@ class LoginService:
                 return False
             
             # Store encrypted secret and backup codes
-            credential = await crud.update_mfa_settings(
+            _ = await crud.update_mfa_settings(
                 self.db,
                 user_id=user_id,
                 mfa_enabled=True,
