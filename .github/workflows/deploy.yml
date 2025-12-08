@@ -67,24 +67,18 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: Log in to ACR
-        if: env.ACR_USERNAME != '' && env.ACR_PASSWORD != ''
+        if: secrets.ACR_USERNAME != ''
         uses: docker/login-action@v2
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
-        env:
-          ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
-          ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
-          push: ${{ env.ACR_USERNAME != '' && env.ACR_PASSWORD != '' }}
-        env:
-          ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
-          ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
+          push: ${{ secrets.ACR_USERNAME != '' && secrets.ACR_PASSWORD != '' }}
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
@@ -94,16 +88,19 @@ jobs:
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
           cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
 
+  scan-image:
+    runs-on: ubuntu-latest
+    name: Scan Docker Image for Vulnerabilities
+    needs: build-image
+    
+    steps:
       - name: Log in to ACR
-        if: env.ACR_USERNAME != '' && env.ACR_PASSWORD != ''
+        if: secrets.ACR_USERNAME != ''
         uses: docker/login-action@v2
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
-        env:
-          ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
-          ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
 
       - name: Run Trivy vulnerability scan
         uses: aquasecurity/trivy-action@master
