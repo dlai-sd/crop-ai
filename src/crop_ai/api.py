@@ -15,10 +15,27 @@ from .telemetry import get_telemetry, init_telemetry_logging, PredictionMetric, 
 import time
 import asyncio
 
-# Import routers
-from .auth.routes import router as auth_router
-from .registration.routes import router as registration_router
-from .login.routes import router as login_router
+# Import routers (with optional fallback for missing dependencies)
+try:
+    from .auth.routes import router as auth_router
+except Exception as e:
+    logger_temp = logging.getLogger(__name__)
+    logger_temp.warning(f"Failed to import auth routes: {e}")
+    auth_router = None
+
+try:
+    from .registration.routes import router as registration_router
+except Exception as e:
+    logger_temp = logging.getLogger(__name__)
+    logger_temp.warning(f"Failed to import registration routes: {e}")
+    registration_router = None
+
+try:
+    from .login.routes import router as login_router
+except Exception as e:
+    logger_temp = logging.getLogger(__name__)
+    logger_temp.warning(f"Failed to import login routes: {e}")
+    login_router = None
 
 # Configure logging
 logging.basicConfig(
@@ -74,10 +91,13 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Include routers
-app.include_router(auth_router)
-app.include_router(registration_router)
-app.include_router(login_router)
+# Include routers (only if they loaded successfully)
+if auth_router:
+    app.include_router(auth_router)
+if registration_router:
+    app.include_router(registration_router)
+if login_router:
+    app.include_router(login_router)
 class PredictionRequest(BaseModel):
     """Request model for crop prediction."""
     image_url: str
