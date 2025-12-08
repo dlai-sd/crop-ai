@@ -5,7 +5,7 @@ WORKDIR /app/angular
 
 # Copy Angular project
 COPY frontend/angular/package*.json ./
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 COPY frontend/angular/ ./
 RUN npm run build
