@@ -42,6 +42,7 @@ jobs:
           fetch-depth: 0
 
       - name: SonarQube Scan (Optional)
+        if: ${{ secrets.SONARQUBE_HOST != '' && secrets.SONARQUBE_TOKEN != '' }}
         uses: SonarSource/sonarqube-scan-action@master
         env:
           SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
@@ -159,6 +160,7 @@ jobs:
         with:
           name: frontend-test-results
           path: frontend/angular/coverage/
+        continue-on-error: true
 
   # =======================
   # STAGE 3: SYSTEM TESTS
@@ -225,7 +227,7 @@ jobs:
           output: 'trivy-results.sarif'
 
       - name: Upload Trivy results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
           sarif_file: 'trivy-results.sarif'
@@ -242,6 +244,7 @@ jobs:
         with:
           name: security-scan-results
           path: bandit-report.json
+        continue-on-error: true
 
   # =======================
   # STAGE 5: BUILD IMAGES

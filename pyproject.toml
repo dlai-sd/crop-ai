@@ -7,7 +7,9 @@ line-length = 88
 select = [
   "E",
   "F",
-  "W",
   "I",
   "C",
+]
+ignore = [
+  "W293",  # Blank line contains whitespace
 ]

@@ -1,12 +1,13 @@
 """
 CRUD (Create, Read, Update, Delete) operations for authentication models.
 """
-from typing import List, Optional
-from sqlalchemy.orm import Session
-from sqlalchemy.exc import IntegrityError
 import logging
+from typing import List, Optional
 
-from .models import User, Role, Permission
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
+
+from .models import Permission, Role, User
 from .utils import hash_password
 
 logger = logging.getLogger(__name__)
@@ -25,17 +26,17 @@ def create_user(
 ) -> User:
     """
     Create a new user.
-    
+
     Args:
         db: Database session
         email: User email (unique)
         username: Username (unique)
         password: Plain text password (will be hashed)
         is_active: Whether user is active
-        
+
     Returns:
         Created User object
-        
+
     Raises:
         ValueError: If email or username already exists
     """
@@ -44,13 +45,14 @@ def create_user(
         existing_user = db.query(User).filter(
             (User.email == email) | (User.username == username)
         ).first()
-        
+
         if existing_user:
-            raise ValueError(f"User with email '{email}' or username '{username}' already exists")
-        
+            msg = f"User with email '{email}' or username '{username}' already exists"
+            raise ValueError(msg)
+
         # Hash password
         password_hash = hash_password(password)
-        
+
         # Create user
         user = User(
             email=email,
@@ -58,14 +60,14 @@ def create_user(
             password_hash=password_hash,
             is_active=is_active,
         )
-        
+
         db.add(user)
         db.commit()
         db.refresh(user)
-        
+
         logger.info(f"User created: {email}")
         return user
-        
+
     except IntegrityError as e:
         db.rollback()
         logger.error(f"Integrity error creating user: {e}")
