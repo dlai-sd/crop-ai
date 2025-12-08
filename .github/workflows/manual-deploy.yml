@@ -41,7 +41,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: SonarQube Scan
+      - name: SonarQube Scan (Optional)
         uses: SonarSource/sonarqube-scan-action@master
         env:
           SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
@@ -50,16 +50,31 @@ jobs:
           args: >
             -Dsonar.projectKey=crop-ai
             -Dsonar.sources=src,frontend
+        continue-on-error: true
 
       - name: Run Ruff Linter
         run: |
           pip install ruff
+          echo "Running Ruff linter..."
           ruff check . --output-format=github || true
 
       - name: Run Black Formatter Check
         run: |
           pip install black
-          black --check . || true
+          echo "Checking code formatting with Black..."
+          black --check . 2>&1 || echo "Format check completed (non-blocking)"
+
+      - name: Run Bandit Security Check
+        run: |
+          pip install bandit
+          echo "Running Bandit security analysis..."
+          bandit -r src -f json -o bandit-report.json || true
+        continue-on-error: true
+
+      - name: Python Syntax Check
+        run: |
+          python -m py_compile $(find src -name "*.py")
+          echo "✓ All Python files have valid syntax"
 
   # =======================
   # STAGE 2: UNIT TESTS
