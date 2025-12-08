@@ -42,7 +42,6 @@ jobs:
           fetch-depth: 0
 
       - name: SonarQube Scan (Optional)
-        if: ${{ secrets.SONARQUBE_HOST != '' && secrets.SONARQUBE_TOKEN != '' }}
         uses: SonarSource/sonarqube-scan-action@master
         env:
           SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
