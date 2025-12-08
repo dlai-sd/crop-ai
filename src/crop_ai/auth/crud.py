@@ -541,18 +541,24 @@ def assign_permission_to_role(
     if not permission:
         raise ValueError(f"Permission {permission_id} not found")
     
-    # Check if role already has permission
+    # Check if role already has permission (idempotent - silently skip)
     if permission in role.permissions:
-        raise ValueError(f"Role already has permission '{permission.name}'")
-    
+        logger.info(
+            f"Permission '{permission.name}' already assigned to role "
+            f"'{role.name}'"
+        )
+        return role
+
     try:
         role.permissions.append(permission)
         db.commit()
         db.refresh(role)
-        
-        logger.info(f"Permission '{permission.name}' assigned to role '{role.name}'")
+
+        logger.info(
+            f"Permission '{permission.name}' assigned to role '{role.name}'"
+        )
         return role
-        
+
     except Exception as e:
         db.rollback()
         logger.error(f"Error assigning permission: {e}")
