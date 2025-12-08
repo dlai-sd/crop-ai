@@ -1,4 +1,4 @@
-name: Manual Deploy - Test & Publish
+name: ManualDeploy
 
 'on':
   workflow_dispatch:
@@ -332,6 +332,9 @@ jobs:
     name: Push to Docker Hub
     needs: [build-backend-image, build-frontend-image]
     if: github.event.inputs.docker_hub_publish == 'true'
+    env:
+      DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+      DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
     steps:
       - name: Checkout code
@@ -341,7 +344,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: Log in to Docker Hub
-        if: secrets.DOCKER_HUB_USERNAME != ''
+        if: env.DOCKER_HUB_USERNAME != ''
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
@@ -352,7 +355,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          push: ${{ secrets.DOCKER_HUB_USERNAME != '' }}
+          push: ${{ env.DOCKER_HUB_USERNAME != '' }}
           tags: |
             ${{ secrets.DOCKER_HUB_USERNAME }}/crop-ai-backend:latest
             ${{ secrets.DOCKER_HUB_USERNAME }}/crop-ai-backend:${{ github.sha }}
@@ -364,7 +367,7 @@ jobs:
         with:
           context: .
           file: ./frontend/Dockerfile
-          push: ${{ secrets.DOCKER_HUB_USERNAME != '' }}
+          push: ${{ env.DOCKER_HUB_USERNAME != '' }}
           tags: |
             ${{ secrets.DOCKER_HUB_USERNAME }}/crop-ai-frontend:latest
             ${{ secrets.DOCKER_HUB_USERNAME }}/crop-ai-frontend:${{ github.sha }}
