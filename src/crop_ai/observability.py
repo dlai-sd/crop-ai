@@ -190,7 +190,7 @@ def track_cache(key_name):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            cache_key = f"{key_name}:{args}:{kwargs}"
+            _ = f"{key_name}:{args}:{kwargs}"
             # Implementation depends on actual cache logic
             return func(*args, **kwargs)
         return wrapper

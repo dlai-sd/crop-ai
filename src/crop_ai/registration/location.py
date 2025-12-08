@@ -225,7 +225,7 @@ class GoogleMapsGeocoder(GeocodeProvider):
                 
                 if data.get("status") == "OK" and data.get("results"):
                     location = data["results"][0]["geometry"]["location"]
-                    accuracy = data["results"][0]["geometry"].get("location_type")
+                    _ = data["results"][0]["geometry"].get("location_type")
                     
                     return GPSCoordinates(
                         latitude=location["lat"],
@@ -258,7 +258,7 @@ class GoogleMapsGeocoder(GeocodeProvider):
                 
                 if data.get("status") == "OK" and data.get("results"):
                     address_components = data["results"][0]["address_components"]
-                    formatted = data["results"][0]["formatted_address"]
+                    _ = data["results"][0]["formatted_address"]
                     
                     # Extract address components
                     components = {}

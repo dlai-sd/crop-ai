@@ -372,7 +372,6 @@ async def register_device(
     **Protected:** Requires authentication
     """
     
-    user_agent = request.headers.get("user-agent", "unknown")
     
     device = await crud.register_device(
         db,

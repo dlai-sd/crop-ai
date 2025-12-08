@@ -580,6 +580,6 @@ def get_registration_stats(db: Session, days: int = 30) -> dict:
         "total_registrations": total,
         "completed_registrations": completed,
         "completion_rate": (completed / total * 100) if total > 0 else 0,
-        "by_role": {role: count for role, count in by_role},
-        "by_method": {method: count for method, count in by_method},
+        "by_role": dict(by_role),
+        "by_method": dict(by_method),
     }

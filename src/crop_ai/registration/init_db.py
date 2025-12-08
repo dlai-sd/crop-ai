@@ -163,7 +163,7 @@ def get_partner_business_types() -> list[str]:
 
 def get_states() -> list[str]:
     """Get list of Indian states."""
-    return sorted(list(INDIA_STATES_AND_CITIES.keys()))
+    return sorted(INDIA_STATES_AND_CITIES.keys())
 
 
 def get_cities_for_state(state: str) -> list[str]:
@@ -176,7 +176,7 @@ def get_all_cities() -> list[str]:
     cities = set()
     for city_list in INDIA_STATES_AND_CITIES.values():
         cities.update(city_list)
-    return sorted(list(cities))
+    return sorted(cities)
 
 
 # ============================================================================

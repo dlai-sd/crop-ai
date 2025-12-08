@@ -227,7 +227,7 @@ class LoginService:
             challenge_id = secrets.token_urlsafe(32)
             challenge_code = secrets.token_bytes(16)
             
-            mfa_challenge = await crud.create_mfa_challenge(
+            _ = await crud.create_mfa_challenge(
                 self.db,
                 user_id=credential.user_id,
                 challenge_id=challenge_id,
@@ -547,7 +547,7 @@ class LoginService:
         
         elif mfa_method == MFAMethod.EMAIL.value:
             # Generate and send OTP
-            otp_code = ''.join([str(secrets.randbelow(10)) for _ in range(6)])
+            _ = ''.join([str(secrets.randbelow(10)) for _ in range(6)])
             setup_token = secrets.token_urlsafe(32)
             
             # TODO: Send email
@@ -600,7 +600,7 @@ class LoginService:
         else:
             # For SMS/Email, just verify the code
             # In production, compare with stored code
-            credential = await crud.update_mfa_settings(
+            _ = await crud.update_mfa_settings(
                 self.db,
                 user_id=user_id,
                 mfa_enabled=True,
@@ -678,7 +678,7 @@ class LoginService:
         
         # Generate reset token
         reset_token = secrets.token_urlsafe(32)
-        reset_token_hash = hash_password(reset_token)
+        _ = hash_password(reset_token)
         
         # TODO: Send reset email with token
         # await self._send_password_reset_email(auth_user.email, reset_token)
