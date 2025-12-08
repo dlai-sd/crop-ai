@@ -28,18 +28,27 @@ Example usage:
 """
 
 from .crud import (
+    assign_permission_to_role,
+    create_permission,
+    create_role,
     create_user,
     delete_user,
-    delete_permission,
-    delete_role,
+    get_permission,
+    get_permission_by_name,
     get_role,
+    get_role_by_name,
+    get_role_permissions,
     get_user,
     get_user_by_email,
     get_user_by_username,
+    get_user_permissions,
+    list_permissions,
+    list_roles,
     list_users,
-    assign_permission_to_role,
-    create_role,
+    remove_permission_from_role,
+    remove_role_from_user,
     update_user,
+    assign_role_to_user,
 )
 from .dependencies import (
     get_current_user,
