@@ -1,19 +1,25 @@
 """
 FastAPI application for crop-ai prediction service.
 """
+import logging
+import sys
+import time
+from contextlib import asynccontextmanager
+from datetime import datetime
+
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from contextlib import asynccontextmanager
-import logging
-import sys
-from datetime import datetime
-from .predict import ModelAdapter
+
+from .database import PredictionRecord, get_database
 from .monitoring import get_monitor
-from .database import get_database, PredictionRecord
-from .telemetry import get_telemetry, init_telemetry_logging, PredictionMetric, HealthMetric
-import time
-import asyncio
+from .predict import ModelAdapter
+from .telemetry import (
+    HealthMetric,
+    PredictionMetric,
+    get_telemetry,
+    init_telemetry_logging,
+)
 
 # Import routers (with optional fallback for missing dependencies)
 try:
@@ -66,7 +72,7 @@ async def _startup():
     except Exception as e:
         logger.error(f"Failed to initialize model adapter: {e}")
         model_adapter = None
-    
+
     try:
         db = await get_database()
         logger.info("Database initialized successfully")
@@ -124,7 +130,7 @@ async def health():
     """Health check endpoint with system metrics."""
     uptime = (datetime.utcnow() - startup_time).total_seconds()
     health_status = monitor.check_health(model_adapter is not None)
-    
+
     # Track health metrics in Application Insights
     telemetry.track_health(
         HealthMetric(
@@ -136,7 +142,7 @@ async def health():
             timestamp=datetime.utcnow().isoformat()
         )
     )
-    
+
     return HealthResponse(
         status=health_status.status,
         service="crop-ai",
@@ -158,30 +164,30 @@ async def ready():
 async def predict(request: PredictionRequest):
     """
     Predict crop type from satellite imagery.
-    
+
     Args:
         request: PredictionRequest with image_url and optional model_version
-        
+
     Returns:
         PredictionResponse with crop_type, confidence, and metadata
     """
     global inference_count
-    
+
     if model_adapter is None:
         raise HTTPException(status_code=503, detail="Model not initialized")
-    
+
     try:
         logger.info(f"Processing prediction request for image: {request.image_url}")
         start_time = time.time()
-        
+
         # TODO: Implement actual model inference
         # For now, return mock response
         crop_type = "wheat"
         confidence = 0.85
-        
+
         processing_time_ms = (time.time() - start_time) * 1000
         inference_count += 1
-        
+
         # Track prediction in Application Insights
         telemetry.track_prediction(
             PredictionMetric(
@@ -194,7 +200,7 @@ async def predict(request: PredictionRequest):
                 success=True
             )
         )
-        
+
         # Save to database
         if db:
             record = PredictionRecord(
@@ -206,7 +212,7 @@ async def predict(request: PredictionRequest):
                 processing_time_ms=processing_time_ms
             )
             await db.save_prediction(record)
-        
+
         return PredictionResponse(
             crop_type=crop_type,
             confidence=confidence,
@@ -215,7 +221,7 @@ async def predict(request: PredictionRequest):
         )
     except Exception as e:
         logger.error(f"Prediction failed: {e}")
-        
+
         # Track failure in Application Insights
         telemetry.track_prediction(
             PredictionMetric(
@@ -295,7 +301,7 @@ async def get_predictions(limit: int = 50):
     """Get recent predictions from database."""
     if not db:
         raise HTTPException(status_code=503, detail="Database not available")
-    
+
     try:
         predictions = await db.get_predictions(limit=limit)
         return {
@@ -321,7 +327,7 @@ async def get_stats():
     """Get prediction statistics."""
     if not db:
         raise HTTPException(status_code=503, detail="Database not available")
-    
+
     try:
         stats = await db.get_stats()
         return {
