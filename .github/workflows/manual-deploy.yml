@@ -139,7 +139,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd frontend/angular
-          npm ci
+          npm ci --legacy-peer-deps
 
       - name: Run Jest Unit Tests
         run: |
@@ -190,7 +190,7 @@ jobs:
       - name: Install Node dependencies
         run: |
           cd frontend/angular
-          npm ci
+          npm ci --legacy-peer-deps
 
       - name: Run System Tests
         run: |
