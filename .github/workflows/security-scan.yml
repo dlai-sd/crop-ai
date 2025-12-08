@@ -1,6 +1,6 @@
 name: Security Scan & Code Review
 
-on:
+'on':
   push:
     branches: [ main, develop ]
   pull_request:
