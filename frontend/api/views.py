@@ -2,12 +2,13 @@
 API views for proxying crop-ai backend requests.
 """
 import logging
+
 import requests
 from django.conf import settings
-from rest_framework import viewsets, status
+from rest_framework import status
 from rest_framework.decorators import api_view
-from rest_framework.response import Response
 from rest_framework.exceptions import APIException
+from rest_framework.response import Response
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +32,7 @@ def _make_backend_request(method, endpoint, data=None):
             response = requests.post(url, json=data, timeout=TIMEOUT)
         else:
             raise ValueError(f"Unsupported method: {method}")
-        
+
         response.raise_for_status()
         return response.json()
     except requests.exceptions.Timeout:
@@ -42,7 +43,9 @@ def _make_backend_request(method, endpoint, data=None):
         raise BackendAPIException(detail="Cannot connect to backend")
     except requests.exceptions.HTTPError as e:
         logger.error(f"HTTP error from backend: {e}")
-        raise BackendAPIException(detail=f"Backend error: {e.response.status_code}")
+        raise BackendAPIException(
+            detail=f"Backend error: {e.response.status_code}"
+        )
     except Exception as e:
         logger.error(f"Unexpected error: {e}")
         raise BackendAPIException(detail=str(e))
@@ -85,12 +88,12 @@ def predict(request):
             {'error': f'Missing required fields: {required_fields}'},
             status=status.HTTP_400_BAD_REQUEST
         )
-    
+
     payload = {
         'image_url': request.data.get('image_url'),
-        'model_version': request.data.get('model_version', 'latest')
+        'model_version': request.data.get('model_version', 'latest'),
     }
-    
+
     data = _make_backend_request('POST', '/predict', data=payload)
     return Response(data)
 

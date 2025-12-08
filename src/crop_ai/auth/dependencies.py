@@ -1,14 +1,15 @@
 """
 Dependency injection and decorators for protected routes.
 """
-from typing import List, Optional
-from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPBearer, HTTPAuthCredentials
-from sqlalchemy.orm import Session
 import logging
+from typing import List, Optional
 
-from .utils import decode_token
+from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPBearer
+from sqlalchemy.orm import Session
+
 from .models import User
+from .utils import decode_token
 
 logger = logging.getLogger(__name__)
 
@@ -27,19 +28,19 @@ def get_db() -> Session:
 
 
 async def get_current_user(
-    credentials: HTTPAuthCredentials = Depends(security),
+    credentials=Depends(security),
     db: Session = Depends(get_db),
 ) -> dict:
     """
     Get current authenticated user from JWT token.
-    
+
     Args:
         credentials: HTTP bearer credentials
         db: Database session
-        
+
     Returns:
         Decoded token payload with user info
-        
+
     Raises:
         HTTPException: If token is invalid or expired
     """

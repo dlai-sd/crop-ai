@@ -2,6 +2,7 @@
 URL routing for API app.
 """
 from django.urls import path
+
 from . import views
 
 app_name = 'api'
