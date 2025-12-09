@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Saathi - Proto Design</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; }
+        
+        body { display: flex; justify-content: center; align-items: center; padding: 20px; }
+        
+        .phone {
+            width: 100%;
+            max-width: 400px;
+            height: 800px;
+            background: white;
+            border-radius: 50px;
+            border: 12px solid #333;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .notch { height: 28px; background: #000; border-radius: 0 0 20px 20px; }
+        
+        .screen { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        
+        .header { 
+            background: white; 
+            padding: 12px 16px; 
+            border-bottom: 1px solid #e0e0e0; 
+            text-align: center; 
+            font-weight: 600; 
+            font-size: 14px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            background: white;
+        }
+        
+        .screen-view { display: none; }
+        .screen-view.active { display: block; animation: fadeIn 0.3s; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .nav { display: flex; justify-content: space-around; border-top: 1px solid #e0e0e0; background: white; padding: 0; }
+        .nav-item { flex: 1; text-align: center; padding: 8px; font-size: 28px; cursor: pointer; border-top: 3px solid transparent; transition: all 0.2s; }
+        .nav-item.active { border-top-color: #2E7D32; background: #f5f5f5; }
+        
+        /* TAB 1 */
+        .map-view { background: linear-gradient(135deg, #4a7c59, #2a5a3a); height: 250px; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 30px; font-size: 50px; margin-bottom: 16px; }
+        .input-field { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 8px; font-size: 13px; }
+        .filter-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+        .filter-chip { background: #e8f5e9; border: 1px solid #2E7D32; padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; }
+        .filter-chip.active { background: #2E7D32; color: white; }
+        
+        /* TAB 2 */
+        .dropdown { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 16px; }
+        .btn { width: 100%; padding: 12px; background: #2E7D32; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-bottom: 16px; }
+        .btn:hover { background: #1B5E20; }
+        .card { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+        .card-title { color: #6200EA; font-weight: 700; margin-bottom: 12px; }
+        .metric { margin-bottom: 12px; }
+        .progress { background: #e0e0e0; height: 6px; border-radius: 3px; overflow: hidden; }
+        .progress-bar { background: #2E7D32; height: 100%; width: 65%; }
+        .metric-box { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px; margin-bottom: 10px; font-size: 12px; }
+        
+        /* TAB 3 */
+        .broadcast { background: #f5f5f5; border: 1px solid #ddd; border-radius: 12px; padding: 12px; margin-bottom: 12px; }
+        .broadcast-title { font-weight: 700; font-size: 13px; margin-bottom: 4px; }
+        .broadcast-hint { font-size: 12px; color: #999; }
+        .post { background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 12px; margin-bottom: 12px; }
+        .post-header { display: flex; gap: 8px; margin-bottom: 8px; }
+        .post-avatar { font-size: 32px; }
+        .post-info { flex: 1; }
+        .post-name { font-weight: 600; font-size: 13px; }
+        .badge { display: inline-block; background: #2E7D32; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; margin-right: 4px; }
+        .badge.partner { background: #1565C0; }
+        .badge.buyer { background: #F9A825; color: black; }
+        .post-text { font-size: 13px; line-height: 1.4; margin: 8px 0; }
+        .post-time { font-size: 11px; color: #999; }
+        
+        /* TAB 4 */
+        .profile-header { background: linear-gradient(135deg, #2E7D32, #1B5E20); color: white; padding: 40px 16px; text-align: center; margin: -16px -16px 16px -16px; border-radius: 0 0 12px 12px; }
+        .profile-avatar { font-size: 48px; margin-bottom: 12px; }
+        .profile-name { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+        .profile-badge { background: #FFC107; color: black; padding: 4px 12px; border-radius: 12px; display: inline-block; font-size: 11px; font-weight: 700; }
+        .stats { display: flex; justify-content: space-around; background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 12px; padding: 12px; margin-bottom: 16px; }
+        .stat { text-align: center; }
+        .stat-num { font-size: 18px; font-weight: 700; }
+        .stat-label { font-size: 11px; color: #999; margin-top: 2px; }
+        .menu { background: white; border: 1px solid #e0e0e0; border-radius: 12px; overflow: hidden; }
+        .menu-item { display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-size: 13px; }
+        .menu-item:last-child { border-bottom: none; }
+        .menu-item:hover { background: #f5f5f5; }
+        .menu-icon { font-size: 20px; margin-right: 12px; }
+        .menu-title { flex: 1; }
+        .menu-arrow { color: #ccc; }
+    </style>
+</head>
+<body>
+    <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+            <div class="header" id="header">🌱 Crop Data</div>
+            
+            <div class="content">
+                <!-- TAB 1: Crop Data -->
+                <div class="screen-view active" id="tab1">
+                    <div class="map-view">👨🏽‍🌾 🛠️ ₹</div>
+                    <input type="text" class="input-field" placeholder="🔍 Search Crop">
+                    <input type="text" class="input-field" placeholder="🔍 Search Location">
+                    <div class="filter-row">
+                        <div class="filter-chip active" onclick="this.classList.toggle('active')">👨🏽‍🌾 Farmers</div>
+                        <div class="filter-chip active" onclick="this.classList.toggle('active')">🛠️ Partners</div>
+                        <div class="filter-chip active" onclick="this.classList.toggle('active')">₹ Customers</div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: AI Saathi -->
+                <div class="screen-view" id="tab2">
+                    <h3 style="font-size: 14px; margin-bottom: 12px;">Select Crop for Analysis</h3>
+                    <select class="dropdown">
+                        <option>Onion</option>
+                        <option>Wheat</option>
+                        <option>Rice</option>
+                        <option>Cotton</option>
+                        <option>Maize</option>
+                    </select>
+                    <button class="btn" onclick="showAnalysis()">GO - Analyze</button>
+                    <div id="analysis" style="display:none;">
+                        <div class="card">
+                            <div class="card-title">📊 ANALYSIS RESULTS</div>
+                            <div class="metric">
+                                <div style="font-size:12px; font-weight:600; margin-bottom:4px;">Saturation: 65%</div>
+                                <div class="progress"><div class="progress-bar"></div></div>
+                            </div>
+                            <div class="metric-box"><strong>💹 Market Price</strong><br>₹2,500 per quintal</div>
+                            <div class="metric-box"><strong>🌤️ Weather</strong><br>Partially Cloudy, 28°C, Humidity: 72%</div>
+                            <div class="metric-box"><strong>⚠️ Risk Assessment</strong><br>MEDIUM - Price volatility next 48 hours</div>
+                            <div class="metric-box" style="margin-top:10px;"><strong>💡 SUGGESTIONS</strong><br>• Apply potassium-rich fertilizer<br>• Monitor humidity levels<br>• Best time to harvest: 5 days</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: Chaupal -->
+                <div class="screen-view" id="tab3">
+                    <div class="broadcast">
+                        <div class="broadcast-title">📢 BROADCAST BOX</div>
+                        <div class="broadcast-hint">What's on your mind?</div>
+                    </div>
+                    <div class="filter-row" style="margin-bottom:12px;">
+                        <div class="filter-chip active">All Updates</div>
+                        <div class="filter-chip">Equipment</div>
+                        <div class="filter-chip">Crops</div>
+                    </div>
+                    <div class="post">
+                        <div class="post-header">
+                            <div class="post-avatar">👨🏽‍🌾</div>
+                            <div class="post-info">
+                                <div class="post-name">Rajesh Kumar</div>
+                                <div><span class="badge">FARMER</span><span style="font-size:11px;">⭐⭐⭐⭐⭐</span></div>
+                            </div>
+                        </div>
+                        <div class="post-text">Onion prices crashed today!</div>
+                        <div class="post-time">2 hours ago</div>
+                    </div>
+                    <div class="post">
+                        <div class="post-header">
+                            <div class="post-avatar">👨🏻‍🔧</div>
+                            <div class="post-info">
+                                <div class="post-name">Ramesh Singh</div>
+                                <div><span class="badge partner">PARTNER</span><span style="font-size:11px;">⭐⭐⭐⭐</span></div>
+                            </div>
+                        </div>
+                        <div class="post-text">Fertilizer delivery - ₹850/bag</div>
+                        <div class="post-time">30 min ago</div>
+                    </div>
+                    <div class="post">
+                        <div class="post-header">
+                            <div class="post-avatar">👨🏻‍💼</div>
+                            <div class="post-info">
+                                <div class="post-name">Merchant Hub</div>
+                                <div><span class="badge buyer">BUYER</span><span style="font-size:11px;">⭐⭐⭐⭐⭐</span></div>
+                            </div>
+                        </div>
+                        <div class="post-text">Quality onions needed - Premium price!</div>
+                        <div class="post-time">45 min ago</div>
+                    </div>
+                </div>
+
+                <!-- TAB 4: Persona -->
+                <div class="screen-view" id="tab4">
+                    <div class="profile-header">
+                        <div class="profile-avatar">👨🏽‍🌾</div>
+                        <div class="profile-name">Rajesh Kumar</div>
+                        <div class="profile-badge">⭐ TRUSTED FARMER</div>
+                    </div>
+                    <div class="stats">
+                        <div class="stat"><div class="stat-num">12</div><div class="stat-label">Broadcasts</div></div>
+                        <div style="width:1px; background:#e0e0e0;"></div>
+                        <div class="stat"><div class="stat-num">450</div><div class="stat-label">Trust Points</div></div>
+                        <div style="width:1px; background:#e0e0e0;"></div>
+                        <div class="stat"><div class="stat-num">8</div><div class="stat-label">Network</div></div>
+                    </div>
+                    <div class="menu">
+                        <div class="menu-item"><span class="menu-icon">🌾</span><span class="menu-title">Farm Details</span><span class="menu-arrow">›</span></div>
+                        <div class="menu-item"><span class="menu-icon">📋</span><span class="menu-title">Order History</span><span class="menu-arrow">›</span></div>
+                        <div class="menu-item"><span class="menu-icon">🌐</span><span class="menu-title">Language</span><span class="menu-arrow">हिंदी</span></div>
+                        <div class="menu-item"><span class="menu-icon">❓</span><span class="menu-title">Help & Support</span><span class="menu-arrow">›</span></div>
+                        <div class="menu-item"><span class="menu-icon">⚙️</span><span class="menu-title">Settings</span><span class="menu-arrow">›</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="nav">
+                <div class="nav-item active" onclick="switchTab(0,'🌱 Crop Data')">🌱</div>
+                <div class="nav-item" onclick="switchTab(1,'🧠 AI Saathi')">🧠</div>
+                <div class="nav-item" onclick="switchTab(2,'📢 Chaupal')">📢</div>
+                <div class="nav-item" onclick="switchTab(3,'👤 Persona')">👤</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(index, title) {
+            document.querySelectorAll('.screen-view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll('.screen-view')[index].classList.add('active');
+            document.querySelectorAll('.nav-item')[index].classList.add('active');
+            document.getElementById('header').textContent = title;
+        }
+        function showAnalysis() {
+            document.getElementById('analysis').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
