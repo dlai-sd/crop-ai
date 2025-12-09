@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Digital Saathi - Final Bottom Nav</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --kisan-green: #2E7D32;
+        --kisan-dark: #1B5E20;
+        --partner-blue: #1565C0;
+        --customer-gold: #F9A825;
+        --bg-grey: #F0F2F5;
+        --nav-height: 70px; /* The Height of the Bottom Menu */
+        --risk-red: #D32F2F;
+        --risk-bg: #FFEBEE;
+        --ai-purple: #6200EA;
+    }
+
+    body {
+        background-color: #222;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .mobile-frame {
+        width: 375px;
+        height: 667px;
+        background: var(--bg-grey);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* --- TAB SYSTEM --- */
+    .tab-screen {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        display: none; flex-direction: column;
+        /* CRITICAL: Ensure scrollable content doesn't hide behind nav */
+        box-sizing: border-box;
+        padding-bottom: var(--nav-height); 
+    }
+    .tab-screen.active { display: flex; }
+
+    /* ================= TAB 1: CROP DATA ================= */
+    #tab-home {
+        background: url('https://images.unsplash.com/photo-1524065607062-1bc6210f2df1?q=80&w=1000&auto=format&fit=crop'); 
+        background-size: cover;
+        background-position: center;
+    }
+
+    /* Top Status Bar (Floating) */
+    .top-status {
+        position: absolute; top: 0; left: 0; width: 100%;
+        padding: 40px 15px 15px 15px;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+        color: white; display: flex; justify-content: space-between;
+        pointer-events: none; z-index: 5;
+    }
+
+    /* PINS */
+    .pin {
+        position: absolute; width: 36px; height: 36px;
+        border-radius: 50%; display: none; justify-content: center; align-items: center;
+        font-size: 18px; box-shadow: 0 3px 6px rgba(0,0,0,0.5);
+        cursor: pointer; border: 2px solid white;
+        transition: transform 0.2s; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .pin.visible { display: flex; }
+    .pin:active { transform: scale(1.3); }
+    @keyframes popIn { from{transform:scale(0)} to{transform:scale(1)} }
+    .pin-farmer { background: var(--kisan-green); color: white; }
+    .pin-partner { background: var(--partner-blue); color: white; }
+    .pin-customer { background: var(--customer-gold); color: black; }
+
+    /* CONTROL DECK (The Search Bar & Chips) */
+    .control-deck {
+        position: absolute; 
+        /* CRITICAL FIX: Sits exactly on top of the Nav Bar */
+        bottom: var(--nav-height); 
+        left: 0; width: 100%;
+        padding: 0 15px 15px 15px; /* Add bottom padding for spacing */
+        box-sizing: border-box;
+        display: flex; flex-direction: column; gap: 10px; z-index: 20;
+        pointer-events: none; /* Allows clicking map through empty spaces */
+    }
+    .control-deck > * { pointer-events: auto; }
+
+    /* Chips */
+    .chips-scroller {
+        display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px;
+        scrollbar-width: none;
+    }
+    .chips-scroller::-webkit-scrollbar { display: none; }
+    .chip {
+        flex: 0 0 auto; padding: 8px 16px; border-radius: 20px;
+        background: white; font-size: 13px; font-weight: 500; color: #444;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 6px;
+        border: 2px solid white; transition: 0.2s; cursor: pointer;
+    }
+    .chip.active-farmer { background: var(--kisan-green); color: white; border-color: var(--kisan-green); }
+    .chip.active-partner { background: var(--partner-blue); color: white; border-color: var(--partner-blue); }
+    .chip.active-customer { background: var(--customer-gold); color: black; border-color: var(--customer-gold); }
+
+    .floating-input {
+        background: white; border-radius: 30px; padding: 12px 20px;
+        display: flex; align-items: center; gap: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+    .fake-field { border: none; outline: none; width: 100%; font-size: 14px; background:transparent; }
+
+    /* ================= TAB 2: AI SAATHI ================= */
+    #tab-ai {
+        background: url('https://images.unsplash.com/photo-1524065607062-1bc6210f2df1?q=80&w=1000&auto=format&fit=crop'); 
+        background-size: cover; background-position: center;
+    }
+
+    /* AI PANEL - DOCKED ABOVE NAV */
+    .ai-full-panel {
+        position: absolute; 
+        /* CRITICAL FIX: Sits exactly on top of the Nav Bar */
+        bottom: var(--nav-height);
+        left: 0; width: 100%;
+        z-index: 40;
+        padding: 0 15px 15px 15px; 
+        box-sizing: border-box;
+    }
+
+    .ai-card {
+        background: white; border-radius: 16px; overflow: hidden;
+        box-shadow: 0 -5px 40px rgba(0,0,0,0.3);
+    }
+
+    .ai-header {
+        background: var(--ai-purple); color: white; padding: 15px;
+        display: flex; align-items: center; justify-content: space-between;
+    }
+    .ai-body { padding: 15px; }
+    .ai-input-row { display: flex; gap: 10px; margin-bottom: 5px; }
+    .ai-select {
+        flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px;
+        font-family: inherit; font-size: 14px; background: #f9f9f9; outline: none;
+    }
+    .btn-analyze {
+        background: var(--ai-purple); color: white; border: none;
+        padding: 0 20px; border-radius: 8px; font-weight: bold; cursor: pointer;
+        box-shadow: 0 3px 6px rgba(98, 0, 234, 0.3);
+    }
+    .ai-result { display: none; animation: slideUp 0.3s ease-out; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px; }
+    @keyframes slideUp { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+    .verdict-banner { text-align: center; padding: 10px; border-radius: 6px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; font-size: 14px; }
+    .verdict-bad { background: var(--risk-bg); color: var(--risk-red); }
+    .verdict-good { background: var(--kisan-light); color: var(--kisan-green); }
+    .metric-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 13px; align-items: center;}
+    .meter-bg { width: 100px; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; }
+    .meter-fill { height: 100%; border-radius: 4px; }
+    .suggestion-box { background: #F3E5F5; color: #4A148C; padding: 10px; border-radius: 8px; font-size: 13px; display: flex; gap: 8px; align-items: center; }
+
+
+    /* ================= TAB 3: CHAUPAL ================= */
+    #tab-chaupal { background-color: #EEF1F4; overflow-y: auto; }
+    .header-bar { background: white; padding: 45px 15px 15px 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 10; }
+    .broadcast-box { background: #F0F2F5; border-radius: 25px; padding: 10px 15px; display: flex; align-items: center; gap: 10px; margin-top: 10px; border:1px solid #ddd; }
+    .filter-row { display: flex; gap: 8px; margin-top: 15px; overflow-x: auto; scrollbar-width: none; padding-bottom: 5px; }
+    .filter-chip { padding: 6px 14px; border-radius: 20px; background: white; border: 1px solid #ddd; font-size: 12px; font-weight: 500; color: #555; white-space: nowrap; }
+    .filter-chip.active { background: var(--kisan-green); color: white; border-color: var(--kisan-green); }
+    .feed-card { background: white; margin-bottom: 10px; padding: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .user-profile { display: flex; align-items: center; gap: 10px; }
+    .avatar { width: 40px; height: 40px; border-radius: 50%; background: #ddd; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .user-badge { font-size: 10px; background: var(--kisan-light); color: var(--kisan-green); padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-left:5px;}
+    .card-actions { display: flex; border-top: 1px solid #f0f0f0; padding-top: 10px; gap: 10px; margin-top:10px;}
+    .action-btn { flex: 1; padding: 8px; border-radius: 5px; border: none; font-weight: 500; font-size: 13px; cursor: pointer;}
+
+
+    /* ================= TAB 4: PERSONA ================= */
+    #tab-persona { background-color: #fff; overflow-y: auto; }
+    .profile-header { background: linear-gradient(135deg, var(--kisan-green), #1B5E20); color: white; padding: 60px 20px 30px 20px; display: flex; align-items: center; gap: 20px; }
+    .stats-row { display: flex; justify-content: space-around; padding: 20px; background: white; border-bottom: 10px solid #f5f5f5; }
+    .menu-item { padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+    .menu-item:active { background: #f9f9f9; }
+
+
+    /* ================= BOTTOM NAVIGATION BAR (FIXED) ================= */
+    .bottom-nav {
+        position: absolute; 
+        bottom: 0; 
+        left: 0; width: 100%;
+        height: var(--nav-height);
+        background: white;
+        display: flex; justify-content: space-around; align-items: center;
+        border-top: 1px solid #eee;
+        z-index: 100;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+    }
+    .nav-item {
+        display: flex; flex-direction: column; align-items: center;
+        color: #999; font-size: 10px; font-weight: 500; cursor: pointer; flex: 1;
+    }
+    .nav-icon { font-size: 24px; margin-bottom: 4px; transition: 0.2s;}
+    
+    .nav-item.active { color: var(--kisan-green); }
+    .nav-item.active .nav-icon { transform: translateY(-2px); }
+    
+    /* Special Style for AI Nav Item */
+    .nav-item.ai-nav.active { color: var(--ai-purple); }
+
+
+    /* ================= MODAL ================= */
+    .detail-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
+    .card { background: white; width: 80%; padding: 25px; border-radius: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+
+</style>
+</head>
+<body>
+
+<div class="mobile-frame">
+
+    <div id="tab-home" class="tab-screen active">
+        <div class="top-status">
+            <div>📍 <b>Haveli, Pune</b> | 🌤️ 32°C</div>
+            <div style="background:rgba(255,255,255,0.2); padding:2px 10px; border-radius:15px; font-size:12px;">English</div>
+        </div>
+
+        <div class="pin pin-farmer pin-group-farmer visible" style="top: 25%; left: 20%;" onclick="showDetail('Ramesh Farmer', '👨🏽‍🌾')">👨🏽‍🌾</div>
+        <div class="pin pin-farmer pin-group-farmer visible" style="top: 60%; left: 50%;" onclick="showDetail('Suresh Farmer', '👨🏽‍🌾')">👨🏽‍🌾</div>
+        <div class="pin pin-partner pin-group-partner" style="top: 35%; left: 60%;" onclick="showDetail('Agri Service', '🛠️')">🛠️</div>
+        <div class="pin pin-customer pin-group-customer" style="top: 50%; left: 30%;" onclick="showDetail('Mandi Market', '₹')">₹</div>
+
+        <div class="control-deck">
+            <div class="chips-scroller">
+                <div class="chip active-farmer" onclick="toggleFilter(this, 'farmer')"><span>👨🏽‍🌾</span> Farmers</div>
+                <div class="chip" onclick="toggleFilter(this, 'partner')"><span>🛠️</span> Partners</div>
+                <div class="chip" onclick="toggleFilter(this, 'customer')"><span>₹</span> Customers</div>
+            </div>
+            <div class="floating-input">
+                <span style="font-size:18px;">🔍</span>
+                <input type="text" class="fake-field" placeholder="Find Crop (e.g. Wheat)">
+            </div>
+            <div class="floating-input">
+                <span style="font-size:18px; color:var(--kisan-green);">📍</span>
+                <input type="text" class="fake-field" value="Go To: Pune, MH">
+            </div>
+        </div>
+    </div>
+
+
+    <div id="tab-ai" class="tab-screen">
+        <div class="top-status">
+            <div>🧠 <b>AI Advisor Mode</b></div>
+        </div>
+
+        <div class="ai-full-panel">
+            <div class="ai-card">
+                <div class="ai-header">
+                    <span style="font-weight:bold; font-size:16px;">AI Crop Planner</span>
+                    <span style="font-size:11px; opacity:0.9;">Satellite Analysis</span>
+                </div>
+                
+                <div class="ai-body">
+                    <div style="font-size:14px; margin-bottom:10px; color:#555;">Select a crop to check viability:</div>
+                    
+                    <div class="ai-input-row">
+                        <select id="cropSelect" class="ai-select">
+                            <option value="" disabled selected>Select Crop...</option>
+                            <option value="onion">Onion (Kanda)</option>
+                            <option value="wheat">Wheat (Gehu)</option>
+                        </select>
+                        <button class="btn-analyze" onclick="analyzeCrop()">GO</button>
+                    </div>
+
+                    <div id="aiResult" class="ai-result">
+                        <div id="v-banner" class="verdict-banner verdict-bad">⚠️ HIGH RISK DETECTED</div>
+                        <div class="metric-row">
+                            <span>🚜 Saturation (Neighbors)</span>
+                            <div style="display:flex; align-items:center; gap:5px;">
+                                <div class="meter-bg"><div id="m-sat" class="meter-fill" style="width:85%; background:var(--risk-red);"></div></div>
+                                <span id="t-sat" style="font-weight:bold; color:var(--risk-red);">85%</span>
+                            </div>
+                        </div>
+                        <div class="metric-row">
+                            <span>📉 Market Price</span>
+                            <span id="t-price" style="font-weight:bold; color:var(--risk-red);">Falling</span>
+                        </div>
+                        <div class="metric-row">
+                            <span>🌤️ Weather</span>
+                            <span id="t-wthr" style="font-weight:bold; color:var(--kisan-green);">Favorable</span>
+                        </div>
+                        <div class="suggestion-box">
+                            <span style="font-size:18px;">💡</span>
+                            <span id="ai-text"><strong>Tip:</strong> Consider Garlic instead.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="tab-chaupal" class="tab-screen">
+        <div class="header-bar">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h2 style="margin:0; color:var(--kisan-green);">Chaupal</h2>
+                <span>🔔</span>
+            </div>
+            <div class="broadcast-box" onclick="alert('Open Camera')">
+                <span style="font-size:18px;">📢</span>
+                <input type="text" class="fake-field" placeholder="Broadcast Update..." readonly>
+                <span>📷</span>
+            </div>
+            <div class="filter-row">
+                <div class="filter-chip active">All Updates</div>
+                <div class="filter-chip">🚜 Equipment</div>
+                <div class="filter-chip">🌾 Crops</div>
+            </div>
+        </div>
+
+        <div style="padding:10px 0;">
+            <div class="feed-card">
+                <div class="card-header">
+                    <div class="user-profile">
+                        <div class="avatar" style="background:#E3F2FD; color:#1565C0;">🛠️</div>
+                        <div>
+                            <div style="font-weight:bold;">Shiva Tools <span class="user-badge">Partner</span></div>
+                            <div style="font-size:11px; color:#999;">20 mins ago</div>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-bottom:10px;">New Harvester available for rent!</div>
+                <div class="card-actions">
+                    <button class="action-btn" style="background:#E8F5E9; color:green;">📞 Call</button>
+                    <button class="action-btn" style="background:#E3F2FD; color:blue;">💬 Chat</button>
+                </div>
+            </div>
+            
+            <div class="feed-card">
+                <div class="card-header">
+                    <div class="user-profile">
+                        <div class="avatar" style="background:#FFF8E1; color:#F57F17;">₹</div>
+                        <div>
+                            <div style="font-weight:bold;">Mandi Agent <span class="user-badge" style="color:orange; bg:#FFF8E1;">Buyer</span></div>
+                            <div style="font-size:11px; color:#999;">2 hrs ago</div>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-bottom:10px;">Buying Wheat (Sharbati) at ₹2200/quintal. Spot Cash payment.</div>
+                <div class="card-actions">
+                    <button class="action-btn" style="background:#E8F5E9; color:green;">📞 Call</button>
+                </div>
+            </div>
+             <div style="height:30px;"></div>
+        </div>
+    </div>
+
+
+    <div id="tab-persona" class="tab-screen">
+        <div class="profile-header">
+            <div style="width:70px; height:70px; border-radius:50%; background:#eee; display:flex; justify-content:center; align-items:center; font-size:35px; border:3px solid white;">👨🏽‍🌾</div>
+            <div>
+                <h2 style="margin:0;">Rajesh Kumar</h2>
+                <div style="font-size:14px;">📍 Haveli, Pune</div>
+                <div style="background:rgba(0,0,0,0.2); display:inline-block; padding:3px 8px; border-radius:10px; font-size:12px; margin-top:5px;">🏆 Level 5 Farmer</div>
+            </div>
+        </div>
+        <div class="stats-row">
+            <div style="text-align:center;"><div style="font-weight:bold; font-size:18px; color:green;">12</div><div style="font-size:12px; color:#777;">Broadcasts</div></div>
+            <div style="text-align:center;"><div style="font-weight:bold; font-size:18px; color:green;">450</div><div style="font-size:12px; color:#777;">Trust Pts</div></div>
+            <div style="text-align:center;"><div style="font-weight:bold; font-size:18px; color:green;">8</div><div style="font-size:12px; color:#777;">Network</div></div>
+        </div>
+        <div class="menu-item"><span>🚜 My Farm Details</span> <span>›</span></div>
+        <div class="menu-item"><span>📦 Order History</span> <span>›</span></div>
+        <div class="menu-item"><span>🗣️ Language (English)</span> <span style="color:green; font-weight:bold;">Change</span></div>
+        <div class="menu-item"><span>📞 Help & Support</span> <span>›</span></div>
+        <div style="text-align:center; padding:30px; color:#ccc;">App Version 2.0</div>
+         <div style="height:30px;"></div>
+    </div>
+
+
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab(1, this)">
+            <span class="nav-icon">🌱</span>
+            Crop Data
+        </div>
+        <div class="nav-item ai-nav" onclick="switchTab(2, this)">
+            <span class="nav-icon">🧠</span>
+            AI Saathi
+        </div>
+        <div class="nav-item" onclick="switchTab(3, this)">
+            <span class="nav-icon">📢</span>
+            Chaupal
+        </div>
+        <div class="nav-item" onclick="switchTab(4, this)">
+            <span class="nav-icon">👤</span>
+            Persona
+        </div>
+    </div>
+
+    <div class="detail-modal" id="modal" onclick="this.style.display='none'">
+        <div class="card" onclick="event.stopPropagation()">
+            <div id="m-icon" style="font-size:50px; margin-bottom:10px;"></div>
+            <h2 id="m-title" style="margin:0 0 5px 0;">Title</h2>
+            <button style="background:var(--kisan-green); color:white; border:none; padding:12px 30px; border-radius:25px; font-weight:bold;">Contact</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function switchTab(n, el) {
+        document.querySelectorAll('.tab-screen').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        
+        if(n===1) document.getElementById('tab-home').classList.add('active');
+        if(n===2) document.getElementById('tab-ai').classList.add('active');
+        if(n===3) document.getElementById('tab-chaupal').classList.add('active');
+        if(n===4) document.getElementById('tab-persona').classList.add('active');
+        
+        el.classList.add('active');
+    }
+
+    function toggleFilter(chip, type) {
+        chip.classList.toggle('active-' + type);
+        const pins = document.querySelectorAll('.pin-group-' + type);
+        pins.forEach(p => {
+            if (getComputedStyle(p).display === 'none') {
+                p.style.display = 'flex';
+            } else {
+                p.style.display = 'none';
+            }
+        });
+    }
+
+    function analyzeCrop() {
+        const crop = document.getElementById('cropSelect').value;
+        const panel = document.getElementById('aiResult');
+        
+        if(!crop) { alert("Please select a crop!"); return; }
+
+        if (crop === 'onion') {
+            setVerdict(false, "Onion");
+            setMeter(85, "High", "#D32F2F");
+            document.getElementById('t-price').innerText = "Falling 📉"; document.getElementById('t-price').style.color="#D32F2F";
+            document.getElementById('t-wthr').innerText = "Good ☀️"; document.getElementById('t-wthr').style.color="#388E3C";
+            document.getElementById('ai-text').innerHTML = "<strong>Alert:</strong> Risk of oversupply. Consider Garlic.";
+        } 
+        else if (crop === 'wheat') {
+            setVerdict(true, "Wheat");
+            setMeter(30, "Low", "#388E3C");
+            document.getElementById('t-price').innerText = "Rising 📈"; document.getElementById('t-price').style.color="#388E3C";
+            document.getElementById('t-wthr').innerText = "Perfect 🌧️"; document.getElementById('t-wthr').style.color="#388E3C";
+            document.getElementById('ai-text').innerHTML = "<strong>Go Ahead:</strong> Conditions are optimal.";
+        }
+        
+        panel.style.display = 'block';
+    }
+
+    function setVerdict(isGood, name) {
+        const banner = document.getElementById('v-banner');
+        if(isGood) {
+            banner.className = "verdict-banner verdict-good";
+            banner.innerText = "✅ " + name.toUpperCase() + ": RECOMMENDED";
+        } else {
+            banner.className = "verdict-banner verdict-bad";
+            banner.innerText = "⚠️ " + name.toUpperCase() + ": HIGH RISK";
+        }
+    }
+
+    function setMeter(percent, text, color) {
+        document.getElementById('m-sat').style.width = percent + "%";
+        document.getElementById('m-sat').style.background = color;
+        document.getElementById('t-sat').innerText = percent + "%";
+        document.getElementById('t-sat').style.color = color;
+    }
+
+    function showDetail(title, icon) {
+        document.getElementById('m-title').innerText = title;
+        document.getElementById('m-icon').innerText = icon;
+        document.getElementById('modal').style.display = 'flex';
+    }
+</script>
+
+</body>
+</html>
