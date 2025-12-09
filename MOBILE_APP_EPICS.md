@@ -14,12 +14,76 @@
 Each epic delivers a **fully functional mobile experience** that farmers can use, not just components.
 
 ```
-Farmer Timeline:
+Development Timeline:
+Week -2 to 0: Epic 0 → CI/CD setup (infrastructure ready)
 Week 1-4:    Epic 1 → First mobile app (Crop monitoring)
 Week 5-8:    Epic 2 → AI predictions (functional)
 Week 9-12:   Epic 3 → Community (gamification added)
 Week 13-16:  Epic 4 → Full product (all features)
 ```
+
+---
+
+## Epic 0: CI/CD Setup & Infrastructure (Weeks -2 to 0)
+
+**Goal:** Establish production-ready CI/CD pipeline before development starts  
+**Deliverable:** Automated testing, building, and deployment workflows  
+**Status:** ✅ COMPLETE (workflows created, ready for use)
+
+### What Gets Built
+- ✅ 2 GitHub Actions workflows (mobile-ci.yml, mobile-build.yml)
+- ✅ Code quality standards (analysis_options.yaml)
+- ✅ Flutter project structure with pubspec.yaml
+- ✅ Test framework setup (unit, widget, integration tests)
+- ✅ Security scanning (dependency audit, secret detection)
+- ✅ SonarQube integration for code quality
+- ✅ Coverage reporting (target: 80%)
+- ✅ Android APK/AAB and iOS IPA build pipelines
+
+### Key Components
+
+**mobile-ci.yml Workflow:**
+- Code Review: flutter analyze, dart format checks
+- Unit Tests: Test coverage with 80% threshold
+- Widget Tests: Critical screen testing
+- Security Scan: Dependency vulnerabilities, secret detection
+- SonarQube: Code quality analysis
+- Runs on: Every commit to main/develop branches
+
+**mobile-build.yml Workflow:**
+- Android: APK (testing) + AAB (Play Store)
+- iOS: IPA (TestFlight)
+- Artifacts: Uploaded to GitHub Actions
+- Runs on: Main branch after CI passes
+
+**Folder Structure:**
+```
+mobile/
+├─ lib/              # App source code
+├─ test/             # Unit & widget tests
+├─ android/          # Android config
+├─ ios/              # iOS config
+├─ pubspec.yaml      # Dependencies
+└─ analysis_options.yaml # Linting rules
+```
+
+### Acceptance Criteria
+- ✅ mobile-ci.yml passes all jobs
+- ✅ mobile-build.yml builds APK, AAB, IPA successfully
+- ✅ Coverage reports generated (>80% target)
+- ✅ SonarQube connected and analyzing
+- ✅ GitHub secrets configured
+- ✅ Documentation complete (MOBILE_CICD_SETUP.md)
+- ✅ Team trained on workflows
+
+### Documentation
+See **MOBILE_CICD_SETUP.md** for:
+- Detailed workflow explanations
+- Code quality standards
+- Testing requirements
+- Security scanning details
+- Release process
+- Troubleshooting guide
 
 ---
 
@@ -410,6 +474,9 @@ mobile/lib/
 ## Epic Priority & Dependencies
 
 ```
+Epic 0: CI/CD Setup & Infrastructure
+└─ Foundation: Workflows, testing, security scanning
+   ↓
 Epic 1: Crop Monitoring
 └─ Foundation: Maps, offline sync, farm data
    ↓
@@ -426,7 +493,10 @@ Epic 5: Full Integration & Polish
 └─ Depends on: All above working
 ```
 
-**Can parallelize:** Epic 2 & Epic 3 (start in weeks 5-9 with overlap)
+**Parallelization Strategy:**
+- Epic 0 (CI/CD) → Complete BEFORE starting Epic 1
+- Epic 2 & Epic 3 can start in parallel once Epic 1 is in beta (week 5)
+- Epic 4 starts after Epics 1+2+3 are in beta (week 13)
 
 ---
 
@@ -546,13 +616,14 @@ Epic 5: Full Integration & Polish
 
 ## Next Steps
 
-1. **Week 0 (This Week):** Finalize Epic 1 detailed requirements
-2. **Week 0:** Set up Flutter project, GitHub workflows for mobile CI/CD
-3. **Week 1:** Start Epic 1 development (farm list + offline sync)
-4. **Week 5:** Start Epic 2 (AI predictions) with Epic 1 in beta
-5. **Week 9:** Start Epic 3 (community) with Epic 1+2 in beta
-6. **Week 13:** Start Epic 4 (marketplace) with 1+2+3 in beta
-7. **Week 17:** Full integration + app store submission
+1. **Week -2:** Setup Firebase project + GitHub secrets
+2. **Week -1:** Team environment setup (Flutter SDK, emulators)
+3. **Week 0:** Epic 0 validation - ensure all CI/CD workflows pass
+4. **Week 1:** Start Epic 1 development (farm list + offline sync)
+5. **Week 5:** Start Epic 2 (AI predictions) with Epic 1 in beta
+6. **Week 9:** Start Epic 3 (community) with Epic 1+2 in beta
+7. **Week 13:** Start Epic 4 (marketplace) with 1+2+3 in beta
+8. **Week 17:** Full integration + app store submission
 
 ---
 
