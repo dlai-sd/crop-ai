@@ -47,7 +47,7 @@ class FarmListScreen extends ConsumerWidget {
                       style: Theme.of(context).textTheme.titleLarge),
                     const SizedBox(height: 8),
                     ElevatedButton(
-                      onPressed: () {}, 
+                      onPressed: () => context.push('/farm/add'),
                       child: Text(i18n?.farmAddFirst ?? 'Add your first farm'),
                     ),
                   ],
@@ -97,7 +97,7 @@ class FarmListScreen extends ConsumerWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => context.push('/farm/add'),
         tooltip: i18n?.farmAddFarm ?? 'Add Farm',
         child: const Icon(Icons.add),
       ),

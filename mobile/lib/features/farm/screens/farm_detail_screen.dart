@@ -102,9 +102,22 @@ class FarmDetailScreen extends ConsumerWidget {
                 const SizedBox(height: 16),
                 Row(
                   children: [
-                    Expanded(child: ElevatedButton.icon(icon: const Icon(Icons.edit), label: Text(i18n?.edit ?? 'Edit'), onPressed: () {})),
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        icon: const Icon(Icons.edit),
+                        label: Text(i18n?.edit ?? 'Edit'),
+                        onPressed: () => context.push('/farm/${farm.id}/edit'),
+                      ),
+                    ),
                     const SizedBox(width: 12),
-                    Expanded(child: ElevatedButton.icon(icon: const Icon(Icons.delete), label: Text(i18n?.delete ?? 'Delete'), style: ElevatedButton.styleFrom(backgroundColor: Colors.red[600]), onPressed: () {})),
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        icon: const Icon(Icons.delete),
+                        label: Text(i18n?.delete ?? 'Delete'),
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.red[600]),
+                        onPressed: () => _showDeleteDialog(context, farm.id, ref),
+                      ),
+                    ),
                   ],
                 ),
               ],
@@ -113,6 +126,32 @@ class FarmDetailScreen extends ConsumerWidget {
         },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(child: Text('Error: $error')),
+      ),
+    );
+  }
+
+  void _showDeleteDialog(BuildContext context, String farmId, WidgetRef ref) {
+    final i18n = AppLocalizations.of(context);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(i18n?.delete ?? 'Delete'),
+        content: Text('${i18n?.farmDetails ?? 'Farm'} ${i18n?.delete ?? 'delete'}?'),
+        actions: [
+          TextButton(
+            onPressed: () => context.pop(),
+            child: Text(i18n?.cancel ?? 'Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              ref.read(farmListNotifierProvider.notifier).deleteFarm(farmId);
+              context.pop();
+              context.pop();
+            },
+            child: Text(i18n?.delete ?? 'Delete', style: const TextStyle(color: Colors.red)),
+          ),
+        ],
       ),
     );
   }
