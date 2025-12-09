@@ -1,0 +1,48 @@
+{
+  "name": "Flutter Web Dev",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+  "remoteUser": "codespace",
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "forwardPorts": [8080, 5037],
+  "portsAttributes": {
+    "8080": {
+      "label": "Flutter Web",
+      "onAutoForward": "notify"
+    },
+    "5037": {
+      "label": "ADB Server",
+      "onAutoForward": "silent"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Dart-Code.flutter",
+        "Dart-Code.dart-code",
+        "esbenp.prettier-vscode"
+      ],
+      "settings": {
+        "dart.enableSdkFormatter": true,
+        "dart.lineLength": 100,
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": true,
+        "[dart]": {
+          "editor.defaultFormatter": "Dart-Code.dart-code",
+          "editor.formatOnSave": true
+        }
+      }
+    }
+  },
+  "mounts": [
+    "source=${localEnv:HOME}/.ssh,target=/home/codespace/.ssh,readonly"
+  ],
+  "remoteEnv": {
+    "FLUTTER_ROOT": "/opt/flutter",
+    "ANDROID_SDK_ROOT": "/opt/android-sdk",
+    "PATH": "/opt/flutter/bin:${PATH}"
+  }
+}
