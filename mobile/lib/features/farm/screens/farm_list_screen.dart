@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:crop_ai/features/farm/providers/farm_provider.dart';
 import 'package:crop_ai/features/farm/widgets/farm_card.dart';
+import 'package:crop_ai/core/localization/app_localizations.dart';
+import 'package:crop_ai/core/localization/locale_provider.dart';
 
 class FarmListScreen extends ConsumerWidget {
   const FarmListScreen({Key? key}) : super(key: key);
@@ -10,11 +12,16 @@ class FarmListScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final farmsAsync = ref.watch(farmListNotifierProvider);
+    final i18n = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Farms'),
+        title: Text(i18n?.farmTitle ?? 'My Farms'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.language),
+            onPressed: () => _showLanguagePicker(context, ref),
+          ),
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {
@@ -36,9 +43,13 @@ class FarmListScreen extends ConsumerWidget {
                   children: [
                     Icon(Icons.landscape, size: 64, color: Colors.grey[400]),
                     const SizedBox(height: 16),
-                    Text('No farms yet', style: Theme.of(context).textTheme.titleLarge),
+                    Text(i18n?.farmEmpty ?? 'No farms yet', 
+                      style: Theme.of(context).textTheme.titleLarge),
                     const SizedBox(height: 8),
-                    ElevatedButton(onPressed: () {}, child: const Text('Add your first farm')),
+                    ElevatedButton(
+                      onPressed: () {}, 
+                      child: Text(i18n?.farmAddFirst ?? 'Add your first farm'),
+                    ),
                   ],
                 ),
               );
@@ -56,18 +67,29 @@ class FarmListScreen extends ConsumerWidget {
               },
             );
           },
-          loading: () => const Center(child: CircularProgressIndicator()),
+          loading: () => Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const CircularProgressIndicator(),
+                const SizedBox(height: 16),
+                Text(i18n?.loading ?? 'Loading...'),
+              ],
+            ),
+          ),
           error: (error, stack) => Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.error_outline, size: 64, color: Colors.red[400]),
                 const SizedBox(height: 16),
-                Text('Error loading farms', style: Theme.of(context).textTheme.titleLarge),
+                Text(i18n?.error ?? 'Error', 
+                  style: Theme.of(context).textTheme.titleLarge),
                 const SizedBox(height: 8),
                 ElevatedButton(
-                  onPressed: () => ref.read(farmListNotifierProvider.notifier).refresh(),
-                  child: const Text('Retry'),
+                  onPressed: () => 
+                    ref.read(farmListNotifierProvider.notifier).refresh(),
+                  child: Text(i18n?.retry ?? 'Retry'),
                 ),
               ],
             ),
@@ -76,8 +98,45 @@ class FarmListScreen extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        tooltip: 'Add Farm',
+        tooltip: i18n?.farmAddFarm ?? 'Add Farm',
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  void _showLanguagePicker(BuildContext context, WidgetRef ref) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: Text(
+                'Select Language',
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+            ),
+            Expanded(
+              child: ListView(
+                children: LocaleNotifier.supportedLanguages.entries
+                    .map((entry) {
+                  return ListTile(
+                    title: Text(entry.value),
+                    onTap: () {
+                      ref.read(localeProvider.notifier)
+                          .setLocale(Locale(entry.key));
+                      Navigator.pop(context);
+                    },
+                  );
+                }).toList(),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

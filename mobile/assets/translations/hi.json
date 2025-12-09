@@ -1,0 +1,74 @@
+{
+  "appName": "कृषि एआई",
+  "appDescription": "स्मार्ट फसल निगरानी और कृषि बुद्धिमत्ता",
+  
+  "common": {
+    "loading": "लोड हो रहा है...",
+    "error": "त्रुटि",
+    "retry": "पुनः प्रयास करें",
+    "cancel": "रद्द करें",
+    "save": "सहेजें",
+    "delete": "हटाएं",
+    "edit": "संपादित करें",
+    "add": "जोड़ें",
+    "submit": "जमा करें",
+    "close": "बंद करें",
+    "next": "अगला",
+    "back": "पीछे",
+    "yes": "हाँ",
+    "no": "नहीं",
+    "ok": "ठीक है",
+    "search": "खोजें"
+  },
+  
+  "farms": {
+    "title": "मेरी फसलें",
+    "empty": "अभी कोई फसल नहीं",
+    "addFirst": "अपनी पहली फसल जोड़ें",
+    "addFarm": "फसल जोड़ें",
+    "farmDetails": "फसल विवरण",
+    "location": "स्थान",
+    "area": "क्षेत्र",
+    "hectares": "हेक्टेयर",
+    "cropType": "फसल का प्रकार",
+    "plantingDate": "बुवाई की तारीख",
+    "expectedHarvest": "अपेक्षित कटाई",
+    "soilMoisture": "मिट्टी की नमी",
+    "temperature": "तापमान",
+    "healthStatus": "स्वास्थ्य स्थिति",
+    "healthy": "फसल उत्तम स्थिति में है",
+    "warning": "फसल को ध्यान की आवश्यकता है",
+    "critical": "फसल को तत्काल कार्रवाई की आवश्यकता है"
+  },
+  
+  "weather": {
+    "title": "मौसम",
+    "temperature": "तापमान",
+    "humidity": "आर्द्रता",
+    "rainfall": "वर्षा",
+    "windSpeed": "हवा की गति",
+    "forecast": "पूर्वानुमान"
+  },
+  
+  "settings": {
+    "title": "सेटिंग्स",
+    "language": "भाषा",
+    "notifications": "सूचनाएं",
+    "theme": "थीम",
+    "about": "के बारे में",
+    "privacy": "गोपनीयता नीति"
+  },
+  
+  "languages": {
+    "english": "English",
+    "hindi": "हिंदी (Hindi)",
+    "tamil": "தமிழ் (Tamil)",
+    "telugu": "తెలుగు (Telugu)",
+    "kannada": "ಕನ್ನಡ (Kannada)",
+    "marathi": "मराठी (Marathi)",
+    "gujarati": "ગુજરાતી (Gujarati)",
+    "punjabi": "ਪੰਜਾਬੀ (Punjabi)",
+    "bengali": "বাংলা (Bengali)",
+    "odia": "ଓଡ଼ିଆ (Odia)"
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "appName": "Crop AI",
+  "appDescription": "Smart Crop Monitoring & Farming Intelligence",
+  
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "submit": "Submit",
+    "close": "Close",
+    "next": "Next",
+    "back": "Back",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK",
+    "search": "Search"
+  },
+  
+  "farms": {
+    "title": "My Farms",
+    "empty": "No farms yet",
+    "addFirst": "Add your first farm",
+    "addFarm": "Add Farm",
+    "farmDetails": "Farm Details",
+    "location": "Location",
+    "area": "Area",
+    "hectares": "hectares",
+    "cropType": "Crop Type",
+    "plantingDate": "Planting Date",
+    "expectedHarvest": "Expected Harvest",
+    "soilMoisture": "Soil Moisture",
+    "temperature": "Temperature",
+    "healthStatus": "Health Status",
+    "healthy": "Farm is in excellent condition",
+    "warning": "Farm needs attention",
+    "critical": "Farm requires immediate action"
+  },
+  
+  "weather": {
+    "title": "Weather",
+    "temperature": "Temperature",
+    "humidity": "Humidity",
+    "rainfall": "Rainfall",
+    "windSpeed": "Wind Speed",
+    "forecast": "Forecast"
+  },
+  
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "notifications": "Notifications",
+    "theme": "Theme",
+    "about": "About",
+    "privacy": "Privacy Policy"
+  },
+  
+  "languages": {
+    "english": "English",
+    "hindi": "हिंदी (Hindi)",
+    "tamil": "தமிழ் (Tamil)",
+    "telugu": "తెలుగు (Telugu)",
+    "kannada": "ಕನ್ನಡ (Kannada)",
+    "marathi": "मराठी (Marathi)",
+    "gujarati": "ગુજરાતી (Gujarati)",
+    "punjabi": "ਪੰਜਾਬੀ (Punjabi)",
+    "bengali": "বাংলা (Bengali)",
+    "odia": "ଓଡ଼ିଆ (Odia)"
+  }
+}

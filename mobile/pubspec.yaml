@@ -10,6 +10,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  
+  # Localization
+  intl: ^0.19.0
+  shared_preferences: ^2.2.0
   
   # State Management
   riverpod: ^2.4.0
@@ -50,69 +56,20 @@ dependencies:
   
   # Camera
   camera: ^0.10.0
-  
-  # UI Components
-  flutter_svg: ^2.0.0
-  cupertino_icons: ^1.0.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   
-  # Linting
   flutter_lints: ^3.0.0
-  
-  # Testing
-  mocktail: ^1.0.0
-  bloc_test: ^9.1.0
-  
-  # Code Generation
   build_runner: ^2.4.0
   drift_dev: ^2.13.0
   riverpod_generator: ^2.3.0
-  
-  # Integration Tests
-  integration_test:
-    sdk: flutter
 
 flutter:
   uses-material-design: true
   
-  assets:
-    - assets/images/
-    - assets/models/
-    - assets/translations/
-    - assets/lottie/
-  
-  fonts:
-    - family: Poppins
-      fonts:
-        - asset: assets/fonts/Poppins-Regular.ttf
-        - asset: assets/fonts/Poppins-Bold.ttf
-          weight: 700
-        - asset: assets/fonts/Poppins-SemiBold.ttf
-          weight: 600
+  generate: true
 
-# Linting Rules
-linter:
-  rules:
-    - avoid_empty_else
-    - avoid_print
-    - avoid_relative_import_paths
-    - avoid_returning_null_for_future
-    - avoid_slow_async_io
-    - cancel_subscriptions
-    - close_sinks
-    - comment_references
-    - control_flow_in_finally
-    - empty_statements
-    - hash_and_equals
-    - invariant_booleans
-    - iterable_contains_unrelated_type
-    - list_remove_unrelated_type
-    - no_adjacent_strings_in_list
-    - no_duplicate_case_values
-    - prefer_void_to_null
-    - throw_in_finally
-    - unnecessary_statements
-    - unrelated_type_equality_checks
+  assets:
+    - assets/translations/
