@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:crop_ai/features/analytics/providers/analytics_provider.dart';
+import 'package:crop_ai/features/analytics/presentation/widgets/chart_widgets.dart';
 
 class AnalyticsDashboardScreen extends ConsumerWidget {
   final String farmId;
@@ -67,17 +68,15 @@ class AnalyticsDashboardScreen extends ConsumerWidget {
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 12),
-            diseaseTrend.when(
-              data: (trend) => _buildTrendCard('Disease Trend', trend.length),
-              loading: () => const SizedBox.shrink(),
-              error: (e, st) => const SizedBox.shrink(),
-            ),
+            DiseaseChartWidget(farmId: farmId),
             const SizedBox(height: 12),
-            yieldTrend.when(
-              data: (trend) => _buildTrendCard('Yield Trend', trend.length),
-              loading: () => const SizedBox.shrink(),
-              error: (e, st) => const SizedBox.shrink(),
-            ),
+            YieldChartWidget(farmId: farmId),
+            const SizedBox(height: 12),
+            SeverityDistributionChart(farmId: farmId),
+            const SizedBox(height: 12),
+            CommonDiseasesChart(farmId: farmId),
+            const SizedBox(height: 12),
+            ConfidenceTrendChart(farmId: farmId),
           ],
         ),
       ),
