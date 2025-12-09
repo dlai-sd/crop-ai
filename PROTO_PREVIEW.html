@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Saathi - Proto Design Preview</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f0f0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        .phone-frame {
+            border: 2px solid #333;
+            border-radius: 40px;
+            overflow: hidden;
+            background: white;
+        }
+        
+        .notch {
+            height: 28px;
+            background: #000;
+            border-radius: 0 0 20px 20px;
+        }
+        
+        .screen {
+            height: 720px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: white;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            background: #fff;
+        }
+        
+        .screen-content {
+            display: none;
+        }
+        
+        .screen-content.active {
+            display: block;
+            animation: fadeIn 0.2s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .nav-bar {
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            border-top: 1px solid #e0e0e0;
+            background: white;
+        }
+        
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            font-size: 24px;
+            cursor: pointer;
+            border-top: 3px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .nav-item.active {
+            border-top-color: #2E7D32;
+            background: #f5f5f5;
+        }
+        
+        /* TAB 1: Crop Data */
+        .map-area {
+            background: linear-gradient(135deg, #4a7c59 0%, #2a5a3a 100%);
+            height: 240px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+        
+        .filter-chips {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+        
+        .chip {
+            background: #e8f5e9;
+            border: 1px solid #2E7D32;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .chip.active {
+            background: #2E7D32;
+            color: white;
+        }
+        
+        /* TAB 2: AI Saathi */
+        .crop-dropdown {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+        
+        .go-btn {
+            width: 100%;
+            background: #2E7D32;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 16px;
+        }
+        
+        .go-btn:hover {
+            background: #1B5E20;
+        }
+        
+        .analysis-card {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 16px;
+        }
+        
+        .analysis-title {
+            color: #6200EA;
+            font-weight: 700;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        
+        .metric-row {
+            margin-bottom: 12px;
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .progress-bar {
+            background: #e0e0e0;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: #2E7D32;
+            height: 100%;
+            width: 65%;
+        }
+        
+        .metric-box {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        
+        /* TAB 3: Chaupal */
+        .broadcast-box {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .broadcast-label {
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+        
+        .broadcast-hint {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .post-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .post-header {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .post-avatar {
+            font-size: 32px;
+        }
+        
+        .post-info {
+            flex: 1;
+        }
+        
+        .post-name {
+            font-weight: 600;
+            font-size: 13px;
+        }
+        
+        .post-badge {
+            display: inline-block;
+            background: #2E7D32;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            margin-right: 4px;
+        }
+        
+        .post-rating {
+            font-size: 11px;
+        }
+        
+        .post-text {
+            font-size: 13px;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+        
+        .post-time {
+            font-size: 11px;
+            color: #999;
+        }
+        
+        /* TAB 4: Persona */
+        .profile-header {
+            background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+            color: white;
+            padding: 40px 16px;
+            text-align: center;
+            margin: -16px -16px 16px -16px;
+            border-radius: 0 0 12px 12px;
+        }
+        
+        .profile-avatar {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        
+        .profile-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        
+        .profile-badge {
+            background: #FFC107;
+            color: black;
+            padding: 4px 12px;
+            border-radius: 12px;
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        
+        .stats-grid {
+            display: flex;
+            justify-content: space-around;
+            background: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        
+        .stat-label {
+            font-size: 11px;
+            color: #999;
+            margin-top: 2px;
+        }
+        
+        .menu {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+        
+        .menu-item:hover {
+            background: #f5f5f5;
+        }
+        
+        .menu-icon {
+            font-size: 20px;
+            margin-right: 12px;
+        }
+        
+        .menu-title {
+            flex: 1;
+        }
+        
+        .menu-arrow {
+            color: #ccc;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="phone-frame">
+            <div class="notch"></div>
+            <div class="screen">
+                <div class="header" id="header">🌱 Crop Data</div>
+                
+                <div class="content">
+                    <!-- TAB 1: Crop Data -->
+                    <div class="screen-content active" id="tab1">
+                        <div class="map-area">👨🏽‍🌾 🛠️ ₹</div>
+                        <input type="text" class="search-input" placeholder="🔍 Search Crop">
+                        <input type="text" class="search-input" placeholder="🔍 Search Location">
+                        <div class="filter-chips">
+                            <div class="chip active" onclick="this.classList.toggle('active')">👨🏽‍🌾 Farmers</div>
+                            <div class="chip active" onclick="this.classList.toggle('active')">🛠️ Partners</div>
+                            <div class="chip active" onclick="this.classList.toggle('active')">₹ Customers</div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: AI Saathi -->
+                    <div class="screen-content" id="tab2">
+                        <h3 style="font-size: 14px; margin-bottom: 12px;">Select Crop for Analysis</h3>
+                        <select class="crop-dropdown">
+                            <option>Onion</option>
+                            <option>Wheat</option>
+                            <option>Rice</option>
+                            <option>Cotton</option>
+                            <option>Maize</option>
+                        </select>
+                        <button class="go-btn" onclick="document.getElementById('analysis').style.display='block'">GO - Analyze</button>
+                        <div id="analysis" style="display:block;">
+                            <div class="analysis-card">
+                                <div class="analysis-title">📊 ANALYSIS RESULTS</div>
+                                <div class="metric-row">
+                                    <div class="metric-label">Saturation: 65%</div>
+                                    <div class="progress-bar"><div class="progress-fill"></div></div>
+                                </div>
+                                <div class="metric-box"><strong>💹 Market Price</strong><br>₹2,500 per quintal</div>
+                                <div class="metric-box"><strong>🌤️ Weather</strong><br>Partially Cloudy, 28°C, Humidity: 72%</div>
+                                <div class="metric-box"><strong>⚠️ Risk Assessment</strong><br>MEDIUM - Price volatility next 48 hours</div>
+                                <div class="metric-box" style="margin-top: 10px;"><strong>💡 SUGGESTIONS</strong><br>• Apply potassium-rich fertilizer<br>• Monitor humidity levels<br>• Best time to harvest: 5 days</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: Chaupal -->
+                    <div class="screen-content" id="tab3">
+                        <div class="broadcast-box">
+                            <div class="broadcast-label">📢 BROADCAST BOX</div>
+                            <div class="broadcast-hint">What's on your mind?</div>
+                        </div>
+                        <div class="filter-chips" style="margin-bottom: 12px;">
+                            <div class="chip active">All Updates</div>
+                            <div class="chip">Equipment</div>
+                            <div class="chip">Crops</div>
+                        </div>
+                        <div class="post-card">
+                            <div class="post-header">
+                                <div class="post-avatar">👨🏽‍🌾</div>
+                                <div class="post-info">
+                                    <div class="post-name">Rajesh Kumar</div>
+                                    <div><span class="post-badge">FARMER</span><span class="post-rating">⭐⭐⭐⭐⭐</span></div>
+                                </div>
+                            </div>
+                            <div class="post-text">Onion prices crashed today!</div>
+                            <div class="post-time">2 hours ago</div>
+                        </div>
+                        <div class="post-card">
+                            <div class="post-header">
+                                <div class="post-avatar">👨🏻‍🔧</div>
+                                <div class="post-info">
+                                    <div class="post-name">Ramesh Singh</div>
+                                    <div><span class="post-badge" style="background: #1565C0;">PARTNER</span><span class="post-rating">⭐⭐⭐⭐</span></div>
+                                </div>
+                            </div>
+                            <div class="post-text">Fertilizer delivery - ₹850/bag</div>
+                            <div class="post-time">30 min ago</div>
+                        </div>
+                        <div class="post-card">
+                            <div class="post-header">
+                                <div class="post-avatar">👨🏻‍💼</div>
+                                <div class="post-info">
+                                    <div class="post-name">Merchant Hub</div>
+                                    <div><span class="post-badge" style="background: #F9A825; color: black;">BUYER</span><span class="post-rating">⭐⭐⭐⭐⭐</span></div>
+                                </div>
+                            </div>
+                            <div class="post-text">Quality onions needed - Premium price!</div>
+                            <div class="post-time">45 min ago</div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 4: Persona -->
+                    <div class="screen-content" id="tab4">
+                        <div class="profile-header">
+                            <div class="profile-avatar">👨🏽‍🌾</div>
+                            <div class="profile-name">Rajesh Kumar</div>
+                            <div class="profile-badge">⭐ TRUSTED FARMER</div>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-number">12</div>
+                                <div class="stat-label">Broadcasts</div>
+                            </div>
+                            <div style="width: 1px; background: #e0e0e0;"></div>
+                            <div class="stat-item">
+                                <div class="stat-number">450</div>
+                                <div class="stat-label">Trust Points</div>
+                            </div>
+                            <div style="width: 1px; background: #e0e0e0;"></div>
+                            <div class="stat-item">
+                                <div class="stat-number">8</div>
+                                <div class="stat-label">Network</div>
+                            </div>
+                        </div>
+                        <div class="menu">
+                            <div class="menu-item">
+                                <span class="menu-icon">🌾</span>
+                                <span class="menu-title">Farm Details</span>
+                                <span class="menu-arrow">›</span>
+                            </div>
+                            <div class="menu-item">
+                                <span class="menu-icon">📋</span>
+                                <span class="menu-title">Order History</span>
+                                <span class="menu-arrow">›</span>
+                            </div>
+                            <div class="menu-item">
+                                <span class="menu-icon">🌐</span>
+                                <span class="menu-title">Language</span>
+                                <span class="menu-arrow">हिंदी</span>
+                            </div>
+                            <div class="menu-item">
+                                <span class="menu-icon">❓</span>
+                                <span class="menu-title">Help & Support</span>
+                                <span class="menu-arrow">›</span>
+                            </div>
+                            <div class="menu-item">
+                                <span class="menu-icon">⚙️</span>
+                                <span class="menu-title">Settings</span>
+                                <span class="menu-arrow">›</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nav-bar">
+                    <div class="nav-item active" onclick="switchTab(1, '🌱 Crop Data')">🌱</div>
+                    <div class="nav-item" onclick="switchTab(2, '🧠 AI Saathi')">🧠</div>
+                    <div class="nav-item" onclick="switchTab(3, '📢 Chaupal')">📢</div>
+                    <div class="nav-item" onclick="switchTab(4, '👤 Persona')">👤</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabNum, title) {
+            document.querySelectorAll('.screen-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab' + tabNum).classList.add('active');
+            event.target.classList.add('active');
+            document.getElementById('header').textContent = title;
+        }
+    </script>
+</body>
+</html>
