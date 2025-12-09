@@ -315,21 +315,317 @@ Web    →
 
 ---
 
+## Risk Mitigation: Write-Once, Run-Anywhere UI Code Trap
+
+### **The Risk Explained**
+
+"Write-once, run-anywhere" (WORA) UI frameworks promise code reuse but often create:
+- **Mobile apps that look "wrong"** (web-ified, too dense, poor touch targets)
+- **Web apps that look "wrong"** (mobile-ified, wasted space, poor keyboard support)
+- **Lowest-common-denominator UX** (neither platform gets optimal experience)
+- **Debugging nightmares** (platform-specific bugs hidden in shared code)
+
+**Example of What Goes Wrong:**
+```
+❌ BAD: Share 100% of UI code
+React Native Web (or Flutter Web) with shared components
+├─ Mobile: Touch targets too small for web
+├─ Web: Screen space wasted with bottom tabs
+└─ Result: Users complain on both platforms
+```
+
+---
+
+### **Strategy 1: Separate UI, Share Business Logic** ✅ RECOMMENDED
+
+**Architecture:**
+```
+Mobile App (React Native or Flutter)
+├─ UI Layer (platform-native: native iOS, native Android)
+├─ Business Logic Layer (shared: badge calc, risk assessment)
+└─ API Integration Layer (shared: REST calls, JWT)
+
+Web App (Angular)
+├─ UI Layer (responsive CSS, desktop-optimized)
+├─ Business Logic Layer (shared: same modules as mobile)
+└─ API Integration Layer (shared: same endpoints)
+
+Shared (Backend)
+├─ All prediction logic
+├─ Badge/level calculation
+├─ Community moderation rules
+├─ Data validation
+└─ src/crop_ai/* (Python modules)
+```
+
+**Benefits:**
+- ✅ Each platform optimized for its constraints (mobile touch, web mouse)
+- ✅ Business logic guaranteed consistent (no duplicate bugs)
+- ✅ Fast platform-specific debugging
+- ✅ Teams can work independently (iOS team ≠ Web team)
+
+**How to Implement:**
+```
+Code Organization:
+crop-ai/
+├─ src/crop_ai/          # Backend (Python) - ALL logic lives here
+│  ├─ prediction.py
+│  ├─ gamification.py    # Badge/level logic (source of truth)
+│  ├─ community.py
+│  └─ sync.py
+├─ mobile/               # React Native/Flutter
+│  ├─ screens/           # Platform-specific screens
+│  ├─ services/          # API calls (calls src/crop_ai endpoints)
+│  └─ assets/
+├─ web/                  # Angular
+│  ├─ components/        # Responsive web components
+│  ├─ services/          # Same API calls
+│  └─ styles/            # Desktop-optimized CSS
+└─ shared/               # Optional: TypeScript types, shared constants
+   └─ types.ts           # Mobile & web use same interfaces
+```
+
+**Critical Implementation Rules:**
+
+| Rule | Why |
+|------|-----|
+| **No UI logic in mobile, no UI logic in web** | Each platform decides UX |
+| **All business logic in backend** | Single source of truth |
+| **API contracts are sacred** | If mobile needs feature, web gets it auto |
+| **Types/interfaces shared** | Mobile & web know exactly what API returns |
+
+---
+
+### **Strategy 2: Component-Level Abstraction** (Alternative)
+
+**If you choose React Native for mobile:**
+```
+✅ Share components between React Native & React Web
+   (but with significant gotchas below)
+
+❌ DON'T: Try to use same component code
+✅ DO: Use abstraction layer
+
+Example - Badge Display:
+components/Badge/
+├─ types.ts           (shared)
+│  └─ export interface BadgeProps { level: number, ... }
+├─ Badge.native.tsx   (React Native - mobile specific)
+│  └─ Uses <View>, <Text> with touch gestures
+├─ Badge.web.tsx      (React Web - web specific)
+│  └─ Uses <div>, <p> with hover states
+└─ useBadgeLogic.ts   (shared - not UI!)
+   └─ Calculates badge progress, visual styling
+```
+
+**Critical Pattern:**
+- Component **interface** can be shared
+- Component **implementation** must be platform-specific
+- Component **logic** should be abstracted to hooks
+- **Never** write one component that works on both
+
+---
+
+### **Strategy 3: Design System (Prevents Divergence)**
+
+**Create explicit design specifications BEFORE coding:**
+
+```
+Design System (Living Document)
+├─ Farmer Profile Card
+│  ├─ Mobile: 320px width, 140px height, bottom accent
+│  ├─ Web: Flexible 300-500px, right sidebar accent
+│  ├─ Badge display: 32px circles (mobile), 48px circles (web)
+│  └─ Data attributes: Same info, different layout
+│
+├─ Bottom Navigation (mobile-only)
+│  ├─ 5 items: Data, AI, Chaupal, Persona, Menu
+│  ├─ Touch target: 44px minimum
+│  └─ Web alternative: Side drawer or top tabs
+│
+├─ AI Prediction Input
+│  ├─ Mobile: Single-column form, large inputs
+│  ├─ Web: 2-column with live preview
+│  └─ API response: Identical for both platforms
+│
+└─ Chaupal Feed
+   ├─ Mobile: Full-width cards, 1 per screen, swipe to next
+   ├─ Web: 2-column grid or list view
+   └─ Data model: Identical API response
+```
+
+**Rule:** If design differs → Implement twice (platform-specific)  
+**Rule:** If data differs → Implement once (in backend)
+
+---
+
+### **Concrete Risk Mitigation Checklist**
+
+**Before Building Mobile App:**
+
+- [ ] **Document API contract** (what mobile receives)
+  - Example: `GET /api/farmer/:id` returns exactly these fields
+  - Web must use same endpoint, no special cases
+
+- [ ] **Separate UI repos**
+  - Mobile: `crop-ai/mobile/` (React Native or Flutter)
+  - Web: `crop-ai/web/` (Angular) — existing, keep separate
+  - Backend: `crop-ai/src/` (shared Python business logic)
+
+- [ ] **No shared UI code initially**
+  - Start with 100% platform-specific UX
+  - If code reuse appears naturally → extract after 2 versions
+  - (Don't force it ahead of time)
+
+- [ ] **Share only:
+  - [ ] API response types (TypeScript interfaces)
+  - [ ] Configuration constants
+  - [ ] Validation rules (if implemented in frontend)
+
+- [ ] **Document which features are mobile-only/web-only**
+  - Mobile-only: GPS-based location, offline mode
+  - Web-only: Bulk user management, analytics dashboards
+  - Shared: Profile viewing, community feed
+
+- [ ] **Backend validation is law**
+  - Mobile app calculates badge locally (cache)
+  - Backend recalculates when sync happens
+  - If different → Backend wins, mobile syncs
+
+- [ ] **Setup analytics to track divergence**
+  - Feature X works differently on mobile vs web?
+  - Flag it immediately
+  - Decide: Align them or accept divergence
+
+---
+
+### **Recommended Tech Stack (Enforces Separation)**
+
+| Layer | Technology | Why |
+|-------|-----------|-----|
+| **Backend (Source of Truth)** | Python (FastAPI + Django) | All logic here, both platforms consume |
+| **Mobile** | React Native **OR** Flutter | Native UI, shared API integration |
+| **Web** | Angular (existing) | Responsive, desktop-optimized |
+| **Shared Types** | TypeScript interfaces (optional) | Mobile & web know API shapes |
+| **Storage** | SQLite (mobile), Browser cache (web) | Platform-native persistence |
+
+**Why NOT use Expo/Flutter Web for both:**
+- ❌ Web scrolling feels like mobile (wasted space)
+- ❌ Mobile has unnecessary features (hover states)
+- ❌ Touch targets wrong on web, wrong on mobile
+- ✅ Better approach: Separate implementations, shared logic
+
+---
+
+### **Monitoring & Enforcement Rules**
+
+**To prevent "write-once" creep:**
+
+1. **Code Review Rule:** 
+   - Mobile PR: Ask "Does this need web?" → If yes, also update web or design new web UX
+   - Web PR: Ask "Is this mobile-hostile?" → If yes, add mobile workaround
+
+2. **API Contract Rule:**
+   - Any API change requires BOTH mobile & web testing
+   - If mobile works but web breaks → API change was bad
+
+3. **Feature Parity Audit (Quarterly):**
+   - Identify features that work differently
+   - Decide: Intentional (✅ ok) or Bug (❌ must fix)
+
+4. **Performance Budgets:**
+   - Mobile: <1MB app bundle (excluding assets)
+   - Web: <3MB initial JS
+   - If crossing threshold → UI code is probably duplicated
+
+---
+
+### **What Sharing IS Safe (Don't Skip)**
+
+Even with platform-specific UX, these should be shared:
+
+✅ **Backend business logic**
+```python
+# src/crop_ai/gamification.py
+def calculate_badge_level(score: int) -> Tuple[int, str]:
+    """Calculate farmer's current level and badge.
+    Used by both mobile AND web API responses."""
+    if score < 100:
+        return (1, "Seedling")
+    elif score < 500:
+        return (2, "Farmer")
+    # ...
+```
+
+✅ **API response contracts**
+```typescript
+// shared/api-types.ts (shared between mobile & web)
+interface FarmerProfile {
+  id: string;
+  name: string;
+  level: number;
+  badge: string;
+  crops: Crop[];
+}
+```
+
+✅ **Validation rules**
+```python
+# src/crop_ai/validation.py
+def validate_crop_name(name: str) -> bool:
+    """Used in backend, but mobile/web can call same logic."""
+    return len(name) > 0 and len(name) < 100
+```
+
+❌ **UI components**
+❌ **Navigation logic**
+❌ **Screen layouts**
+❌ **Styling/themes**
+
+---
+
 ## Risk Mitigation: Implementation Order
 
 **Recommended Sequence:**
 
-1. **Q1 2026:** Build mobile app (iOS + Android -2 versions)
+1. **Q1 2026: Build Mobile App** (React Native or Flutter)
    - Set new design standard
    - Establish API contracts
+   - **Enforce:** 100% native UI, share only backend logic
 
-2. **Q2 2026:** Refactor web app for mobile harmony
+2. **Q2 2026: Refactor Web App** for mobile harmony
    - Keep farmer UX consistent
+   - Make responsive (desktop-first, not mobile-first)
    - Add partner modules
+   - **Enforce:** Never copy mobile code, redesign for desktop
 
-3. **Q3 2026:** Launch synchronized releases
+3. **Q3 2026: Launch Synchronized Releases**
    - Mobile update → Web compatible
-   - Single release schedule
+   - Single API release schedule
+   - **Enforce:** Code review checks for "write-once" attempts
+
+---
+
+### **Failure Mode: What Happens If You Ignore This**
+
+**Year 1 (Looks Good):**
+- "We'll share UI code to save time"
+- Use Expo (React Native) for web too
+- Ship faster initially
+
+**Year 2 (Problems Emerge):**
+- Mobile users complain: "Touch targets too big, scrolling is weird"
+- Web users complain: "Too much wasted space, bottom navigation is weird"
+- Android-specific bugs hard to fix (hidden in shared code)
+- iOS-specific bugs hidden for months
+
+**Year 3 (Chaos):**
+- Rewriting UI code from scratch (losing 6 months)
+- Two separate teams struggling with shared code
+- Farmers switch to competitors with better mobile UX
+- Partners abandon web portal because it feels mobile-ish
+
+**Lesson:** Invest time upfront in architecture to save time long-term
 
 ---
 
