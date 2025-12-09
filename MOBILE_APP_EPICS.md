@@ -1,9 +1,10 @@
 # Mobile App Development: Epics & Delivery Plan
 
 **Approved Strategy:** Separate UI, Share Business Logic  
-**Platform:** React Native (cross-platform iOS/Android)  
+**Platform:** Flutter (cross-platform iOS/Android)  
 **Target OS:** Android 13+, iOS 15+  
 **Start Date:** Q1 2026  
+**Key Advantage:** Smaller app size (20-30MB), faster frequent rollouts, superior real-time performance  
 
 ---
 
@@ -49,31 +50,33 @@ POST /api/farm/{id}/sync        # Upload edits
 
 **Mobile App Stack:**
 ```
-React Native Project Structure:
+Flutter Project Structure:
 mobile/
-├─ src/
+├─ lib/
 │  ├─ screens/
-│  │  ├─ FarmListScreen.tsx      # Shows all farms (with offline cache)
-│  │  ├─ FarmDetailsScreen.tsx   # One farm details + weather
-│  │  ├─ MapScreen.tsx           # Map view of all farms
-│  │  └─ SyncScreen.tsx          # Offline indicator + sync status
+│  │  ├─ farm_list_screen.dart      # Shows all farms (with offline cache)
+│  │  ├─ farm_details_screen.dart   # One farm details + weather
+│  │  ├─ map_screen.dart            # Map view of all farms
+│  │  └─ sync_screen.dart           # Offline indicator + sync status
 │  ├─ services/
-│  │  ├─ api.ts                  # Calls backend APIs
-│  │  ├─ storage.ts              # SQLite offline storage
-│  │  ├─ sync.ts                 # Handles online/offline toggle
-│  │  └─ location.ts             # GPS for farm pinning
-│  ├─ components/
-│  │  ├─ FarmCard.tsx            # Reusable farm display
-│  │  ├─ WeatherCard.tsx         # Weather forecast display
-│  │  ├─ SyncStatus.tsx          # Offline/online indicator
-│  │  └─ OfflineNotice.tsx       # Alert when offline
-│  ├─ hooks/
-│  │  ├─ useSync.ts              # Manage sync lifecycle
-│  │  ├─ useOffline.ts           # Detect online/offline
-│  │  └─ useFarmData.ts          # Fetch + cache farm data
-│  └─ App.tsx                    # Navigation setup (bottom tabs)
-├─ app.json                      # Expo config
-└─ package.json
+│  │  ├─ api_service.dart           # Calls backend APIs (Dio HTTP client)
+│  │  ├─ storage_service.dart       # SQLite offline storage (Drift)
+│  │  ├─ sync_service.dart          # Handles online/offline toggle (connectivity_plus)
+│  │  └─ location_service.dart      # GPS for farm pinning (geolocator)
+│  ├─ widgets/
+│  │  ├─ farm_card.dart            # Reusable farm display
+│  │  ├─ weather_card.dart         # Weather forecast display
+│  │  ├─ sync_status_widget.dart    # Offline/online indicator
+│  │  └─ offline_notice.dart        # Alert when offline
+│  ├─ providers/
+│  │  ├─ farm_provider.dart         # Manage farm data state (Riverpod)
+│  │  ├─ sync_provider.dart         # Manage sync lifecycle
+│  │  └─ connectivity_provider.dart # Detect online/offline
+│  ├─ main.dart                     # App entry point + navigation
+│  └─ app.dart                      # Main app widget
+├─ pubspec.yaml                     # Flutter dependencies
+├─ pubspec.lock                     # Locked dependency versions
+└─ analysis_options.yaml             # Lint rules
 ```
 
 ### Acceptance Criteria:
@@ -94,10 +97,10 @@ mobile/
 - ✅ No new backend code needed
 
 ### Team Estimate:
-- 2 React Native devs
-- 2 weeks core feature
-- 2 weeks testing + refinement
-- **Total: 4 weeks**
+- 2 Flutter devs
+- 1.5 weeks core feature (Flutter faster prototyping)
+- 1.5 weeks testing + refinement
+- **Total: 3 weeks** (faster than React Native due to smaller bundle)
 
 ---
 
@@ -128,25 +131,25 @@ GET /api/prediction/model/metadata       # Latest ML model info
 
 **Mobile App Stack:**
 ```
-React Native Extension:
-mobile/src/
+Flutter Extension:
+mobile/lib/
 ├─ screens/
-│  ├─ PredictionScreen.tsx       # Show current prediction + risks
-│  ├─ PredictionHistoryScreen.tsx # Past predictions timeline
-│  └─ RecommendationScreen.tsx   # Action items from AI
+│  ├─ prediction_screen.dart       # Show current prediction + risks
+│  ├─ prediction_history_screen.dart # Past predictions timeline
+│  └─ recommendation_screen.dart   # Action items from AI
 ├─ services/
-│  ├─ prediction.ts              # Call /predict API
-│  ├─ mlModel.ts                 # Load cached ML model (TF Lite)
-│  └─ recommendations.ts         # Parse recommendations
-├─ components/
-│  ├─ RiskCard.tsx               # Color-coded risk (red/yellow/green)
-│  ├─ YieldChart.tsx             # Predicted yield visualization
-│  ├─ RecommendationItem.tsx     # Single action item
-│  └─ ShareButton.tsx            # Share prediction UI
-└─ hooks/
-   ├─ usePrediction.ts           # Fetch prediction + errors
-   ├─ useMLModel.ts              # Load + cache local ML model
-   └─ useRecommendations.ts      # Parse AI output
+│  ├─ prediction_service.dart      # Call /predict API (Dio)
+│  ├─ ml_model_service.dart        # Load cached ML model (TF Lite Flutter)
+│  └─ recommendation_service.dart  # Parse recommendations
+├─ widgets/
+│  ├─ risk_card.dart               # Color-coded risk (red/yellow/green)
+│  ├─ yield_chart.dart             # Predicted yield visualization (fl_chart)
+│  ├─ recommendation_item.dart     # Single action item
+│  └─ share_button.dart            # Share prediction UI
+└─ providers/
+   ├─ prediction_provider.dart     # Fetch prediction + errors (Riverpod)
+   ├─ ml_model_provider.dart       # Load + cache local ML model
+   └─ recommendation_provider.dart # Parse AI output
 ```
 
 **ML Model (Local on Mobile):**
@@ -176,12 +179,12 @@ mobile/assets/models/
 - 🔄 Model versioning API
 
 ### Team Estimate:
-- 2 React Native devs (ML integration)
+- 2 Flutter devs (ML integration)
 - 1 Backend dev (expand prediction APIs)
-- 2 weeks core feature
-- 1.5 weeks ML model + mobile optimization
+- 1.5 weeks core feature
+- 1 week ML model + mobile optimization (Flutter TF Lite bindings mature)
 - 0.5 weeks testing
-- **Total: 4 weeks**
+- **Total: 3 weeks**
 
 ---
 
@@ -216,31 +219,31 @@ POST /api/gamification/sync         # Update badge progress
 
 **Mobile App Stack:**
 ```
-React Native Extension:
-mobile/src/
+Flutter Extension:
+mobile/lib/
 ├─ screens/
-│  ├─ ChaupalFeedScreen.tsx      # Community feed (scrollable)
-│  ├─ CreatePostScreen.tsx       # Text + photo composer
-│  ├─ PersonaScreen.tsx          # Profile + badges + level
-│  ├─ LeaderboardScreen.tsx      # Top farmers by region
-│  └─ PostDetailScreen.tsx       # Single post + comments
+│  ├─ chaupal_feed_screen.dart      # Community feed (scrollable)
+│  ├─ create_post_screen.dart       # Text + photo composer
+│  ├─ persona_screen.dart           # Profile + badges + level
+│  ├─ leaderboard_screen.dart       # Top farmers by region
+│  └─ post_detail_screen.dart       # Single post + comments
 ├─ services/
-│  ├─ community.ts               # Feed + posts API calls
-│  ├─ gamification.ts            # Badge calculation + progress
-│  ├─ engagement.ts              # Like/comment interactions
-│  └─ offline.ts                 # Queue posts/comments when offline
-├─ components/
-│  ├─ PostCard.tsx               # Single post display (text + image)
-│  ├─ BadgeCard.tsx              # Badge with unlock condition
-│  ├─ LevelProgress.tsx          # Level bar + next milestone
-│  ├─ LeaderboardRow.tsx         # Farmer entry in leaderboard
-│  ├─ CommentThread.tsx          # Comments on post
-│  └─ LikeButton.tsx             # Like/unlike interaction
-└─ hooks/
-   ├─ useChaupalFeed.ts          # Pagination + caching
-   ├─ useGamification.ts         # Badge tracking
-   ├─ useLevelProgress.ts        # Calculate progress to next level
-   └─ useEngagement.ts           # Handle likes, comments, shares
+│  ├─ community_service.dart        # Feed + posts API calls (Dio)
+│  ├─ gamification_service.dart     # Badge calculation + progress
+│  ├─ engagement_service.dart       # Like/comment interactions
+│  └─ offline_queue_service.dart    # Queue posts/comments when offline
+├─ widgets/
+│  ├─ post_card.dart                # Single post display (text + image)
+│  ├─ badge_card.dart               # Badge with unlock condition
+│  ├─ level_progress_widget.dart    # Level bar + next milestone
+│  ├─ leaderboard_row.dart          # Farmer entry in leaderboard
+│  ├─ comment_thread.dart           # Comments on post
+│  └─ like_button.dart              # Like/unlike interaction
+└─ providers/
+   ├─ chaupal_feed_provider.dart    # Pagination + caching (Riverpod)
+   ├─ gamification_provider.dart    # Badge tracking
+   ├─ level_progress_provider.dart  # Calculate progress to next level
+   └─ engagement_provider.dart      # Handle likes, comments, shares
 ```
 
 **Gamification Logic (Backend - Source of Truth):**
@@ -286,13 +289,13 @@ def unlock_badges(farmer_id: str) -> List[Badge]:
 - 🆕 Regional aggregation for leaderboard
 
 ### Team Estimate:
-- 2 React Native devs (UI + engagement)
+- 2 Flutter devs (UI + engagement)
 - 1 Backend dev (API + gamification)
 - 1 Product manager (engagement mechanics)
-- 2 weeks core features
+- 1.5 weeks core features (Flutter faster)
 - 1 week backend + badge logic
 - 0.5 weeks testing + polish
-- **Total: 3.5 weeks**
+- **Total: 3 weeks**
 
 ---
 
@@ -327,33 +330,33 @@ GET /api/marketplace/nearby          # Services near farm (geo)
 
 **Mobile App Stack:**
 ```
-React Native Extension:
-mobile/src/
+Flutter Extension:
+mobile/lib/
 ├─ screens/
-│  ├─ MarketplaceScreen.tsx      # Browse services
-│  ├─ ServiceDetailScreen.tsx    # Service + partner info + reviews
-│  ├─ RequestQuoteScreen.tsx     # Form to request service
-│  ├─ MyRequestsScreen.tsx       # Order history + status
-│  ├─ ChatScreen.tsx             # Conversation with partner
-│  ├─ NearbyServicesScreen.tsx   # Map of nearby services
-│  └─ ReviewScreen.tsx           # Rate + review after transaction
+│  ├─ marketplace_screen.dart      # Browse services
+│  ├─ service_detail_screen.dart   # Service + partner info + reviews
+│  ├─ request_quote_screen.dart    # Form to request service
+│  ├─ my_requests_screen.dart      # Order history + status
+│  ├─ chat_screen.dart             # Conversation with partner (Firebase Realtime)
+│  ├─ nearby_services_screen.dart  # Map of nearby services (google_maps_flutter)
+│  └─ review_screen.dart           # Rate + review after transaction
 ├─ services/
-│  ├─ marketplace.ts             # Browse + request APIs
-│  ├─ messaging.ts               # Chat + notifications
-│  ├─ location.ts                # Geo queries for nearby services
-│  └─ reviews.ts                 # Rating + review
-├─ components/
-│  ├─ ServiceCard.tsx            # Service listing (name, price, rating)
-│  ├─ PartnerProfile.tsx         # Partner info + reviews
-│  ├─ RatingBar.tsx              # 5-star rating display
-│  ├─ ChatBubble.tsx             # Message in conversation
-│  ├─ MapMarker.tsx              # Service on map
-│  └─ ReviewForm.tsx             # Text + rating form
-└─ hooks/
-   ├─ useMarketplaceSearch.ts    # Browse + filter
-   ├─ useMessaging.ts            # Chat state
-   ├─ useNearby.ts               # Geo queries
-   └─ useReviews.ts              # Rating system
+│  ├─ marketplace_service.dart     # Browse + request APIs (Dio)
+│  ├─ messaging_service.dart       # Chat + notifications (Firebase)
+│  ├─ location_service.dart        # Geo queries for nearby services
+│  └─ review_service.dart          # Rating + review
+├─ widgets/
+│  ├─ service_card.dart            # Service listing (name, price, rating)
+│  ├─ partner_profile.dart         # Partner info + reviews
+│  ├─ rating_bar.dart              # 5-star rating display
+│  ├─ chat_bubble.dart             # Message in conversation
+│  ├─ map_marker.dart              # Service on map
+│  └─ review_form.dart             # Text + rating form
+└─ providers/
+   ├─ marketplace_provider.dart    # Browse + filter (Riverpod)
+   ├─ messaging_provider.dart      # Chat state (Firebase listener)
+   ├─ nearby_provider.dart         # Geo queries
+   └─ review_provider.dart         # Rating system
 ```
 
 ### Acceptance Criteria:
@@ -378,13 +381,13 @@ mobile/src/
 - 🆕 Geo-location queries
 
 ### Team Estimate:
-- 2 React Native devs (marketplace UI + chat)
+- 2 Flutter devs (marketplace UI + chat)
 - 1 Backend dev (service APIs + messaging)
-- 1 DevOps (real-time messaging setup)
-- 2.5 weeks core marketplace
-- 1 week messaging + real-time
-- 0.5 weeks testing + polish
-- **Total: 4 weeks**
+- 1 DevOps (Firebase real-time messaging setup)
+- 2 weeks core marketplace (Flutter faster)
+- 0.75 weeks messaging + real-time (Firebase integration simpler in Flutter)
+- 0.25 weeks testing + polish
+- **Total: 3 weeks**
 
 ---
 
@@ -427,28 +430,49 @@ Epic 5: Full Integration & Polish
 
 ---
 
-## Tech Stack Summary
+## Why Flutter Over React Native?
+
+| Factor | Flutter | React Native |
+|--------|---------|---------------|
+| **App Size** | 20-30MB (small) | 45-60MB (large) |
+| **Release Cycle** | Fast iteration due to smaller build | Slower, larger bundles |
+| **Real-time Performance** | Superior (Chaupal feed, chat) | Good but slower on older devices |
+| **ML Integration** | TF Lite bindings mature & optimized | Requires native modules |
+| **Offline Sync** | Excellent (Drift ORM) | Good (Realm or SQLite) |
+| **Development Speed** | Hot reload + strong typing (Dart) | Hot reload + JS flexibility |
+| **Team Ramp** | Dart learning curve initially | JS developers faster onboard |
+| **Rural Performance** | Optimized for older devices | Can be bloated on slow devices |
+
+**Recommendation:** Flutter wins for your use case (20-30MB size = faster downloads on 2G/3G networks, better real-time updates for community feed).
+
+---
+
+## Tech Stack (Flutter)
 
 | Component | Technology | Why |
 |-----------|-----------|-----|
-| **Mobile Framework** | React Native | Cross-platform iOS/Android, JS ecosystem |
-| **State Management** | Redux or Zustand | Manage sync state, offline queue |
-| **Offline Storage** | SQLite (via WatermelonDB) | Relational queries, performance |
-| **Maps** | Expo MapView | Pre-integrated, simple API |
-| **ML Model** | TensorFlow Lite | Lightweight, on-device predictions |
-| **Push Notifications** | Firebase Cloud Messaging | Cross-platform, backend-triggered |
-| **Real-time Chat** | Firebase Realtime DB or Pusher | WebSocket alternative |
-| **Analytics** | Firebase Analytics | Free, integrated with FCM |
-| **API Client** | Axios + custom retry | Handle offline queueing |
+| **Mobile Framework** | Flutter (Dart) | Cross-platform iOS/Android, compiled to native |
+| **State Management** | Riverpod | Type-safe, composable, excellent for sync |
+| **Offline Storage** | Drift (SQLite wrapper) | Relational + type-safe, excellent ORM |
+| **Maps** | google_maps_flutter | High-quality maps, geolocation |
+| **ML Model** | TensorFlow Lite Flutter | Native bindings, optimized performance |
+| **Push Notifications** | Firebase Cloud Messaging | Cross-platform, excellent Flutter support |
+| **Real-time Chat** | Firebase Realtime DB | WebSocket alternative, instant updates |
+| **Analytics** | Firebase Analytics | Free, first-class Flutter support |
+| **API Client** | Dio | Excellent interceptors, offline queueing |
+| **Image Handling** | image_picker + cached_network_image | Optimized caching, compression |
+| **Connectivity** | connectivity_plus | Detect online/offline, handle transitions |
+| **Local Notifications** | flutter_local_notifications | Badge earned, order updates |
+| **Camera** | camera | For photo uploads (marketplace, community) |
 
 ---
 
 ## Resource Plan
 
 ### Team Composition (Recommended):
-- **2 React Native Devs** (full-time, Weeks 1-16)
+- **2 Flutter Devs** (full-time, Weeks 1-16)
 - **1-2 Backend Devs** (part-time Weeks 1-4, full-time Weeks 5-16)
-- **1 DevOps/Infrastructure** (Weeks 9-16 for real-time + app store)
+- **1 DevOps/Infrastructure** (Weeks 9-16 for Firebase + app store)
 - **1 Product Manager** (full-time, all weeks)
 - **1 QA Engineer** (Weeks 4-16 for testing)
 
@@ -523,7 +547,7 @@ Epic 5: Full Integration & Polish
 ## Next Steps
 
 1. **Week 0 (This Week):** Finalize Epic 1 detailed requirements
-2. **Week 0:** Set up React Native project, GitHub workflows for mobile CI/CD
+2. **Week 0:** Set up Flutter project, GitHub workflows for mobile CI/CD
 3. **Week 1:** Start Epic 1 development (farm list + offline sync)
 4. **Week 5:** Start Epic 2 (AI predictions) with Epic 1 in beta
 5. **Week 9:** Start Epic 3 (community) with Epic 1+2 in beta
