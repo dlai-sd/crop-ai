@@ -4,7 +4,7 @@ Smoke tests to verify service availability and basic functionality.
 """
 import json
 import logging
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 import requests
 import pytest
@@ -45,7 +45,7 @@ class EndpointTester:
         self.service_name = service_name
         self.results = []
 
-    def test_endpoint(self, path: str, method: str = "GET", timeout: int = 5) -> Tuple[bool, str, int]:
+    def test_endpoint(self, path: str, method: str = "GET", timeout: int = 5) -> tuple[bool, str, int]:
         """Test a single endpoint."""
         url = f"{self.base_url}{path}"
         try:
@@ -65,7 +65,7 @@ class EndpointTester:
         except Exception as e:
             return False, str(e), 0
 
-    def test_all_endpoints(self, endpoints: List[Tuple[str, str]]) -> Dict:
+    def test_all_endpoints(self, endpoints: List[tuple[str, str]]) -> Dict:
         """Test all endpoints for this service."""
         results = {
             "service": self.service_name,
