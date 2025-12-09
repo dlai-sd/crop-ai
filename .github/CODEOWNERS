@@ -1,13 +1,19 @@
-# CODEOWNERS file - Automatically assigns reviewers
+# Code Owners for crop-ai repository
+# GitHub auto-requests reviews from code owners when PRs modify matching files
 
-# Default reviewers for all code
+# Global fallback
 * @dlai-sd
+
+# Mobile app - Flutter (NEW)
+/mobile/**                 @dlai-sd
+/mobile/lib/**             @dlai-sd
+/mobile/test/**            @dlai-sd
+/mobile/android/**         @dlai-sd
+/mobile/ios/**             @dlai-sd
+/mobile/pubspec.yaml       @dlai-sd
 
 # Backend API code
 src/ @dlai-sd
-
-# Frontend code
-frontend/ @dlai-sd
 
 # CI/CD pipeline
 .github/workflows/ @dlai-sd
@@ -24,7 +30,6 @@ docs/ @dlai-sd
 *.yml @dlai-sd
 *.yaml @dlai-sd
 requirements.txt @dlai-sd
-angular.json @dlai-sd
 
 # Tests must have approval
 tests/ @dlai-sd
