@@ -1,6 +1,6 @@
 {
-  "appName": "कृषि एआई",
-  "appDescription": "स्मार्ट फसल निगरानी और कृषि बुद्धिमत्ता",
+  "appName": "Crop AI",
+  "appDescription": "स्मार्ट कृषि निगरानी और खेती बुद्धिमत्ता",
   
   "common": {
     "loading": "लोड हो रहा है...",
@@ -14,7 +14,7 @@
     "submit": "जमा करें",
     "close": "बंद करें",
     "next": "अगला",
-    "back": "पीछे",
+    "back": "वापस",
     "yes": "हाँ",
     "no": "नहीं",
     "ok": "ठीक है",
@@ -22,32 +22,41 @@
   },
   
   "farms": {
-    "title": "मेरी फसलें",
-    "empty": "अभी कोई फसल नहीं",
-    "addFirst": "अपनी पहली फसल जोड़ें",
-    "addFarm": "फसल जोड़ें",
-    "farmDetails": "फसल विवरण",
+    "title": "मेरे खेत",
+    "empty": "अभी कोई खेत नहीं",
+    "addFirst": "अपना पहला खेत जोड़ें",
+    "addFarm": "खेत जोड़ें",
+    "farmDetails": "खेत का विवरण",
     "location": "स्थान",
     "area": "क्षेत्र",
     "hectares": "हेक्टेयर",
     "cropType": "फसल का प्रकार",
     "plantingDate": "बुवाई की तारीख",
-    "expectedHarvest": "अपेक्षित कटाई",
+    "expectedHarvest": "अपेक्षित फसल कटाई",
     "soilMoisture": "मिट्टी की नमी",
     "temperature": "तापमान",
     "healthStatus": "स्वास्थ्य स्थिति",
-    "healthy": "फसल उत्तम स्थिति में है",
-    "warning": "फसल को ध्यान की आवश्यकता है",
-    "critical": "फसल को तत्काल कार्रवाई की आवश्यकता है"
+    "healthy": "खेत उत्तम स्थिति में है",
+    "warning": "खेत को ध्यान देने की आवश्यकता है",
+    "critical": "खेत को तुरंत कार्रवाई की आवश्यकता है"
   },
   
   "weather": {
     "title": "मौसम",
     "temperature": "तापमान",
+    "feelsLike": "प्रतीत होता है",
     "humidity": "आर्द्रता",
     "rainfall": "वर्षा",
     "windSpeed": "हवा की गति",
-    "forecast": "पूर्वानुमान"
+    "uvIndex": "यूवी इंडेक्स",
+    "forecast": "पूर्वानुमान",
+    "condition": "स्थिति",
+    "lastUpdated": "अंतिम अपडेट",
+    "lowRisk": "कम",
+    "moderateRisk": "मध्यम",
+    "highRisk": "उच्च",
+    "veryHighRisk": "बहुत अधिक",
+    "extremeRisk": "चरम"
   },
   
   "settings": {
@@ -55,20 +64,20 @@
     "language": "भाषा",
     "notifications": "सूचनाएं",
     "theme": "थीम",
-    "about": "के बारे में",
+    "about": "परिचय",
     "privacy": "गोपनीयता नीति"
   },
   
   "languages": {
     "english": "English",
-    "hindi": "हिंदी (Hindi)",
-    "tamil": "தமிழ் (Tamil)",
-    "telugu": "తెలుగు (Telugu)",
-    "kannada": "ಕನ್ನಡ (Kannada)",
-    "marathi": "मराठी (Marathi)",
-    "gujarati": "ગુજરાતી (Gujarati)",
-    "punjabi": "ਪੰਜਾਬੀ (Punjabi)",
-    "bengali": "বাংলা (Bengali)",
-    "odia": "ଓଡ଼ିଆ (Odia)"
+    "hindi": "हिंदी",
+    "tamil": "தமிழ்",
+    "telugu": "తెలుగు",
+    "kannada": "ಕನ್ನಡ",
+    "marathi": "मराठी",
+    "gujarati": "ગુજરાતી",
+    "punjabi": "ਪੰਜਾਬੀ",
+    "bengali": "বাংলা",
+    "odia": "ଓଡ଼ିଆ"
   }
 }

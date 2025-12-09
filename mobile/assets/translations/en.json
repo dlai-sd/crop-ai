@@ -44,10 +44,19 @@
   "weather": {
     "title": "Weather",
     "temperature": "Temperature",
+    "feelsLike": "Feels Like",
     "humidity": "Humidity",
     "rainfall": "Rainfall",
     "windSpeed": "Wind Speed",
-    "forecast": "Forecast"
+    "uvIndex": "UV Index",
+    "forecast": "Forecast",
+    "condition": "Condition",
+    "lastUpdated": "Last Updated",
+    "lowRisk": "Low",
+    "moderateRisk": "Moderate",
+    "highRisk": "High",
+    "veryHighRisk": "Very High",
+    "extremeRisk": "Extreme"
   },
   
   "settings": {

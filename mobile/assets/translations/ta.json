@@ -1,34 +1,34 @@
 {
-  "appName": "பயிர் AI",
-  "appDescription": "ஸ்மார்ட் பயிர் கண்காணிப்பு மற்றும் விவசாய வுத்திக்ஜ்ஞ்ஞை",
+  "appName": "Crop AI",
+  "appDescription": "ஸ்மார்ட் பயிர் கண்காணிப்பு மற்றும் விவசாய நுண்ணறிவு",
   
   "common": {
-    "loading": "ஏற்றப்படுகிறது...",
+    "loading": "ஏற்றுகிறது...",
     "error": "பிழை",
     "retry": "மீண்டும் முயற்சிக்கவும்",
-    "cancel": "ரத்து செய்யவும்",
+    "cancel": "ரத்துசெய்க",
     "save": "சேமிக்கவும்",
     "delete": "நீக்கவும்",
     "edit": "திருத்தவும்",
     "add": "சேர்க்கவும்",
     "submit": "சமர்ப்பிக்கவும்",
-    "close": "மூடவும்",
-    "next": "அடுத்து",
+    "close": "மூடுக",
+    "next": "அடுத்தது",
     "back": "பின்னே",
     "yes": "ஆம்",
     "no": "இல்லை",
     "ok": "சரி",
-    "search": "தேடுக"
+    "search": "தேடல்"
   },
   
   "farms": {
-    "title": "எனது பயிர்கள்",
-    "empty": "இதுவரை எந்த பயிரும் இல்லை",
-    "addFirst": "உங்கள் முதல் பயிரைச் சேர்க்கவும்",
-    "addFarm": "பயிர் சேர்க்கவும்",
-    "farmDetails": "பயிர் விவரங்கள்",
-    "location": "இருப்பிடம்",
-    "area": "பகுதி",
+    "title": "என் பண்ணைகள்",
+    "empty": "இன்னும் பண்ணை இல்லை",
+    "addFirst": "உங்கள் முதல் பண்ணையைச் சேர்க்கவும்",
+    "addFarm": "பண்ணை சேர்க்கவும்",
+    "farmDetails": "பண்ணை விவரங்கள்",
+    "location": "இடம்",
+    "area": "பரப்பளவு",
     "hectares": "ஹெக்டேர்",
     "cropType": "பயிரின் வகை",
     "plantingDate": "நடவு தேதி",
@@ -36,39 +36,48 @@
     "soilMoisture": "மண் ஈரப்பதம்",
     "temperature": "வெப்பநிலை",
     "healthStatus": "ஆரோக்கிய நிலை",
-    "healthy": "பயிர் சிறந்த நிலையில் உள்ளது",
-    "warning": "பயிருக்கு கவனம் தேவை",
-    "critical": "பயிருக்கு உடனடி조치 தேவை"
+    "healthy": "பண்ணை சிறந்த நிலையில் உள்ளது",
+    "warning": "பண்ணைக்கு கவனம் தேவை",
+    "critical": "பண்ணைக்கு உடனடி நடவடிக்கை தேவை"
   },
   
   "weather": {
-    "title": "வானிலை",
+    "title": "காலநிலை",
     "temperature": "வெப்பநிலை",
+    "feelsLike": "உணர்ந்த வெப்பநிலை",
     "humidity": "ஈரப்பதம்",
     "rainfall": "மழைப்பொழிவு",
     "windSpeed": "காற்றின் வேகம்",
-    "forecast": "முன்னறிவிப்பு"
+    "uvIndex": "UV குறியீடு",
+    "forecast": "முன்னறிவிப்பு",
+    "condition": "நிலை",
+    "lastUpdated": "கடைசியாக புதுப்பிக்கப்பட்டது",
+    "lowRisk": "குறைவு",
+    "moderateRisk": "மிதமான",
+    "highRisk": "அधिक",
+    "veryHighRisk": "மிக அधिक",
+    "extremeRisk": "தீவிரமான"
   },
   
   "settings": {
     "title": "அமைப்புகள்",
     "language": "மொழி",
     "notifications": "அறிவிப்புகள்",
-    "theme": "கருப்பொருள்",
+    "theme": "தீம்",
     "about": "பற்றி",
     "privacy": "தனியுரிமை கொள்கை"
   },
   
   "languages": {
     "english": "English",
-    "hindi": "हिंदी (Hindi)",
-    "tamil": "தமிழ் (Tamil)",
-    "telugu": "తెలుగు (Telugu)",
-    "kannada": "ಕನ್ನಡ (Kannada)",
-    "marathi": "मराठी (Marathi)",
-    "gujarati": "ગુજરાતી (Gujarati)",
-    "punjabi": "ਪੰਜਾਬੀ (Punjabi)",
-    "bengali": "বাংলা (Bengali)",
-    "odia": "ଓଡ଼ିଆ (Odia)"
+    "hindi": "हिंदी",
+    "tamil": "தமிழ்",
+    "telugu": "తెలుగు",
+    "kannada": "ಕನ್ನಡ",
+    "marathi": "मराठी",
+    "gujarati": "ગુજરાતી",
+    "punjabi": "ਪੰਜਾਬੀ",
+    "bengali": "বাংলা",
+    "odia": "ଓଡ଼ିଆ"
   }
 }

@@ -1,10 +1,11 @@
 {
-  "appName": "పంట AI",
-  "appDescription": "స్మార్ట్ పంట పర్యవేక్షణ మరియు వ్యవసాయ ఇంటెలిజెన్స్",
+  "appName": "Crop AI",
+  "appDescription": "స్మార్ట్ పంట మానిటరింగ్ మరియు వ్యవసాయ గుద్ధత",
+  
   "common": {
-    "loading": "లోడ్ చేస్తోంది...",
+    "loading": "లోడ్ చేస్తుంది...",
     "error": "లోపం",
-    "retry": "మళ్ళీ ప్రయత్నించండి",
+    "retry": "మళ్లీ ప్రయత్నించండి",
     "cancel": "రద్దు చేయండి",
     "save": "సేవ్ చేయండి",
     "delete": "తొలగించండి",
@@ -15,55 +16,68 @@
     "next": "తర్వాత",
     "back": "వెనుకకు",
     "yes": "అవును",
-    "no": "నం",
-    "ok": "సరി",
-    "search": "వెతకండి"
+    "no": "కాదు",
+    "ok": "సరි",
+    "search": "అన్వేషణ"
   },
+  
   "farms": {
-    "title": "నా పంటలు",
-    "empty": "ఇంకా పంటలు లేవు",
-    "addFirst": "మీ మొదటి పంటను జోడించండి",
-    "addFarm": "పంట జోడించండి",
-    "farmDetails": "పంట వివరాలు",
-    "location": "స్థానం",
+    "title": "నా భూముల్లు",
+    "empty": "ఇంకా ఉదయోగాలు లేవు",
+    "addFirst": "మీ మొదటి భూమిని జోడించండి",
+    "addFarm": "భూమిని జోడించండి",
+    "farmDetails": "భూమి వివరాలు",
+    "location": "ప్రదేశం",
     "area": "ప్రాంతం",
-    "hectares": "హెక్టార్లు",
+    "hectares": "హెక్టార్",
     "cropType": "పంట రకం",
     "plantingDate": "నాటిన తేదీ",
-    "expectedHarvest": "ఆశించిన కోత",
+    "expectedHarvest": "ఆశించిన సంఘం",
     "soilMoisture": "నేల తేమ",
     "temperature": "ఉష్ణోగ్రత",
     "healthStatus": "ఆరోగ్య స్థితి",
-    "healthy": "పంట సద్ధ స్థితిలో ఉంది",
-    "warning": "పంటకు శ్రద్ధ అవసరం",
-    "critical": "పంటకు తక్షణ చర్య అవసరం"
+    "healthy": "భూమి సద్దుస్థితిలో ఉంది",
+    "warning": "భూమికి శ్రద్ధ అవసరమైతే",
+    "critical": "భూమికి తక్షణ చర్య అవసరమైతే"
   },
+  
   "weather": {
     "title": "వాతావరణం",
     "temperature": "ఉష్ణోగ్రత",
-    "humidity": "ఆర్ద్రత",
-    "rainfall": "వర్ష",
+    "feelsLike": "అనిపిస్తుంది",
+    "humidity": "ఆర్ధతা",
+    "rainfall": "వర్షపాతం",
     "windSpeed": "గాలి వేగం",
-    "forecast": "సూచన"
+    "uvIndex": "UV సూచిక",
+    "forecast": "సూచన",
+    "condition": "పరిస్థితి",
+    "lastUpdated": "చివరిగా నవీకరించిన",
+    "lowRisk": "తక్కువ",
+    "moderateRisk": "మధ్యమ",
+    "highRisk": "ఎత్తైన",
+    "veryHighRisk": "చాలా ఎత్తైన",
+    "extremeRisk": "విపరీతమైన"
   },
+  
   "settings": {
     "title": "సెట్టింగ్‌లు",
     "language": "భాష",
-    "notifications": "నోటిఫికేషన్‌లు",
+    "notifications": "ఎక్కువ నోటీసులు",
     "theme": "థీమ్",
     "about": "గురించి",
     "privacy": "గోప్యతా విధానం"
   },
+  
   "languages": {
     "english": "English",
-    "hindi": "हिंदी (Hindi)",
-    "tamil": "தமிழ் (Tamil)",
-    "telugu": "తెలుగు (Telugu)",
-    "kannada": "ಕನ್ನಡ (Kannada)",
-    "marathi": "मराठी (Marathi)",
-    "gujarati": "ગુજરાતી (Gujarati)",
-    "punjabi": "ਪੰਜਾਬੀ (Punjabi)",
-    "bengali": "বাংলা (Bengali)",
-    "odia": "ଓଡ଼ିଆ (Odia)"
+    "hindi": "हिंदी",
+    "tamil": "தமிழ்",
+    "telugu": "తెలుగు",
+    "kannada": "ಕನ್ನಡ",
+    "marathi": "मराठी",
+    "gujarati": "ગુજરાતી",
+    "punjabi": "ਪੰਜਾਬੀ",
+    "bengali": "বাংলা",
+    "odia": "ଓଡ଼ିଆ"
   }
 }

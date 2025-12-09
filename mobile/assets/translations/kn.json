@@ -1,69 +1,83 @@
 {
-  "appName": "ಫಸಲು AI",
-  "appDescription": "ಸ್ಮಾರ್ಟ್ ಫಸಲು ಮೇಲ್ವಿಚಾರಣೆ ಮತ್ತು ಕೃಷಿ ಬುದ್ಧಿಮತ್ತೆ",
+  "appName": "Crop AI",
+  "appDescription": "ಸ್ಮಾರ್ಟ್ ಪಂದ್ಯಾಂತರ ಮತ್ತು ಕೃಷಿ ಬುದ್ಧಿಮತ್ತೆ",
+  
   "common": {
     "loading": "ಲೋಡ್ ಆಗುತ್ತಿದೆ...",
-    "error": "ದೋಷ",
+    "error": "ಪ್ರಮಾಣೀಕರಣ",
     "retry": "ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ",
-    "cancel": "ರದ್ದುಗೊಳಿಸಿ",
+    "cancel": "ರದ್ದು ಮಾಡಿ",
     "save": "ಉಳಿಸಿ",
     "delete": "ಅಳಿಸಿ",
-    "edit": "ತಿದ್ದಿ",
+    "edit": "ಸಂಪಾದನೆ ಮಾಡಿ",
     "add": "ಸೇರಿಸಿ",
     "submit": "ಸಲ್ಲಿಸಿ",
     "close": "ಮುಚ್ಚಿ",
-    "next": "ಮುಂದೆ",
+    "next": "ಮುಂದಿನ",
     "back": "ಹಿಂದೆ",
     "yes": "ಹೌದು",
     "no": "ಇಲ್ಲ",
     "ok": "ಸರಿ",
     "search": "ಹುಡುಕಿ"
   },
+  
   "farms": {
-    "title": "ನನ್ನ ಫಸಲುಗಳು",
-    "empty": "ಇನ್ನೂ ಫಸಲುಗಳು ಇಲ್ಲ",
-    "addFirst": "ನಿಮ್ಮ ಮೊದಲ ಫಸಲನ್ನು ಸೇರಿಸಿ",
-    "addFarm": "ಫಸಲು ಸೇರಿಸಿ",
-    "farmDetails": "ಫಸಲು ವಿವರಗಳು",
+    "title": "ನನ್ನ ತೋಟಗಳು",
+    "empty": "ಇನ್ನೂ ತೋಟಗಳು ಇಲ್ಲ",
+    "addFirst": "ನಿಮ್ಮ ಮೊದಲ ತೋಟವನ್ನು ಸೇರಿಸಿ",
+    "addFarm": "ತೋಟ ಸೇರಿಸಿ",
+    "farmDetails": "ತೋಟ ವಿವರಗಳು",
     "location": "ಸ್ಥಾನ",
     "area": "ಪ್ರದೇಶ",
-    "hectares": "ಹೆಕ್ಟೇರ್",
-    "cropType": "ಫಸಲು ಪ್ರಕಾರ",
-    "plantingDate": "ನೆಂಟುಸುವ ದಿನಾಂಕ",
-    "expectedHarvest": "ನಿರೀಕ್ಷಿತ ಪೂಸಿ",
-    "soilMoisture": "ಮಣ್ಣಿನ ತೇವಾಂಶ",
+    "hectares": "ಹೆಕ್ಟರ್",
+    "cropType": "ಪಂದ್ಯಾಂತರ ವಿಧ",
+    "plantingDate": "ನೆಡುವ ದಿನಾಂಕ",
+    "expectedHarvest": "ನಿರೀಕ್ಷಿತ ಸುಗ್ರಹಣ",
+    "soilMoisture": "ಮಣ್ಣಿನ ಆರ್ದ್ರತೆ",
     "temperature": "ತಾಪಮಾನ",
     "healthStatus": "ಆರೋಗ್ಯ ಸ್ಥಿತಿ",
-    "healthy": "ಫಸಲು ಅತ್ತೋತ್ತಮ ಸ್ಥಿತಿಯಲ್ಲಿ ಇದೆ",
-    "warning": "ಫಸಲು ಗಮನವಿರಕೆ ಅವಶ್ಯಕ",
-    "critical": "ಫಸಲುಗೆ ತಕ್ಷಣ ಕ್ರಿಯೆ ಅವಶ್ಯಕ"
+    "healthy": "ತೋಟ ಸ್ವಸ್ಥ ಸ್ಥಿತಿಯಲ್ಲಿ ಇದೆ",
+    "warning": "ತೋಟಕ್ಕೆ ಗಮನ ಬೇಕು",
+    "critical": "ತೋಟಕ್ಕೆ ತಾತ್ಕ್ಷಣಿಕ ನೋಟಿಸ್ ಬೇಕು"
   },
+  
   "weather": {
-    "title": "ವಾಯುವಿಜ್ಞಾನ",
+    "title": "ಹವಾಮಾನ",
     "temperature": "ತಾಪಮಾನ",
-    "humidity": "ತೇವಾಂಶ",
+    "feelsLike": "ಅನುಭವ",
+    "humidity": "ಆರ್ದ್ರತೆ",
     "rainfall": "ಮಳೆ",
-    "windSpeed": "ಗಾಳಿಯ ವೇಗ",
-    "forecast": "ಪೂರ್ವಾನುಮಾನ"
+    "windSpeed": "ಗಾಳಿ ವೇಗ",
+    "uvIndex": "UV ಸೂಚ್ಯಾಂಕ",
+    "forecast": "ಮುನ್ನುಡಣೆ",
+    "condition": "ಸ್ಥಿತಿ",
+    "lastUpdated": "ಕೊನೆಯ ನವೀಕರಣ",
+    "lowRisk": "ಕಡಿಮೆ",
+    "moderateRisk": "ಮಧ್ಯಮ",
+    "highRisk": "ಅಧಿಕ",
+    "veryHighRisk": "ಅತ್ಯಂತ ಅಧಿಕ",
+    "extremeRisk": "ತೀವ್ರ"
   },
+  
   "settings": {
     "title": "ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
     "language": "ಭಾಷೆ",
-    "notifications": "ಸೂಚನೆಗಳು",
+    "notifications": "ಅಧಿಸೂಚನೆಗಳು",
     "theme": "ಥೀಮ್",
     "about": "ಕುರಿತು",
-    "privacy": "ಗೋಪ್ಯತೆ ನೀತಿ"
+    "privacy": "ಗೌಪ್ಯತಾ ನೀತಿ"
   },
+  
   "languages": {
     "english": "English",
-    "hindi": "हिंदी (Hindi)",
-    "tamil": "தமிழ் (Tamil)",
-    "telugu": "తెలుగు (Telugu)",
-    "kannada": "ಕನ್ನಡ (Kannada)",
-    "marathi": "मराठी (Marathi)",
-    "gujarati": "ગુજરાતી (Gujarati)",
-    "punjabi": "ਪੰਜਾਬੀ (Punjabi)",
-    "bengali": "বাংলা (Bengali)",
-    "odia": "ଓଡ଼ିଆ (Odia)"
+    "hindi": "हिंदी",
+    "tamil": "தமிழ்",
+    "telugu": "తెలుగు",
+    "kannada": "ಕನ್ನಡ",
+    "marathi": "मराठी",
+    "gujarati": "ગુજરાતી",
+    "punjabi": "ਪੰਜਾਬੀ",
+    "bengali": "বাংলা",
+    "odia": "ଓଡ଼ିଆ"
   }
 }

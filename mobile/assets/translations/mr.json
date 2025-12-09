@@ -1,1 +1,83 @@
-{"appName":"मराठी कृषि AI","appDescription":"स्मार्ट पिक निरीक्षण आणि कृषी बुद्धिमत्ता","common":{"loading":"लोड होत आहे...","error":"त्रुटी","retry":"पुन्हा प्रयत्न करा","cancel":"रद्द करा","save":"जतन करा","delete":"हटवा","edit":"संपादित करा","add":"जोडा","submit":"सबमिट करा","close":"बंद करा","next":"पुढे","back":"मागे","yes":"होय","no":"नाही","ok":"ठीक आहे","search":"शोध"},"farms":{"title":"माझ्या पिके","empty":"अद्याप कोणतीही पीक नाही","addFirst":"आपली पहिली पीक जोडा","addFarm":"पीक जोडा","farmDetails":"पीक तपशील","location":"स्थान","area":"क्षेत्र","hectares":"हेक्टर","cropType":"पीकाचा प्रकार","plantingDate":"रोपणाची तारीख","expectedHarvest":"अपेक्षित कापणी","soilMoisture":"माती ओलावा","temperature":"तापमान","healthStatus":"आरोग्य स्थिती","healthy":"पीक उत्तम स्थितीत आहे","warning":"पीकला लक्ष देण्याची आवश्यकता आहे","critical":"पीकला तातकाळ कारवाई आवश्यक आहे"},"weather":{"title":"हवामान","temperature":"तापमान","humidity":"आर्द्रता","rainfall":"पाऊस","windSpeed":"वाऱ्याचा वेग","forecast":"अंदाज"},"settings":{"title":"सेटिंग्ज","language":"भाषा","notifications":"सूचना","theme":"थीम","about":"माहिती","privacy":"गोपनीयता धोरण"},"languages":{"english":"English","hindi":"हिंदी (Hindi)","tamil":"தமிழ் (Tamil)","telugu":"తెలుగు (Telugu)","kannada":"ಕನ್ನಡ (Kannada)","marathi":"मराठी (Marathi)","gujarati":"ગુજરાતી (Gujarati)","punjabi":"ਪੰਜਾਬੀ (Punjabi)","bengali":"বাংলা (Bengali)","odia":"ଓଡ଼ିଆ (Odia)"}}
+{
+  "appName": "Crop AI",
+  "appDescription": "स्मार्ट पीक मॉनिटरिंग आणि शेतीचे बुद्धिमत्ता",
+  
+  "common": {
+    "loading": "लोड होत आहे...",
+    "error": "त्रुटी",
+    "retry": "पुन्हा प्रयत्न करा",
+    "cancel": "रद्द करा",
+    "save": "सेव्ह करा",
+    "delete": "हटवा",
+    "edit": "संपादन करा",
+    "add": "जोडा",
+    "submit": "समर्पित करा",
+    "close": "बंद करा",
+    "next": "पुढे",
+    "back": "मागे",
+    "yes": "होय",
+    "no": "नाही",
+    "ok": "ठीक आहे",
+    "search": "शोध"
+  },
+  
+  "farms": {
+    "title": "माझे शेत",
+    "empty": "अजून शेत नाही",
+    "addFirst": "आपला पहिला शेत जोडा",
+    "addFarm": "शेत जोडा",
+    "farmDetails": "शेत तपशील",
+    "location": "स्थान",
+    "area": "क्षेत्र",
+    "hectares": "हेक्टर",
+    "cropType": "पीक प्रकार",
+    "plantingDate": "रोपण तारीख",
+    "expectedHarvest": "अपेक्षित कापणी",
+    "soilMoisture": "मातीची ओलावणता",
+    "temperature": "तापमान",
+    "healthStatus": "आरोग्य स्थिती",
+    "healthy": "शेत उत्तम स्थितीत आहे",
+    "warning": "शेतला लक्ष देण्याची आवश्यकता आहे",
+    "critical": "शेतला त्वरित कृती आवश्यक आहे"
+  },
+  
+  "weather": {
+    "title": "हवामान",
+    "temperature": "तापमान",
+    "feelsLike": "वाटते",
+    "humidity": "आर्द्रता",
+    "rainfall": "पाऊस",
+    "windSpeed": "वाऱ्याची गती",
+    "uvIndex": "UV निर्देशांक",
+    "forecast": "अंदाज",
+    "condition": "स्थिती",
+    "lastUpdated": "शेवटची अपडेट",
+    "lowRisk": "कमी",
+    "moderateRisk": "मध्यम",
+    "highRisk": "उच्च",
+    "veryHighRisk": "अत्यंत उच्च",
+    "extremeRisk": "अत्यंत"
+  },
+  
+  "settings": {
+    "title": "सेटिंग्ज",
+    "language": "भाषा",
+    "notifications": "सूचना",
+    "theme": "थीम",
+    "about": "परिचय",
+    "privacy": "गोपनीयता धोरण"
+  },
+  
+  "languages": {
+    "english": "English",
+    "hindi": "हिंदी",
+    "tamil": "தமிழ்",
+    "telugu": "తెలుగు",
+    "kannada": "ಕನ್ನಡ",
+    "marathi": "मराठी",
+    "gujarati": "ગુજરાતી",
+    "punjabi": "ਪੰਜਾਬੀ",
+    "bengali": "বাংলা",
+    "odia": "ଓଡ଼ିଆ"
+  }
+}

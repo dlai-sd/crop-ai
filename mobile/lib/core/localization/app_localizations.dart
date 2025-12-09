@@ -83,10 +83,19 @@ class AppLocalizations {
   // Weather
   String get weatherTitle => translate('weather.title');
   String get weatherTemperature => translate('weather.temperature');
+  String get weatherFeelsLike => translate('weather.feelsLike');
   String get weatherHumidity => translate('weather.humidity');
   String get weatherRainfall => translate('weather.rainfall');
   String get weatherWindSpeed => translate('weather.windSpeed');
+  String get weatherUVIndex => translate('weather.uvIndex');
   String get weatherForecast => translate('weather.forecast');
+  String get weatherCondition => translate('weather.condition');
+  String get weatherLastUpdated => translate('weather.lastUpdated');
+  String get weatherLowRisk => translate('weather.lowRisk');
+  String get weatherModerateRisk => translate('weather.moderateRisk');
+  String get weatherHighRisk => translate('weather.highRisk');
+  String get weatherVeryHighRisk => translate('weather.veryHighRisk');
+  String get weatherExtremeRisk => translate('weather.extremeRisk');
 
   // Settings
   String get settingsTitle => translate('settings.title');
