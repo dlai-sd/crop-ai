@@ -74,6 +74,54 @@ PYTHONPATH=src python -m pytest -q
 docker build -t crop-ai:latest .
 ```
 
+## Service Endpoints & Ports
+
+The project runs three main services during development/deployment:
+
+### 1. **FastAPI Backend** (Core ML Service)
+- **URL:** `http://localhost:5000`
+- **Health Check:** `http://localhost:5000/health`
+- **Key Endpoints:**
+  - `GET /health` — Service health status
+  - `GET /ready` — Readiness probe (dependencies check)
+  - `GET /info` — Service information (version, status)
+  - `GET /metrics` — Service metrics
+  - `POST /predict` — Crop identification prediction
+  - `GET /predictions` — List all predictions
+  - `GET /stats` — Service statistics
+- **API Docs:** `http://localhost:5000/docs` (Swagger UI)
+
+### 2. **Django Gateway** (API Proxy & Authentication)
+- **URL:** `http://localhost:8000`
+- **Key Endpoints:**
+  - `GET /api/health/` — Gateway health status
+  - `GET /api/ready/` — Readiness check
+  - `GET /api/info/` — Gateway information
+  - `GET /api/predict/` — Prediction endpoint
+  - `POST /api/login/` — User authentication
+  - `POST /api/register/` — User registration
+- **Admin Panel:** `http://localhost:8000/admin` (Django Admin)
+
+### 3. **Angular Frontend** (Web UI)
+- **URL:** `http://localhost:4200`
+- **Landing Page:** `http://localhost:4200/` — Public landing page
+- **Authentication:** User login and registration
+- **Dashboard:** Crop identification interface
+
+## Integration Testing
+
+Run endpoint smoke tests to verify all services:
+
+```bash
+# Run integration tests (requires all services running)
+PYTHONPATH=src python -m pytest tests/test_integration_endpoints.py -v
+
+# Or run standalone test suite
+cd tests && python test_integration_endpoints.py
+```
+
+This tests all three services and generates a health report.
+
 ### CI/CD pipeline
 
 The project uses GitHub Actions for testing, linting, formatting, Docker builds, and deployment to Azure.

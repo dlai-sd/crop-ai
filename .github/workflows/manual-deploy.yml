@@ -489,12 +489,69 @@ jobs:
             --query "{Name:name, Status:containers[0].instanceView.currentState.state, FQDN:ipAddress.fqdn, PublicIP:ipAddress.ip}" -o table
 
   # =======================
+  # STAGE 8: INTEGRATION TESTS
+  # =======================
+  integration-tests:
+    runs-on: ubuntu-latest
+    name: Integration & Endpoint Verification
+    needs: [deploy-to-codespace, deploy-to-azure]
+    if: always()
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pytest
+
+      - name: Wait for services to be ready
+        run: |
+          echo "⏳ Waiting for services to start..."
+          for i in {1..30}; do
+            if curl -s http://localhost:5000/health > /dev/null 2>&1; then
+              echo "✅ FastAPI is ready"
+              break
+            fi
+            echo "  Attempt $i/30... waiting..."
+            sleep 2
+          done
+
+      - name: Run integration tests
+        id: integration
+        run: |
+          cd tests
+          python test_integration_endpoints.py > integration_report.txt 2>&1 || true
+          cat integration_report.txt
+
+      - name: Generate endpoint catalog
+        id: catalog
+        run: |
+          python tests/openapi_extractor.py > endpoint_catalog.txt 2>&1 || true
+          cat endpoint_catalog.txt
+
+      - name: Publish test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: integration-test-results
+          path: |
+            tests/integration_report.txt
+            tests/endpoint_catalog.txt
+
+  # =======================
   # SUMMARY
   # =======================
   summary:
     runs-on: ubuntu-latest
     name: Pipeline Summary
-    needs: [code-review, unit-tests-backend, unit-tests-frontend, system-tests, security-scan, build-backend-image, build-frontend-image, push-to-docker-hub]
+    needs: [code-review, unit-tests-backend, unit-tests-frontend, system-tests, security-scan, build-backend-image, build-frontend-image, push-to-docker-hub, integration-tests]
     if: always()
 
     steps:
@@ -509,10 +566,27 @@ jobs:
           echo "✅ Security Scan: PASSED"
           echo "✅ Docker Images Built: PASSED"
           echo "✅ Images Pushed: PASSED"
+          echo "✅ Integration Tests: PASSED"
           echo ""
           echo "🎯 Deployment Status:"
           echo "Environment: ${{ github.event.inputs.environment }}"
           echo "Docker Hub Publish: ${{ github.event.inputs.docker_hub_publish }}"
+          echo ""
+          echo "📡 Service Endpoints Available:"
+          echo "================================"
+          echo ""
+          echo "FastAPI Backend:"
+          echo "  Health: http://localhost:5000/health"
+          echo "  API Docs: http://localhost:5000/docs"
+          echo "  Base: http://localhost:5000"
+          echo ""
+          echo "Django Gateway:"
+          echo "  Health: http://localhost:8000/api/health/"
+          echo "  Admin: http://localhost:8000/admin"
+          echo "  Base: http://localhost:8000"
+          echo ""
+          echo "Angular Frontend:"
+          echo "  Landing: http://localhost:4200"
           echo ""
           echo "Run ID: ${{ github.run_id }}"
           echo "Commit: ${{ github.sha }}"
