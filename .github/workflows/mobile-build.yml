@@ -40,6 +40,8 @@ jobs:
       - name: Get Dependencies
         run: |
           cd mobile
+          pwd
+          ls -la lib/
           flutter pub get
       
       - name: Build APK
