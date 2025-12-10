@@ -6,11 +6,11 @@ on:
       upload_to_play_store:
         description: 'Upload to Play Store internal testing?'
         required: false
-        default: 'true'
+        default: 'false'
 
 jobs:
   build_and_distribute:
-    name: Build & Upload to Play Store
+    name: Build AAB & Distribute
     runs-on: ubuntu-latest
     
     steps:
@@ -22,6 +22,23 @@ jobs:
           flutter-version: '3.24.0'
           channel: 'stable'
 
+      - name: Cache Flutter pub cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('mobile/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+            ${{ runner.os }}-
+
+      - name: Cache Flutter build
+        uses: actions/cache@v3
+        with:
+          path: mobile/build
+          key: ${{ runner.os }}-flutter-build-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-build-
+
       - name: Get Flutter dependencies
         working-directory: ./mobile
         run: flutter pub get
@@ -30,22 +47,26 @@ jobs:
         working-directory: ./mobile
         run: dart run build_runner build --delete-conflicting-outputs
 
-      - name: Build APK (release)
-        working-directory: ./mobile
-        run: |
-          flutter build apk \
-            --release \
-            --split-per-abi \
-            --target-platform android-arm64 \
-            --no-sound-null-safety
-
-      - name: Build App Bundle (AAB)
+      - name: Build App Bundle (AAB - Release)
         working-directory: ./mobile
         run: |
           flutter build appbundle \
             --release \
             --target-platform android-arm64 \
             --no-sound-null-safety
+
+      - name: Verify AAB
+        working-directory: ./mobile
+        run: |
+          ls -lh build/app/outputs/bundle/release/
+          file build/app/outputs/bundle/release/app-release.aab
+
+      - name: Upload AAB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dlai-crop-aab
+          path: mobile/build/app/outputs/bundle/release/app-release.aab
+          retention-days: 30
 
       - name: Upload to Play Store (Internal Testing)
         if: github.event.inputs.upload_to_play_store == 'true'
@@ -56,24 +77,25 @@ jobs:
           # Install fastlane
           sudo apt-get update
           sudo apt-get install -y ruby-dev
-          sudo gem install fastlane
+          sudo gem install fastlane -v 2.217.0
           
           # Create service account file
           echo "$PLAY_STORE_SERVICE_ACCOUNT" > /tmp/service_account.json
           
-          # Upload to Play Store
+          # Upload to Play Store (internal testing)
           fastlane supply --aab build/app/outputs/bundle/release/app-release.aab \
             --skip_upload_metadata \
             --skip_upload_images \
             --skip_upload_screenshots \
             --track internal \
             --json_key /tmp/service_account.json \
-            --package_name com.dlai.crop
+            --package_name com.dlai.crop \
+            --skip_upload_metadata true
           
           # Clean up
           rm /tmp/service_account.json
 
-      - name: Create Release
+      - name: Create GitHub Release
         if: success()
         uses: actions/create-release@v1
         env:
@@ -82,36 +104,13 @@ jobs:
           tag_name: mobile-v${{ github.run_number }}
           release_name: Mobile Build ${{ github.run_number }}
           body: |
-            ## DLAI Crop Mobile - Build ${{ github.run_number }}
+            ## Build Information
+            - Build Number: ${{ github.run_number }}
+            - Triggered by: @${{ github.actor }}
+            - Commit: ${{ github.sha }}
             
-            **Build Date:** ${{ github.event.head_commit.timestamp }}
-            **Commit:** ${{ github.sha }}
-            
-            ### Artifacts
-            - APK: Attached to this release
-            - AAB: Uploaded to Play Store
-            
-            ### Notes
-            This is an internal testing release.
+            ## Artifacts
+            - App Bundle (AAB): Ready for Play Store
+            - Built on: ${{ github.event.head_commit.timestamp }}
           draft: false
-          prerelease: true
-
-      - name: Upload APK to Release
-        if: success()
-        uses: softprops/action-gh-release@v1
-        with:
-          files: mobile/build/app/outputs/flutter-apk/app-release.apk
-          tag_name: mobile-v${{ github.run_number }}
-
-      - name: Notify Success
-        if: success()
-        run: |
-          echo "✅ Build successful!"
-          echo "APK: mobile/build/app/outputs/flutter-apk/app-release.apk"
-          echo "AAB: mobile/build/app/outputs/bundle/release/app-release.aab"
-
-      - name: Notify Failure
-        if: failure()
-        run: |
-          echo "❌ Build failed!"
-          exit 1
+          prerelease: false
