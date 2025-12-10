@@ -72,7 +72,10 @@ jobs:
 
       - name: Generate code (build_runner)
         working-directory: ./mobile
-        run: dart run build_runner build --delete-conflicting-outputs
+        run: |
+          echo "Starting code generation..."
+          dart run build_runner build --delete-conflicting-outputs --verbose 2>&1 | tee build_runner.log
+          echo "Code generation completed"
 
       - name: Analyze code
         working-directory: ./mobile
@@ -123,7 +126,7 @@ jobs:
           path: mobile/build/app/outputs/flutter-apk/app-release.apk
           retention-days: 30
 
-      - name: Upload build log
+      - name: Upload build logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -131,5 +134,6 @@ jobs:
           path: |
             mobile/build.log
             mobile/pub-get.log
+            mobile/build_runner.log
           retention-days: 7
         continue-on-error: true
