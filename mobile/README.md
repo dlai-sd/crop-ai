@@ -104,3 +104,4 @@ Testing suite:
 
 ### `integration_test/`
 End-to-end user journey tests
+# Mobile App Build - Fresh Run
