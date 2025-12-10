@@ -27,6 +27,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Debug - Check environment
+        run: |
+          echo "Dart SDK version:"
+          which dart
+          dart --version
+          echo "Flutter version:"
+          which flutter
+          flutter --version
+
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -90,7 +99,8 @@ jobs:
         run: |
           flutter build apk \
             --release \
-            --target-platform android-arm64
+            --target-platform android-arm64 \
+            --verbose 2>&1 | tee build.log || true
           echo "apk_path=build/app/outputs/flutter-apk/app-release.apk" >> $GITHUB_OUTPUT
 
       - name: Verify APK
