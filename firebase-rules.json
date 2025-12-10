@@ -1,0 +1,61 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid",
+        "farms": {
+          "$farmId": {
+            ".read": "$uid === auth.uid",
+            ".write": "$uid === auth.uid",
+            "offline_changes": {
+              ".read": "$uid === auth.uid",
+              ".write": "$uid === auth.uid"
+            }
+          }
+        },
+        "farm_syncs": {
+          "$farmId": {
+            ".read": "$uid === auth.uid",
+            ".write": "$uid === auth.uid",
+            "timestamp": {},
+            "changes": {}
+          }
+        },
+        "devices": {
+          "$deviceId": {
+            ".read": "$uid === auth.uid",
+            ".write": "$uid === auth.uid"
+          }
+        },
+        "preferences": {
+          ".read": "$uid === auth.uid",
+          ".write": "$uid === auth.uid"
+        }
+      }
+    },
+    "weather": {
+      "$farmId": {
+        ".read": "auth !== null",
+        ".write": "false"
+      }
+    },
+    "crops": {
+      ".read": "auth !== null",
+      ".write": "false"
+    },
+    "analytics": {
+      "$userId": {
+        ".read": "$userId === auth.uid",
+        ".write": "$userId === auth.uid",
+        "$event": {
+          ".validate": "newData.hasChildren(['timestamp', 'event_type'])"
+        }
+      }
+    },
+    ".default": {
+      ".read": false,
+      ".write": false
+    }
+  }
+}
