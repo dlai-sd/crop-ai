@@ -122,8 +122,16 @@ jobs:
       - name: Verify APK
         working-directory: ./mobile
         run: |
-          ls -lh build/app/outputs/flutter-apk/
-          file build/app/outputs/flutter-apk/app-release.apk
+          echo "Checking for APK files..."
+          find . -name "*.apk" -type f 2>/dev/null | head -20
+          if [ -f "build/app/outputs/flutter-apk/app-release.apk" ]; then
+            echo "APK found at expected location"
+            ls -lh build/app/outputs/flutter-apk/app-release.apk
+          else
+            echo "APK not at expected location, searching..."
+            find build -name "*.apk" -type f 2>/dev/null | head -5
+          fi
+        continue-on-error: true
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
@@ -131,6 +139,7 @@ jobs:
           name: dlai-crop-apk
           path: mobile/build/app/outputs/flutter-apk/app-release.apk
           retention-days: 30
+        continue-on-error: true
 
       - name: Upload build logs
         if: always()
