@@ -61,7 +61,14 @@ jobs:
 
       - name: Get Flutter dependencies
         working-directory: ./mobile
-        run: flutter pub get
+        run: |
+          echo "Current directory: $(pwd)"
+          echo "Checking pubspec.yaml:"
+          head -20 pubspec.yaml
+          echo ""
+          echo "Running flutter pub get..."
+          flutter pub get --verbose 2>&1 | tee pub-get.log
+        continue-on-error: false
 
       - name: Generate code (build_runner)
         working-directory: ./mobile
@@ -120,7 +127,9 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: build-log
-          path: mobile/build.log
+          name: build-logs
+          path: |
+            mobile/build.log
+            mobile/pub-get.log
           retention-days: 7
         continue-on-error: true
