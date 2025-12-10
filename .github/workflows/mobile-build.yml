@@ -52,8 +52,7 @@ jobs:
         run: |
           flutter build appbundle \
             --release \
-            --target-platform android-arm64 \
-            --no-sound-null-safety
+            --target-platform android-arm64
 
       - name: Verify AAB
         working-directory: ./mobile

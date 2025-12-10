@@ -90,8 +90,7 @@ jobs:
         run: |
           flutter build apk \
             --release \
-            --target-platform android-arm64 \
-            --no-sound-null-safety
+            --target-platform android-arm64
           echo "apk_path=build/app/outputs/flutter-apk/app-release.apk" >> $GITHUB_OUTPUT
 
       - name: Verify APK
