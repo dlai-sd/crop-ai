@@ -57,14 +57,14 @@ jobs:
             --verbose
       
       - name: Upload APK Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: mobile-android-apk
           path: mobile/build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
       
       - name: Upload AAB Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: mobile-android-aab
           path: mobile/build/app/outputs/bundle/release/app-release.aab
@@ -115,7 +115,7 @@ jobs:
             --verbose || flutter build ipa --release --verbose
       
       - name: Upload IPA Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: mobile-ios-ipa
           path: mobile/build/ios/ipa/
