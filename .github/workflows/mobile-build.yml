@@ -40,8 +40,6 @@ jobs:
       - name: Get Dependencies
         run: |
           cd mobile
-          pwd
-          ls -la lib/
           flutter pub get
       
       - name: Build APK
@@ -72,61 +70,10 @@ jobs:
           path: mobile/build/app/outputs/bundle/release/app-release.aab
           if-no-files-found: error
 
-  build-ios:
-    name: Build iOS (IPA)
-    runs-on: macos-latest
-    
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.16.0'
-          channel: 'stable'
-      
-      - name: Cache Flutter packages
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.pub-cache
-            mobile/.packages
-          key: ${{ runner.os }}-flutter-${{ hashFiles('mobile/pubspec.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-flutter-
-      
-      - name: Get Dependencies
-        run: |
-          cd mobile
-          flutter pub get
-      
-      - name: Build iOS (Framework)
-        run: |
-          cd mobile
-          flutter build ios \
-            --release \
-            --no-codesign \
-            --verbose
-      
-      - name: Build iOS IPA
-        run: |
-          cd mobile
-          flutter build ipa \
-            --release \
-            --export-options-template=ios/Runner/ExportOptions.plist \
-            --verbose || flutter build ipa --release --verbose
-      
-      - name: Upload IPA Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: mobile-ios-ipa
-          path: mobile/build/ios/ipa/
-          if-no-files-found: warn
-
   build-status:
     name: Build Status
     runs-on: ubuntu-latest
-    needs: [ build-android, build-ios ]
+    needs: [ build-android ]
     if: always()
     
     steps:
@@ -137,8 +84,4 @@ jobs:
             exit 1
           fi
           
-          if [ "${{ needs.build-ios.result }}" != "success" ]; then
-            echo "⚠️ iOS Build failed (might be expected in non-macOS runner)"
-          fi
-          
-          echo "✅ Build artifacts ready for deployment"
+          echo "✅ APK build complete!"
