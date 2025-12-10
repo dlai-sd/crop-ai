@@ -46,9 +46,6 @@ dependencies:
   # Localization (i18n)
   intl: ^0.19.0
 
-  # Date & Time
-  intl: ^0.19.0
-
   # Logging
   logger: ^2.4.0
   sentry_flutter: ^8.0.0
@@ -75,17 +72,16 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  assets:
-    - assets/images/
-    - assets/icons/
-    - assets/logo/
-    - assets/locales/
+  # Assets can be added later when directories are created
+  # assets:
+  #   - assets/images/
+  #   - assets/icons/
+  #   - assets/locales/
 
-  fonts:
-    - family: Aptos
-      fonts:
-        - asset: assets/fonts/aptos-regular.ttf
-        - asset: assets/fonts/aptos-bold.ttf
-          weight: 700
-        - asset: assets/fonts/aptos-semibold.ttf
-          weight: 600
+  # Default system fonts used; custom fonts can be added when available
+  # fonts:
+  #   - family: Aptos
+  #     fonts:
+  #       - asset: assets/fonts/aptos-regular.ttf
+  #       - asset: assets/fonts/aptos-bold.ttf
+  #         weight: 700
