@@ -64,7 +64,12 @@ jobs:
 
       - name: Check formatting
         working-directory: ./mobile
-        run: dart format --set-exit-if-changed lib test
+        run: |
+          if [ -d "test" ]; then
+            dart format --set-exit-if-changed lib test
+          else
+            dart format --set-exit-if-changed lib
+          fi
 
       - name: Run unit tests
         working-directory: ./mobile
