@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4" tools:version="4.0">
+    <component name="ProjectModuleManager">
+        <modules>
+            <module fileurl="file://$PROJECT_DIR$/Runner.xcodeproj/project.pbxproj" filepath="$PROJECT_DIR$/Runner.xcodeproj/project.pbxproj" />
+        </modules>
+    </component>
+    <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK" />
+</project>

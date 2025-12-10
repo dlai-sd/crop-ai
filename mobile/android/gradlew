@@ -1,0 +1,3 @@
+#!/bin/bash
+# Run the following command to download the Android SDK:
+# cd android && ./gradlew --version
