@@ -1,0 +1,138 @@
+{
+  "name": "Crop AI - Mobile-First Farming Platform",
+  "image": "mcr.microsoft.com/devcontainers/universal:latest",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11",
+      "installTools": true,
+      "installJupyterlab": false
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.debugpy",
+        "Dart-Code.dart-code",
+        "Dart-Code.flutter",
+        "ms-vscode.extension-test-runner",
+        "ms-vscode.makefile-tools",
+        "ms-vscode-remote.remote-ssh",
+        "ms-vscode-remote.remote-containers",
+        "GitHub.copilot",
+        "GoogleCloudTools.cloudcode",
+        "ms-azuretools.vscode-docker",
+        "eamodio.gitlens",
+        "ms-vscode.makefile-tools",
+        "esbenp.prettier-vscode",
+        "charliermarsh.ruff",
+        "ms-python.black-formatter",
+        "ms-python.isort",
+        "ms-vscode.cpptools",
+        "ms-vscode.cmake-tools"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": false,
+        "python.linting.banditEnabled": true,
+        "python.formatting.provider": "black",
+        "python.formatting.blackArgs": [
+          "--line-length",
+          "100"
+        ],
+        "python.analysis.typeCheckingMode": "strict",
+        "[python]": {
+          "editor.defaultFormatter": "ms-python.python",
+          "editor.formatOnSave": true,
+          "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+          }
+        },
+        "[dart]": {
+          "editor.defaultFormatter": "Dart-Code.dart-code",
+          "editor.formatOnSave": true
+        },
+        "dart.flutterSelectDeviceWhenExtensionStarts": false,
+        "dart.showWebServerDevTools": false,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "files.exclude": {
+          "**/.git": true,
+          "**/__pycache__": true,
+          "**/*.pyc": true,
+          "**/node_modules": true,
+          "**/.flutter-plugins": true,
+          "**/build": true
+        },
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "bash",
+            "icon": "terminal-bash"
+          }
+        }
+      }
+    }
+  },
+
+  "containerEnv": {
+    "PYTHONPATH": "/workspaces/crop-ai/src",
+    "PATH": "/tmp/flutter/bin:${PATH}",
+    "FLUTTER_HOME": "/tmp/flutter",
+    "ANDROID_HOME": "/opt/android-sdk",
+    "NODE_ENV": "development"
+  },
+
+  "postCreateCommand": "bash .devcontainer/init.sh",
+
+  "mounts": [
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,readonly",
+    "source=${localEnv:HOME}/.gitconfig,target=/home/vscode/.gitconfig,readonly"
+  ],
+
+  "remoteUser": "vscode",
+
+  "forwardPorts": [
+    5000,
+    8000,
+    4200,
+    3000,
+    9090,
+    9091
+  ],
+
+  "portsAttributes": {
+    "5000": {
+      "label": "FastAPI",
+      "onAutoForward": "notify"
+    },
+    "8000": {
+      "label": "Django Gateway",
+      "onAutoForward": "notify"
+    },
+    "4200": {
+      "label": "Angular Web",
+      "onAutoForward": "notify"
+    },
+    "3000": {
+      "label": "Node Dev Server",
+      "onAutoForward": "notify"
+    },
+    "9090": {
+      "label": "Prometheus",
+      "onAutoForward": "notify"
+    },
+    "9091": {
+      "label": "Alertmanager",
+      "onAutoForward": "notify"
+    }
+  }
+}
