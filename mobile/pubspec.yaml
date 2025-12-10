@@ -33,10 +33,12 @@ dependencies:
   tflite_flutter: ^0.10.0
   
   # Firebase
-  firebase_core: ^24.2.0
-  firebase_messaging: ^14.6.0
+  firebase_core: ^2.24.0
+  firebase_auth: ^4.18.0
+  firebase_messaging: ^14.7.0
   firebase_analytics: ^10.7.0
-  firebase_database: ^10.3.0
+  firebase_database: ^10.2.0
+  firebase_storage: ^11.6.0
   
   # Image Handling
   image_picker: ^1.0.0
@@ -47,6 +49,9 @@ dependencies:
   
   # Notifications
   flutter_local_notifications: ^16.0.0
+  
+  # Environment Configuration
+  flutter_dotenv: ^5.1.0
   
   # Camera
   camera: ^0.10.0
@@ -84,14 +89,15 @@ flutter:
     - assets/translations/
     - assets/lottie/
   
-  fonts:
-    - family: Poppins
-      fonts:
-        - asset: assets/fonts/Poppins-Regular.ttf
-        - asset: assets/fonts/Poppins-Bold.ttf
-          weight: 700
-        - asset: assets/fonts/Poppins-SemiBold.ttf
-          weight: 600
+  # Fonts configuration - uncomment and add font files when ready
+  # fonts:
+  #   - family: Poppins
+  #     fonts:
+  #       - asset: assets/fonts/Poppins-Regular.ttf
+  #       - asset: assets/fonts/Poppins-Bold.ttf
+  #         weight: 700
+  #       - asset: assets/fonts/Poppins-SemiBold.ttf
+  #         weight: 600
 
 # Linting Rules
 linter:
