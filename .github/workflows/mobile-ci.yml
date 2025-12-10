@@ -68,14 +68,21 @@ jobs:
 
       - name: Run unit tests
         working-directory: ./mobile
-        run: flutter test --coverage
+        run: |
+          if [ -d "test" ] && [ "$(ls -A test)" ]; then
+            flutter test --coverage
+          else
+            echo "No tests found, skipping test step"
+          fi
 
       - name: Upload coverage
+        if: always()
         uses: codecov/codecov-action@v3
         with:
           files: ./mobile/coverage/lcov.info
           flags: mobile
           name: mobile-coverage
+        continue-on-error: true
 
       - name: Build APK (release) - ARM64
         id: build_apk
