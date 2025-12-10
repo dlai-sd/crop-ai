@@ -1,0 +1,91 @@
+name: dlai_crop
+description: "Delai Kiya kya? - Crop monitoring and community platform for Indian farmers."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.4.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management & Async
+  riverpod: ^2.6.1
+  flutter_riverpod: ^2.6.1
+  riverpod_generator: ^2.5.14
+
+  # Local Database
+  drift: ^2.19.5
+  sqlite3_flutter_libs: ^0.5.18
+  path_provider: ^2.1.6
+  path: ^1.9.0
+
+  # HTTP & API
+  dio: ^5.5.0
+  http: ^1.2.2
+
+  # Auth & Security
+  flutter_secure_storage: ^9.2.2
+  crypto: ^3.0.4
+  jwt_decoder: ^2.0.1
+
+  # Firebase
+  firebase_core: ^3.8.0
+  firebase_messaging: ^15.1.0
+  firebase_analytics: ^11.3.0
+  firebase_crashlytics: ^4.1.1
+
+  # UI & Navigation
+  go_router: ^14.1.2
+  flutter_svg: ^2.0.12
+  cached_network_image: ^3.4.1
+  pull_to_refresh: ^2.0.0
+
+  # Localization (i18n)
+  intl: ^0.19.0
+
+  # Date & Time
+  intl: ^0.19.0
+
+  # Logging
+  logger: ^2.4.0
+  sentry_flutter: ^8.0.0
+
+  # Device Info
+  device_info_plus: ^11.2.0
+  connectivity_plus: ^6.1.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^4.0.0
+
+  # Code generation
+  build_runner: ^2.4.13
+  drift_dev: ^2.19.5
+  riverpod_generator: ^2.5.14
+
+  # Testing
+  mockito: ^5.4.4
+  mocktail: ^1.0.3
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/logo/
+    - assets/locales/
+
+  fonts:
+    - family: Aptos
+      fonts:
+        - asset: assets/fonts/aptos-regular.ttf
+        - asset: assets/fonts/aptos-bold.ttf
+          weight: 700
+        - asset: assets/fonts/aptos-semibold.ttf
+          weight: 600

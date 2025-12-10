@@ -1,0 +1,67 @@
+# Multi-stage Dockerfile for Flutter Mobile App Build
+# Supports Android APK generation in CI/CD environment
+# Based on official Flutter Docker image
+
+FROM cirrusci/flutter:latest AS flutter_build
+
+# Set environment variables
+ENV ANDROID_SDK_ROOT=/opt/android-sdk-linux
+ENV ANDROID_HOME=/opt/android-sdk-linux
+ENV PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin
+
+# Install additional dependencies
+RUN apt-get update && apt-get install -y \
+    openjdk-17-jdk \
+    gradle \
+    git \
+    curl \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Verify Flutter installation
+RUN flutter --version
+RUN flutter doctor -v
+RUN dart --version
+
+# Set working directory
+WORKDIR /workspace
+
+# Copy Flutter project
+COPY mobile/ /workspace/
+
+# Get Flutter dependencies
+RUN flutter pub get
+
+# Build stage for APK
+FROM flutter_build AS apk_builder
+
+# Build APK (release mode)
+RUN flutter build apk --release \
+    --split-per-abi \
+    --no-sound-null-safety 2>&1 | tee build.log
+
+# Output stage: Extract APK for CI/CD
+FROM flutter_build AS apk_output
+
+COPY --from=apk_builder /workspace/build/app/outputs/flutter-apk/ /output/
+
+# Verify APK exists
+RUN ls -lah /output/ && file /output/*.apk
+
+# Final stage: Lightweight runner
+FROM alpine:latest
+
+RUN apk add --no-cache \
+    bash \
+    curl \
+    git
+
+WORKDIR /app
+
+COPY --from=apk_output /output/ /app/
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD test -f /app/app-release.apk || exit 1
+
+CMD ["/bin/bash"]

@@ -1,0 +1,53 @@
+# Dart/Flutter
+.dart_tool/
+.flutter/
+pubspec.lock
+build/
+
+# Android
+android/.gradle/
+android/.idea/
+android/local.properties
+android/app/.idea/
+android/app/.gradle/
+android/app/debug/
+android/app/release/
+
+# iOS
+ios/.symlinks/
+ios/Flutter/Flutter.podspec
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.modulemap
+ios/Flutter/GeneratedPluginRegistrant.*
+ios/Pods
+ios/.idea/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+.DS_Store
+
+# Environment
+.env
+.env.local
+local.properties
+
+# Logs
+*.log
+log.txt
+
+# Database
+*.db
+*.sqlite
+
+# Secrets
+secrets.json
+service-account.json
+
+# Generated files
+lib/generated_plugin_registrant.dart
+lib/database/app_database.g.dart
+lib/providers/app_providers.g.dart
