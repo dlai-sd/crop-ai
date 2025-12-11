@@ -117,7 +117,7 @@ jobs:
           flutter build apk \
             --release \
             --target-platform android-arm64 \
-            --verbose 2>&1 | tee build.log || true
+            --verbose 2>&1 | tee build.log
           echo "apk_path=build/app/outputs/flutter-apk/app-release.apk" >> $GITHUB_OUTPUT
 
       - name: Verify APK
