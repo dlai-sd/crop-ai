@@ -7,3 +7,4 @@
 # Gradle fix applied
 # Build check fix
 # Plugin fix
+# Simple gradle
