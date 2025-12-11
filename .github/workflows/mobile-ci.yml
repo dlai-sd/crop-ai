@@ -79,6 +79,8 @@ jobs:
       - name: Get Flutter dependencies
         working-directory: ./mobile
         run: |
+          echo "Clearing stale dart_tool cache..."
+          rm -rf .dart_tool
           echo "Removing stale pubspec.lock if exists..."
           rm -f pubspec.lock
           echo "Running flutter pub get..."
