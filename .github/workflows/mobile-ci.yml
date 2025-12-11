@@ -52,10 +52,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.pub-cache
-          key: ${{ runner.os }}-pub-${{ hashFiles('mobile/pubspec.lock') }}
+          key: ${{ runner.os }}-pub-${{ hashFiles('mobile/pubspec.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pub-
-            ${{ runner.os }}-
 
       - name: Cache Flutter build
         uses: actions/cache@v3
@@ -72,6 +71,8 @@ jobs:
           echo "Checking pubspec.yaml:"
           head -20 pubspec.yaml
           echo ""
+          echo "Removing stale pubspec.lock if exists..."
+          rm -f pubspec.lock
           echo "Running flutter pub get..."
           flutter pub get --verbose 2>&1 | tee pub-get.log
           PUB_RESULT=$?
@@ -79,6 +80,7 @@ jobs:
             echo "ERROR: flutter pub get failed with exit code $PUB_RESULT"
             exit $PUB_RESULT
           fi
+          echo "Dependencies resolved successfully"
 
       - name: Generate code (build_runner)
         working-directory: ./mobile
