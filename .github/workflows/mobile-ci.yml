@@ -48,6 +48,18 @@ jobs:
           which flutter
           flutter --version
 
+      - name: Setup Android Build (local.properties)
+        working-directory: ./mobile
+        run: |
+          echo "Creating android/local.properties..."
+          FLUTTER_ROOT=$(dirname $(dirname $(which flutter)))
+          ANDROID_SDK_ROOT="${ANDROID_SDK_ROOT:-$ANDROID_HOME}"
+          mkdir -p android
+          echo "flutter.sdk=$FLUTTER_ROOT" > android/local.properties
+          echo "sdk.dir=$ANDROID_SDK_ROOT" >> android/local.properties
+          echo "✓ Created android/local.properties with:"
+          cat android/local.properties
+
       - name: Cache Flutter pub cache
         uses: actions/cache@v3
         with:
@@ -67,14 +79,6 @@ jobs:
       - name: Get Flutter dependencies
         working-directory: ./mobile
         run: |
-          echo "Setting up Android local.properties..."
-          FLUTTER_ROOT=$(dirname $(dirname $(which flutter)))
-          ANDROID_SDK_ROOT="${ANDROID_SDK_ROOT:-$ANDROID_HOME}"
-          echo "flutter.sdk=$FLUTTER_ROOT" > android/local.properties
-          echo "sdk.dir=$ANDROID_SDK_ROOT" >> android/local.properties
-          echo "Created android/local.properties:"
-          cat android/local.properties
-          echo ""
           echo "Removing stale pubspec.lock if exists..."
           rm -f pubspec.lock
           echo "Running flutter pub get..."
@@ -84,7 +88,7 @@ jobs:
             echo "ERROR: flutter pub get failed with exit code $PUB_RESULT"
             exit $PUB_RESULT
           fi
-          echo "Dependencies resolved successfully"
+          echo "✓ Dependencies resolved successfully"
 
       - name: Generate code (build_runner)
         working-directory: ./mobile
