@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'localization_service.dart';
+import '../services/localization_service.dart';
 
 /// Provider for current app language
 final appLanguageProvider = StateProvider<AppLanguage>((ref) {
