@@ -33,6 +33,12 @@ jobs:
           flutter-version: '3.24.0'
           channel: 'stable'
 
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
       - name: Debug - Check environment
         run: |
           echo "Dart SDK version:"
