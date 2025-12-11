@@ -160,7 +160,6 @@ class AppTypography {
 ThemeData appTheme() {
   return ThemeData(
     useMaterial3: true,
-    fontFamily: AppTypography.fontFamily,
     colorScheme: ColorScheme(
       brightness: Brightness.light,
       primary: AppColors.primary,

@@ -33,10 +33,16 @@ class _GeospatialChatScreenState extends ConsumerState<GeospatialChatScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.servicePin?.name ?? 'Vikram Singh'),
-        subtitle: Text(
-          widget.servicePin?.title ?? 'Tractor Repair Mechanic',
-          style: TextStyle(fontSize: 12),
+        title: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(widget.servicePin?.name ?? 'Vikram Singh'),
+            Text(
+              widget.servicePin?.title ?? 'Tractor Repair Mechanic',
+              style: TextStyle(fontSize: 12),
+            ),
+          ],
         ),
         centerTitle: false,
         elevation: 0,

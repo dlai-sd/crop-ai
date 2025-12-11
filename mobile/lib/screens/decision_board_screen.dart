@@ -317,12 +317,12 @@ class _DecisionBoardScreenState extends ConsumerState<DecisionBoardScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     _weatherMetric(
-                      label: l10n.temperature,
+                      label: 'Temperature',
                       value: '${weather.temperature.toStringAsFixed(1)}°C',
                       icon: '🌡️',
                     ),
                     _weatherMetric(
-                      label: l10n.humidity,
+                      label: 'Humidity',
                       value: '${weather.humidity.toStringAsFixed(0)}%',
                       icon: '💧',
                     ),

@@ -59,7 +59,7 @@ class AuthState {
   final String? error;
   final bool isLoading;
 
-  AuthState({
+  const AuthState({
     this.isAuthenticated = false,
     this.userId,
     this.email,
