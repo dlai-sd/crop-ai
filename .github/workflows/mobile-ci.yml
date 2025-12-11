@@ -114,11 +114,20 @@ jobs:
         id: build_apk
         working-directory: ./mobile
         run: |
+          echo "=== Starting APK Build ==="
           flutter build apk \
             --release \
             --target-platform android-arm64 \
             --verbose 2>&1 | tee build.log
+          BUILD_RESULT=$?
+          echo "=== Build Exit Code: $BUILD_RESULT ==="
+          if [ $BUILD_RESULT -ne 0 ]; then
+            echo "BUILD FAILED! Exit code: $BUILD_RESULT"
+            tail -100 build.log
+            exit $BUILD_RESULT
+          fi
           echo "apk_path=build/app/outputs/flutter-apk/app-release.apk" >> $GITHUB_OUTPUT
+          echo "=== APK Build Completed Successfully ==="
 
       - name: Verify APK
         working-directory: ./mobile
