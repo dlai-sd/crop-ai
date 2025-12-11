@@ -71,6 +71,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  
+  # Localization settings
+  generate: true
 
   # Assets can be added later when directories are created
   # assets:
