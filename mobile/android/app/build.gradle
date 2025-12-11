@@ -24,9 +24,6 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-// Apply Flutter Gradle plugin early so flutter { } DSL is available
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-
 android {
     namespace "com.dlai.crop"
     compileSdkVersion 34
@@ -59,6 +56,9 @@ android {
         }
     }
 }
+
+// Apply Flutter Gradle plugin AFTER android block
+apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 flutter {
     source '../..'
