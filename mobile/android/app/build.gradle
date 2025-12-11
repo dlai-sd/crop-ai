@@ -24,6 +24,9 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
+// Apply Flutter Gradle plugin early so flutter { } DSL is available
+apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+
 android {
     namespace "com.dlai.crop"
     compileSdkVersion 34
@@ -65,6 +68,3 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.core:core-splashscreen:1.0.1'
 }
-
-// Apply Flutter Gradle plugin after all configuration is complete
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
