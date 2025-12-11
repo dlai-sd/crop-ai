@@ -145,15 +145,16 @@ jobs:
         working-directory: ./mobile
         run: |
           echo "Checking for APK files..."
-          find . -name "*.apk" -type f 2>/dev/null | head -20
-          if [ -f "build/app/outputs/flutter-apk/app-release.apk" ]; then
-            echo "APK found at expected location"
-            ls -lh build/app/outputs/flutter-apk/app-release.apk
+          APK_FILE="build/app/outputs/flutter-apk/app-release.apk"
+          if [ -f "$APK_FILE" ]; then
+            echo "✓ APK found at expected location"
+            ls -lh "$APK_FILE"
           else
-            echo "APK not at expected location, searching..."
-            find build -name "*.apk" -type f 2>/dev/null | head -5
+            echo "✗ ERROR: APK not found at $APK_FILE"
+            echo "Searching for any APK files:"
+            find build -name "*.apk" -type f 2>/dev/null || echo "No APK files found"
+            exit 1
           fi
-        continue-on-error: true
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
@@ -161,7 +162,7 @@ jobs:
           name: dlai-crop-apk
           path: mobile/build/app/outputs/flutter-apk/app-release.apk
           retention-days: 30
-        continue-on-error: true
+          if-no-files-found: error
 
       - name: Upload build logs
         if: always()
