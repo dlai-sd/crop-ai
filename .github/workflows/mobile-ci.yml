@@ -67,9 +67,11 @@ jobs:
       - name: Get Flutter dependencies
         working-directory: ./mobile
         run: |
-          echo "Current directory: $(pwd)"
-          echo "Checking pubspec.yaml:"
-          head -20 pubspec.yaml
+          echo "Setting up Android local.properties..."
+          FLUTTER_ROOT=$(dirname $(dirname $(which flutter)))
+          echo "flutter.sdk=$FLUTTER_ROOT" > android/local.properties
+          echo "Created local.properties with Flutter SDK: $FLUTTER_ROOT"
+          cat android/local.properties
           echo ""
           echo "Removing stale pubspec.lock if exists..."
           rm -f pubspec.lock
