@@ -1,17 +1,8 @@
 {
   "name": "Crop AI - Mobile-First Farming Platform",
-  "image": "mcr.microsoft.com/devcontainers/universal:latest",
-  
-  "features": {
-    "ghcr.io/devcontainers/features/python:1": {
-      "version": "3.11",
-      "installTools": true,
-      "installJupyterlab": false
-    },
-    "ghcr.io/devcontainers/features/node:1": {
-      "version": "18"
-    },
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
   },
 
   "customizations": {
@@ -85,13 +76,13 @@
 
   "containerEnv": {
     "PYTHONPATH": "/workspaces/crop-ai/src",
-    "PATH": "/tmp/flutter/bin:${PATH}",
+    "PATH": "/tmp/flutter/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
     "FLUTTER_HOME": "/tmp/flutter",
-    "ANDROID_HOME": "/opt/android-sdk",
+    "FLUTTER_SKIP_DOWNLOAD_ENCODING_ASSETS": "true",
     "NODE_ENV": "development"
   },
 
-  "postCreateCommand": "bash .devcontainer/init.sh",
+  "postCreateCommand": "bash .devcontainer/init.sh && echo 'export PATH=\"/tmp/flutter/bin:$PATH\"' >> ~/.bashrc",
 
   "mounts": [
     "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,readonly",
@@ -103,6 +94,7 @@
   "forwardPorts": [
     5000,
     8000,
+    8080,
     4200,
     3000,
     9090,
@@ -116,6 +108,10 @@
     },
     "8000": {
       "label": "Django Gateway",
+      "onAutoForward": "notify"
+    },
+    "8080": {
+      "label": "Flutter Web Preview",
       "onAutoForward": "notify"
     },
     "4200": {
