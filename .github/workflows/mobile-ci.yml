@@ -128,20 +128,36 @@ jobs:
         id: build_apk
         working-directory: ./mobile
         run: |
-          echo "=== Starting APK Build ==="
+          echo "========== APK BUILD START =========="
+          echo "Flutter version:"
+          flutter --version
+          echo ""
+          echo "Checking for gradlew:"
+          if [ -f "android/gradlew" ]; then
+            echo "gradlew found"
+            ls -lh android/gradlew
+          else
+            echo "No gradlew in android dir"
+          fi
+          echo ""
+          echo "Starting Flutter build APK..."
           flutter build apk \
             --release \
             --target-platform android-arm64 \
             --verbose 2>&1 | tee build.log
           BUILD_RESULT=$?
-          echo "=== Build Exit Code: $BUILD_RESULT ==="
+          echo ""
+          echo "Build exit code: $BUILD_RESULT"
           if [ $BUILD_RESULT -ne 0 ]; then
-            echo "BUILD FAILED! Exit code: $BUILD_RESULT"
-            tail -100 build.log
+            echo "ERROR: Build failed with code $BUILD_RESULT"
             exit $BUILD_RESULT
           fi
+          echo ""
+          echo "Checking build output directory:"
+          ls -la build/app/outputs/flutter-apk/ 2>/dev/null || echo "Directory not found"
+          find build -name "*.apk" 2>/dev/null | head -5
+          echo "========== APK BUILD END =========="
           echo "apk_path=build/app/outputs/flutter-apk/app-release.apk" >> $GITHUB_OUTPUT
-          echo "=== APK Build Completed Successfully ==="
 
       - name: Verify APK
         working-directory: ./mobile
