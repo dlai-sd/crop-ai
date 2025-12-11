@@ -26,7 +26,7 @@ enum AppLanguage {
 }
 
 /// Extension for easy access to localized strings
-extension AppLocalizations on BuildContext {
+extension LocalizationExtension on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this)!;
 }
 

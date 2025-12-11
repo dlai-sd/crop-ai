@@ -86,9 +86,8 @@ final myFarmsProvider = Provider<List<FarmData>>((ref) {
       soilHealth: 78.0,
       pestRisk: 15.0,
       coordinates: [
-        [28.6139, 77.2090],
-        [28.6150, 77.2100],
-        [28.6145, 77.2110],
+        28.6139,
+        77.2090,
       ],
     ),
     FarmData(
@@ -102,9 +101,8 @@ final myFarmsProvider = Provider<List<FarmData>>((ref) {
       soilHealth: 82.0,
       pestRisk: 8.0,
       coordinates: [
-        [28.6100, 77.2050],
-        [28.6110, 77.2060],
-        [28.6105, 77.2070],
+        28.6100,
+        77.2050,
       ],
     ),
   ];

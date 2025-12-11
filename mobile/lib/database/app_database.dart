@@ -89,8 +89,7 @@ class SyncQueue extends Table {
 /// Metadata for sync tracking
 @DataClassName('SyncMetadataModel')
 class SyncMetadata extends Table {
-  IntColumn get id => integer().primary()();
-  TextColumn get entityType => text(); // users, farms, conversations, messages
+  IntColumn get id => integer().autoIncrement()();
   DateTimeColumn get lastSyncAt => dateTime().nullable()();
   TextColumn get syncStatus => text().withDefault(const Constant('synced'))();
   IntColumn get pendingChanges => integer().withDefault(const Constant(0))();
@@ -200,13 +199,13 @@ class AppDatabase extends _$AppDatabase {
     required String payload,
   }) async {
     await into(syncQueue).insert(
-      SyncQueueModel(
-        operation: operation,
-        entityType: entityType,
-        entityId: entityId,
-        payload: payload,
-        status: 'pending',
-        createdAt: DateTime.now(),
+      SyncQueueCompanion(
+        operation: Value(operation),
+        entityType: Value(entityType),
+        entityId: Value(entityId),
+        payload: Value(payload),
+        status: const Value('pending'),
+        createdAt: Value(DateTime.now()),
       ),
     );
   }
@@ -226,14 +225,12 @@ class AppDatabase extends _$AppDatabase {
   // ========================================================================
 
   Future<void> updateSyncMetadata(
-    String entityType,
     DateTime syncAt,
     int pendingChanges,
   ) async {
     await into(syncMetadata).insertOnConflictUpdate(
       SyncMetadataModel(
-        id: _metadataId(entityType),
-        entityType: entityType,
+        id: 1, // Fixed ID for global sync metadata
         lastSyncAt: syncAt,
         syncStatus: 'synced',
         pendingChanges: pendingChanges,
@@ -241,20 +238,9 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 
-  Future<SyncMetadataModel?> getSyncMetadata(String entityType) async {
-    return (select(syncMetadata)..where((t) => t.entityType.equals(entityType)))
+  Future<SyncMetadataModel?> getSyncMetadata() async {
+    return (select(syncMetadata)..where((t) => t.id.equals(1)))
         .getSingleOrNull();
-  }
-
-  // Helper method to generate consistent metadata IDs
-  int _metadataId(String entityType) {
-    const Map<String, int> ids = {
-      'users': 1,
-      'farms': 2,
-      'conversations': 3,
-      'messages': 4,
-    };
-    return ids[entityType] ?? 0;
   }
 
   // ========================================================================

@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'auth_http_client.dart';
-import 'token_storage.dart';
 
 /// API Service for backend integration
 /// Handles: Registration, Login, Farm operations, Conversations
