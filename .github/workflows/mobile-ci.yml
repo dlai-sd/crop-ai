@@ -74,7 +74,11 @@ jobs:
           echo ""
           echo "Running flutter pub get..."
           flutter pub get --verbose 2>&1 | tee pub-get.log
-        continue-on-error: false
+          PUB_RESULT=$?
+          if [ $PUB_RESULT -ne 0 ]; then
+            echo "ERROR: flutter pub get failed with exit code $PUB_RESULT"
+            exit $PUB_RESULT
+          fi
 
       - name: Generate code (build_runner)
         working-directory: ./mobile
