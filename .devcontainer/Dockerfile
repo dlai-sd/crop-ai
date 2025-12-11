@@ -17,7 +17,6 @@ RUN apt-get update && apt-get install -y \
     postgresql-client \
     sqlite3 \
     dos2unix \
-    python3-http-server \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Firebase CLI globally
