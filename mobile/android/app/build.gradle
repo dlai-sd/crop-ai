@@ -54,7 +54,8 @@ android {
 
     buildTypes {
         release {
-            signingConfig signingConfigs.debug
+            // Use default debug signing for CI/CD builds
+            // Gradle automatically uses ~/.android/debug.keystore if not specified
         }
     }
 }
