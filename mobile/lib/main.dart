@@ -16,7 +16,7 @@ import 'services/localization_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   runApp(const ProviderScope(child: DlaiCropApp()));
 }
 
