@@ -13,6 +13,5 @@ def flutterSdkPath = properties.getProperty('flutter.sdk')
 if (flutterSdkPath == null) {
     throw new GradleException('Flutter SDK not found. Define flutter.sdk in local.properties.')
 }
-}
 
 
