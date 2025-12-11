@@ -1,5 +1,5 @@
-// This file is a placeholder for future widget tests
-// Tests will be added during development
+// This file is a placeholder for future widget tests.
+// Tests will be added during development.
 
 void main() {
   // TODO: Add widget tests here

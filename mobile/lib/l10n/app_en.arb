@@ -10,7 +10,7 @@
   "marathi": "मराठी",
   "bengali": "বাংলা",
   "punjabi": "ਪੰਜਾਬੀ",
-  
+
   "login": "Login",
   "register": "Register",
   "welcome": "Welcome to Agri-Pulse",
@@ -18,7 +18,7 @@
   "password": "Password",
   "phoneNumber": "Phone Number",
   "logout": "Logout",
-  
+
   "decisionBoard": "AI Decision Board",
   "decisionBoardDesc": "Get expert advice before planting",
   "selectCrop": "Select Crop",
@@ -28,13 +28,13 @@
   "goAhead": "Go Ahead! Good conditions",
   "mustAvoid": "Must Avoid. High risk.",
   "proceed": "Proceed with Caution",
-  
+
   "livingMap": "Living Map",
   "myCrops": "My Crops",
   "services": "Services",
   "buyFresh": "Buy Fresh",
   "searchLocation": "Search location or crop...",
-  
+
   "myCropsTitle": "My Crops",
   "pestRisk": "Pest Risk: {percentage}%",
   "daysToHarvest": "{days} days to harvest",
@@ -42,7 +42,7 @@
   "weather": "Weather",
   "temperature": "{temp}°C",
   "humidity": "Humidity: {humidity}%",
-  
+
   "servicesTitle": "Find Services",
   "urgent": "Urgent",
   "predicted": "Predicted",
@@ -51,7 +51,7 @@
   "pestControl": "Pest control expert nearby",
   "callNow": "Call Now",
   "viewDetails": "View Details",
-  
+
   "buyFreshTitle": "Buy Fresh Produce",
   "harvestedHours": "Harvested {hours}h ago",
   "bioVitality": "Bio-Vitality Index",
@@ -59,7 +59,7 @@
   "viewFarm": "View Farm",
   "addToCart": "Add to Cart",
   "pricePerKg": "₹{price}/kg",
-  
+
   "magicSnap": "Magic Snap - Claim Your Land",
   "centerCrosshair": "Center the crosshair on your field",
   "autoDetecting": "Auto-detecting field boundary...",
@@ -67,7 +67,7 @@
   "acreage": "{acres} acres",
   "confirmBoundary": "Confirm Boundary",
   "retake": "Retake Photo",
-  
+
   "chat": "Messages",
   "messageHint": "Type a message...",
   "send": "Send",
@@ -75,7 +75,7 @@
   "shareLocation": "Share Location",
   "viewProfile": "View Profile",
   "rejectBid": "Reject",
-  
+
   "crops": {
     "wheat": "Wheat",
     "rice": "Rice",
@@ -90,7 +90,7 @@
     "potato": "Potato",
     "spinach": "Spinach"
   },
-  
+
   "stages": {
     "planning": "Planning",
     "sowing": "Sowing",
@@ -101,7 +101,7 @@
     "maturity": "Maturity",
     "harvest": "Harvest"
   },
-  
+
   "loading": "Loading...",
   "error": "Error occurred",
   "retry": "Retry",

@@ -10,7 +10,7 @@
   "marathi": "मराठी",
   "bengali": "বাংলা",
   "punjabi": "ਪੰਜਾਬੀ",
-  
+
   "login": "लॉगिन",
   "register": "पंजीकरण करें",
   "welcome": "कृषि-पल्स में आपका स्वागत है",
@@ -18,7 +18,7 @@
   "password": "पासवर्ड",
   "phoneNumber": "फोन नंबर",
   "logout": "लॉग आउट",
-  
+
   "decisionBoard": "AI निर्णय बोर्ड",
   "decisionBoardDesc": "रोपण से पहले विशेषज्ञ सलाह प्राप्त करें",
   "selectCrop": "फसल चुनें",
@@ -28,13 +28,13 @@
   "goAhead": "आगे बढ़ें! अच्छी परिस्थितियाँ",
   "mustAvoid": "बचें। उच्च जोखिम।",
   "proceed": "सावधानी के साथ आगे बढ़ें",
-  
+
   "livingMap": "जीवंत नक्शा",
   "myCrops": "मेरी फसलें",
   "services": "सेवाएं",
   "buyFresh": "ताजा खरीदें",
   "searchLocation": "स्थान या फसल खोजें...",
-  
+
   "myCropsTitle": "मेरी फसलें",
   "pestRisk": "कीट जोखिम: {percentage}%",
   "daysToHarvest": "कटाई में {days} दिन",
@@ -42,7 +42,7 @@
   "weather": "मौसम",
   "temperature": "{temp}°C",
   "humidity": "आर्द्रता: {humidity}%",
-  
+
   "servicesTitle": "सेवाएं खोजें",
   "urgent": "तुरंत",
   "predicted": "अनुमानित",
@@ -51,7 +51,7 @@
   "pestControl": "कीट नियंत्रण विशेषज्ञ पास में",
   "callNow": "अभी कॉल करें",
   "viewDetails": "विवरण देखें",
-  
+
   "buyFreshTitle": "ताजा उपज खरीदें",
   "harvestedHours": "{hours}h पहले काटी गई",
   "bioVitality": "जैव-जीवंतता सूचकांक",
@@ -59,7 +59,7 @@
   "viewFarm": "खेत देखें",
   "addToCart": "कार्ट में जोड़ें",
   "pricePerKg": "₹{price}/किग्रा",
-  
+
   "magicSnap": "जादुई स्नैप - अपनी जमीन को दावा करें",
   "centerCrosshair": "क्रॉसहेयर को अपने खेत पर केंद्रित करें",
   "autoDetecting": "खेत की सीमा स्वचालित रूप से पहचान रहे हैं...",
@@ -67,7 +67,7 @@
   "acreage": "{acres} एकड़",
   "confirmBoundary": "सीमा की पुष्टि करें",
   "retake": "फिर से लें",
-  
+
   "chat": "संदेश",
   "messageHint": "संदेश लिखें...",
   "send": "भेजें",
@@ -75,7 +75,7 @@
   "shareLocation": "स्थान साझा करें",
   "viewProfile": "प्रोफाइल देखें",
   "rejectBid": "अस्वीकार करें",
-  
+
   "crops": {
     "wheat": "गेहूँ",
     "rice": "चावल",
@@ -90,7 +90,7 @@
     "potato": "आलू",
     "spinach": "पालक"
   },
-  
+
   "stages": {
     "planning": "योजना",
     "sowing": "बुवाई",
@@ -101,7 +101,7 @@
     "maturity": "परिपक्वता",
     "harvest": "कटाई"
   },
-  
+
   "loading": "लोड हो रहा है...",
   "error": "त्रुटि हुई",
   "retry": "फिर से प्रयास करें",
