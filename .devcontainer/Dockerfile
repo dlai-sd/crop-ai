@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/devcontainers/python:3.11-bullseye
 
-# Install Node.js 18
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+# Install Node.js 22 (LTS - actively supported)
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get install -y nodejs
 
 # Install system dependencies including web server for Flutter web preview
