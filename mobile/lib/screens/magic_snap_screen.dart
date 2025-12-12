@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:dlai_crop/generated_l10n/app_localizations.dart';
 import '../models/agri_pulse_models.dart';
 
 class MagicSnapScreen extends ConsumerStatefulWidget {
