@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dlai_crop/generated_l10n/app_localizations.dart';
+import '../generated_l10n/app_localizations.dart';
 import '../models/agri_pulse_models.dart';
 import '../providers/mock_data_provider.dart';
 import '../services/localization_service.dart';
