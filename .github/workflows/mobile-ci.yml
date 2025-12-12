@@ -92,13 +92,6 @@ jobs:
           fi
           echo "✓ Dependencies resolved successfully"
 
-      - name: Generate localization files
-        working-directory: ./mobile
-        run: |
-          echo "Generating localization files..."
-          flutter gen-l10n
-          echo "✓ Localization files generated"
-
       - name: Generate code (build_runner)
         working-directory: ./mobile
         run: |
